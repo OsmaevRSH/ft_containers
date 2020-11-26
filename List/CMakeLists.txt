@@ -3,4 +3,4 @@ project(List)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(List List.cpp List.hpp List_Iterator.hpp)
+add_executable(List List.cpp List.hpp ../iterator/Iterator.hpp ../iterator/ListIterator.hpp)
