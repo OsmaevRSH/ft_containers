@@ -9,19 +9,34 @@ namespace ft
 	class vector
 	{
 		private:
-			typename T *ptr;
+			T *ptr;
 			size_t vector_len;
 			size_t alloc_size;
+
 		public:
+
+			//Constructor
 			explicit vector();
-			explicit vector(size_t n, const T &val = value_type());
+			explicit vector(size_t n, const T &val);
 			template<class InputIterator>
 			vector(InputIterator first, InputIterator last);
 			vector(const vector &x);
+
+			//Destructor
 			~vector();
 
-			vector &operator=(const vector &x)
-			void push_back(const value_type &val);
+			//Operator
+			vector &operator=(const vector &x);
+			T &operator[](const size_t &);
+			friend bool operator==(const vector<T> &lhs, const vector<T> &rhs);
+			friend bool operator!=(const vector<T> &lhs, const vector<T> &rhs);
+			friend bool operator<(const vector<T> &lhs, const vector<T> &rhs);
+			friend bool operator<=(const vector<T> &lhs, const vector<T> &rhs);
+			friend bool operator>(const vector<T> &lhs, const vector<T> &rhs);
+			friend bool operator>=(const vector<T> &lhs, const vector<T> &rhs);
+
+			//Function
+			void push_back(const T &val);
 	};
 
 	template<class T>
@@ -72,7 +87,7 @@ namespace ft
 	}
 
 	template<class T>
-	vector &vector<T>::operator=(const vector &x)
+	vector<T> &vector<T>::operator=(const vector &x)
 	{
 		delete[] ptr;
 		vector_len = x.vector_len;
@@ -84,7 +99,7 @@ namespace ft
 	}
 
 	template<class T>
-	void vector<T>::push_back(const value_type &val)
+	void vector<T>::push_back(const T &val)
 	{
 		if (vector_len < alloc_size - 1)
 		{
@@ -105,6 +120,46 @@ namespace ft
 			for (int i = vector_len; i < alloc_size; ++i)
 				ptr[i] = 0;
 		}
+	}
+	template<class T>
+	T &vector<T>::operator[](const size_t &i)
+	{
+		return ptr[i];
+	}
+	template<class T>
+
+	bool operator==(const vector<T> &lhs, const vector<T> &rhs)
+	{
+
+	}
+	template<class T>
+	bool operator!=(const vector<T> &lhs, const vector<T> &rhs)
+	{
+		if (lhs.vector_len == rhs.vector_len)
+			return false;
+		return true;
+	}
+	template<class T>
+	bool operator<(const vector<T> &lhs, const vector<T> &rhs)
+	{
+		if (lhs.vector_len < rhs.vector_len)
+			return true;
+		return false;
+	}
+	template<class T>
+	bool operator<=(const vector<T> &lhs, const vector<T> &rhs)
+	{
+		return false;
+	}
+	template<class T>
+	bool operator>(const vector<T> &lhs, const vector<T> &rhs)
+	{
+		return false;
+	}
+	template<class T>
+	bool operator>=(const vector<T> &lhs, const vector<T> &rhs)
+	{
+		return false;
 	}
 }
 
