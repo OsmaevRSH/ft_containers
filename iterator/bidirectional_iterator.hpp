@@ -7,7 +7,7 @@ template<class T>
 class Bidirectional_iterator : public Forward_iterator<T>
 {
 	public:
-		Bidirectional_iterator();
+		explicit Bidirectional_iterator(const T *);
 		Bidirectional_iterator(const Bidirectional_iterator<T> &);
 		Bidirectional_iterator<T> &operator=(const Bidirectional_iterator<T> &);
 		~Bidirectional_iterator();
@@ -17,7 +17,8 @@ class Bidirectional_iterator : public Forward_iterator<T>
 };
 
 template<class T>
-Bidirectional_iterator<T>::Bidirectional_iterator() : Forward_iterator<T>()
+Bidirectional_iterator<T>::Bidirectional_iterator(const T *c)
+	: Forward_iterator<T>(c)
 {
 }
 
@@ -31,7 +32,7 @@ template<class T>
 Bidirectional_iterator<T> &Bidirectional_iterator<
 	T>::operator=(const Bidirectional_iterator<T> &copy)
 {
-	m = copy.m;
+	this->m = copy.m;
 	return *this;
 }
 
@@ -41,9 +42,9 @@ Bidirectional_iterator<T>::~Bidirectional_iterator()
 }
 
 template<class T>
-Bidirectional_iterator &Bidirectional_iterator<T>::operator--()
+Bidirectional_iterator<T> &Bidirectional_iterator<T>::operator--()
 {
-	--m;
+	--this->m;
 	return *this;
 }
 
@@ -51,7 +52,7 @@ template<class T>
 const Bidirectional_iterator<T> Bidirectional_iterator<T>::operator--(int)
 {
 	Bidirectional_iterator<T> tmp(*this);
-	--m;
+	--this->m;
 	return tmp;
 }
 

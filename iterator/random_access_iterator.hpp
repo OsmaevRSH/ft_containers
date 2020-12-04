@@ -1,38 +1,40 @@
 #ifndef FT_CONTAINERS_ITERATOR_RANDOM_ACCESS_ITERATOR_HPP_
 #define FT_CONTAINERS_ITERATOR_RANDOM_ACCESS_ITERATOR_HPP_
 
-#include "forward_iterator.hpp"
+#include "bidirectional_iterator.hpp"
 
 template<class T>
-class Random_access_iterator : public Forward_iterator<T>
+class Random_access_iterator : public Bidirectional_iterator<T>
 {
 	public:
-		Random_access_iterator();
+		explicit Random_access_iterator(const T *);
 		Random_access_iterator(const Random_access_iterator<T> &);
 		Random_access_iterator<T> &operator=(const Random_access_iterator<T> &);
 		~Random_access_iterator();
 
-		Random_access_iterator &operator+(const int &);
-		Random_access_iterator &operator+(const int &,
-										  Random_access_iterator<T> &);
 		Random_access_iterator &operator-(const int &);
 		Random_access_iterator &operator-(const Random_access_iterator<T> &);
 
 		Random_access_iterator &operator+=(const int &);
 		Random_access_iterator &operator-=(const int &);
 
-		bool operator<(const Random_access_iterator<T> &,
-					   const Random_access_iterator<T> &);
-		bool operator>(const Random_access_iterator<T> &,
-					   const Random_access_iterator<T> &);
-		bool operator<=(const Random_access_iterator<T> &,
-						const Random_access_iterator<T> &);
-		bool operator>=(const Random_access_iterator<T> &,
-						const Random_access_iterator<T> &);
+		friend Random_access_iterator &operator+(Random_access_iterator<T> &,
+												 const int &);
+		friend Random_access_iterator &operator+(const int &,
+												 Random_access_iterator<T> &);
+		friend bool operator<(const Random_access_iterator<T> &,
+							  const Random_access_iterator<T> &);
+		friend bool operator>(const Random_access_iterator<T> &,
+							  const Random_access_iterator<T> &);
+		friend bool operator<=(const Random_access_iterator<T> &,
+							   const Random_access_iterator<T> &);
+		friend bool operator>=(const Random_access_iterator<T> &,
+							   const Random_access_iterator<T> &);
 };
 
 template<class T>
-Random_access_iterator<T>::Random_access_iterator() : Forward_iterator<T>()
+Random_access_iterator<T>::Random_access_iterator(const T *c)
+	: Bidirectional_iterator<T>(c)
 {
 }
 
@@ -46,7 +48,7 @@ template<class T>
 Random_access_iterator<T> &Random_access_iterator<
 	T>::operator=(const Random_access_iterator<T> &copy)
 {
-	m = copy.m;
+	this->m = copy.m;
 	return *this;
 }
 
@@ -56,75 +58,71 @@ Random_access_iterator<T>::~Random_access_iterator()
 }
 
 template<class T>
-Random_access_iterator &Random_access_iterator<T>::operator+(const int &n)
+Random_access_iterator<T> &Random_access_iterator<T>::operator-(const int &n)
 {
-	m += n;
+	this->m -= n;
 	return *this;
 }
 
 template<class T>
-Random_access_iterator &Random_access_iterator<T>::operator+(
-	const int &r, Random_access_iterator<T> &l)
-{
-	m += n;
-	return *this;
-}
-
-template<class T>
-Random_access_iterator &Random_access_iterator<T>::operator-(const int &n)
-{
-	m -= n;
-	return *this;
-}
-
-template<class T>
-Random_access_iterator &Random_access_iterator<
+Random_access_iterator<T> &Random_access_iterator<
 	T>::operator-(const Random_access_iterator<T> &n)
 {
-	m -= n.m;
+	this->m -= n.m;
 	return *this;
 }
 
 template<class T>
-Random_access_iterator &Random_access_iterator<T>::operator+=(const int &n)
+Random_access_iterator<T> &Random_access_iterator<T>::operator+=(const int &n)
 {
-	m += n;
+	this->m += n;
 	return *this;
 }
 
 template<class T>
-Random_access_iterator &Random_access_iterator<T>::operator-=(const int &n)
+Random_access_iterator<T> &Random_access_iterator<T>::operator-=(const int &n)
 {
-	m -= n;
+	this->m -= n;
 	return *this;
 }
 
 template<class T>
-bool Random_access_iterator<T>::operator<(const Random_access_iterator<T> &l,
-										  const Random_access_iterator<T> &r)
+bool operator<(const Random_access_iterator<T> &l,
+			   const Random_access_iterator<T> &r)
 {
 	return (l.m < r.m);
 }
 
 template<class T>
-bool Random_access_iterator<T>::operator>(const Random_access_iterator<T> &l,
-										  const Random_access_iterator<T> &r)
+bool operator>(const Random_access_iterator<T> &l,
+			   const Random_access_iterator<T> &r)
 {
 	return (l.m > r.m);
 }
 
 template<class T>
-bool Random_access_iterator<T>::operator<=(const Random_access_iterator<T> &l,
-										   const Random_access_iterator<T> &r)
+bool operator<=(const Random_access_iterator<T> &l,
+				const Random_access_iterator<T> &r)
 {
 	return (l.m <= r.m);
 }
 
 template<class T>
-bool Random_access_iterator<T>::operator>=(const Random_access_iterator<T> &l,
-										   const Random_access_iterator<T> &r)
+bool operator>=(const Random_access_iterator<T> &l,
+				const Random_access_iterator<T> &r)
 {
 	return (l.m >= r.m);
+}
+template<class T>
+Random_access_iterator<T> &operator+(Random_access_iterator<T> &l, const int &r)
+{
+	return Random_access_iterator<T>(l.m + r);
+}
+
+template<class T>
+Random_access_iterator<T> &operator+(const int &l, Random_access_iterator<T> &r)
+{
+	return Random_access_iterator<T>(r.m + l);
 }
 
 #endif

@@ -2,6 +2,7 @@
 #define FT_CONTAINERS_VECTOR_HPP
 
 #include <iostream>
+#include "../iterator/random_access_iterator.hpp"
 
 namespace ft
 {
@@ -39,18 +40,48 @@ namespace ft
 			void push_back(const T &val);
 
 			//Iterator
-			class iterator
+			class iterator : public Random_access_iterator<T>
 			{
-				private:
-					vector<T> &c;
 				public:
 					iterator();
-					iterator(vector<T> &);
-
+					iterator(const T *);
+					iterator(const iterator &);
+					iterator &operator=(const iterator &);
+					~iterator();
 			};
+
 			iterator &begin();
 			iterator &end();
 	};
+
+	template<class T>
+	vector<T>::iterator::iterator() : Random_access_iterator<T>()
+	{
+	}
+
+	template<class T>
+	vector<T>::iterator::iterator(const vector::iterator &copy)
+		: Random_access_iterator<T>(copy)
+	{
+	}
+
+	template<class T>
+	typename vector<T>::iterator &vector<T>::iterator::operator=(const vector::iterator &copy)
+	{
+		this->m = copy.m;
+		return *this;
+	}
+
+	template<class T>
+	vector<T>::iterator::~iterator()
+	{
+	}
+
+	template<class T>
+	vector<T>::iterator::iterator(const T *c)
+	{
+		this->m = c;
+	}
 
 	template<class T>
 	vector<T>::vector() : vector_len(0), alloc_size(0)
@@ -60,7 +91,7 @@ namespace ft
 
 	template<class T>
 	vector<T>::vector(size_t n, const T &val)
-			: vector_len(n), alloc_size((n / 8) * 8 + 8)
+		: vector_len(n), alloc_size((n / 8) * 8 + 8)
 	{
 		ptr = new T[(n / 8) * 8 + 8];
 		for (int i = 0; i < n; ++i)
@@ -86,7 +117,7 @@ namespace ft
 
 	template<class T>
 	vector<T>::vector(const vector &x)
-			: vector_len(x.vector_len), alloc_size(x.alloc_size)
+		: vector_len(x.vector_len), alloc_size(x.alloc_size)
 	{
 		ptr = new T[x.vector_len];
 		for (int i = 0; i < x.vector_len; ++i)
@@ -173,6 +204,18 @@ namespace ft
 	bool operator>=(const vector<T> &lhs, const vector<T> &rhs)
 	{
 		return false;
+	}
+
+	template<class T>
+	typename vector<T>::iterator &vector<T>::begin()
+	{
+		return iterator(this->ptr[0]);
+	}
+
+	template<class T>
+	typename vector<T>::iterator &vector<T>::end()
+	{
+		return iterator(this->ptr[this->vector_len]);
 	}
 }
 

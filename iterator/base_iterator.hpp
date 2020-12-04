@@ -7,15 +7,17 @@ template<class T>
 class Base_iterator
 {
 	protected:
-		Base_iterator();
+		explicit Base_iterator(const T *);
 		T *m;
 	public:
 		Base_iterator(const Base_iterator<T> &);
 		Base_iterator &operator=(const Base_iterator<T> &);
 		virtual ~Base_iterator();
 
-		bool operator==(const Base_iterator<T> &, const Base_iterator<T> &);
-		bool operator!=(const Base_iterator<T> &, const Base_iterator<T> &);
+		friend bool operator==(const Base_iterator<T> &,
+							   const Base_iterator<T> &);
+		friend bool operator!=(const Base_iterator<T> &,
+							   const Base_iterator<T> &);
 		T &operator*();
 		T &operator->();
 		Base_iterator &operator++();
@@ -40,14 +42,14 @@ Base_iterator<T>::~Base_iterator()
 }
 
 template<class T>
-bool Base_iterator<T>::operator==(const Base_iterator<T> &l,
+bool operator==(const Base_iterator<T> &l,
 								  const Base_iterator<T> &r)
 {
 	return (l.m == r.m);
 }
 
 template<class T>
-bool Base_iterator<T>::operator!=(const Base_iterator<T> &l,
+bool operator!=(const Base_iterator<T> &l,
 								  const Base_iterator<T> &r)
 {
 	return (l.m != r.m);
@@ -81,7 +83,7 @@ const Base_iterator<T> Base_iterator<T>::operator++(int)
 }
 
 template<class T>
-Base_iterator<T>::Base_iterator()
+Base_iterator<T>::Base_iterator(const T *c) : m(c)
 {
 }
 

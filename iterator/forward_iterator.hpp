@@ -7,14 +7,14 @@ template<class T>
 class Forward_iterator : public Base_iterator<T>
 {
 	public:
-		Forward_iterator();
+		explicit Forward_iterator(const T *);
 		Forward_iterator(const Forward_iterator<T> &);
 		Forward_iterator<T> &operator=(const Forward_iterator<T> &);
 		~Forward_iterator();
 };
 
 template<class T>
-Forward_iterator<T>::Forward_iterator() : Base_iterator<T>()
+Forward_iterator<T>::Forward_iterator(const T *c) : Base_iterator<T>(c)
 {
 }
 
@@ -27,7 +27,7 @@ Forward_iterator<T>::Forward_iterator(const Forward_iterator<T> &copy)
 template<class T>
 Forward_iterator<T> &Forward_iterator<T>::operator=(const Forward_iterator<T> &copy)
 {
-	m = copy.m;
+	this->m = copy.m;
 	return *this;
 }
 
