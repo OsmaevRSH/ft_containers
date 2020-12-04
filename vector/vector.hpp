@@ -37,6 +37,19 @@ namespace ft
 
 			//Function
 			void push_back(const T &val);
+
+			//Iterator
+			class iterator
+			{
+				private:
+					vector<T> &c;
+				public:
+					iterator();
+					iterator(vector<T> &);
+
+			};
+			iterator &begin();
+			iterator &end();
 	};
 
 	template<class T>

@@ -80,6 +80,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/ruslanosmaev/Desktop/ft_containers/base_iterator.hpp">
+			<Option target="ft_containers"/>
+		</Unit>
+		<Unit filename="/Users/ruslanosmaev/Desktop/ft_containers/input_iterator_tag.hpp">
+			<Option target="ft_containers"/>
+		</Unit>
 		<Unit filename="/Users/ruslanosmaev/Desktop/ft_containers/vector/vector.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
