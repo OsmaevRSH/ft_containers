@@ -44,7 +44,7 @@ namespace ft
 			{
 				public:
 					iterator();
-					iterator(const T *);
+					explicit iterator(const T *);
 					iterator(const iterator &);
 					iterator &operator=(const iterator &);
 					~iterator();
@@ -108,6 +108,7 @@ namespace ft
 			++size;
 		vector_len = size;
 		ptr = new T[(size / 8) * 8 + 8];
+		alloc_size = (size / 8) * 8 + 8;
 		for (int i = 0; i < size; ++i)
 		{
 			ptr[i] = *first;
@@ -133,12 +134,15 @@ namespace ft
 	template<class T>
 	vector<T> &vector<T>::operator=(const vector &x)
 	{
-		delete[] ptr;
-		vector_len = x.vector_len;
-		alloc_size = x.alloc_size;
-		ptr = new T[alloc_size];
-		for (int i = 0; i < vector_len; ++i)
-			ptr[i] = x.ptr[i];
+		if (x != *this)
+		{
+			delete[] ptr;
+			vector_len = x.vector_len;
+			alloc_size = x.alloc_size;
+			ptr = new T[alloc_size];
+			for (int i = 0; i < vector_len; ++i)
+				ptr[i] = x.ptr[i];
+		}
 		return *this;
 	}
 
