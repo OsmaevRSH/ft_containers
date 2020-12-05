@@ -21,7 +21,9 @@ namespace ft
 			explicit vector();
 			explicit vector(size_t n, const T &val = T());
 			template<class InputIterator>
-			vector(InputIterator first, InputIterator last);
+//			explicit vector(typename std::iterator_traits<InputIterator>::iterator_category first,
+//					typename std::iterator_traits<InputIterator>::iterator_category last);
+			explicit vector(InputIterator first, InputIterator last);
 			vector(const vector &x);
 
 			//Destructor
@@ -100,18 +102,21 @@ namespace ft
 
 	template<class T>
 	vector<T>::vector(size_t n, const T &val)
-			: vector_len(n), alloc_size(ceil(log(n)/log(2)))
+			: vector_len(n), alloc_size(n)
 	{
-		ptr = new T[(int)pow(2, ceil(log(vector_len)/log(2)))];
+		ptr = new T[n];
 		for (int i = 0; i < n; ++i)
 			ptr[i] = val;
 	}
 
 	template<class T>
 	template<class InputIterator>
+//	vector<T>::vector(typename std::iterator_traits<InputIterator>::iterator_category first,
+//			typename std::iterator_traits<InputIterator>::iterator_category last)
 	vector<T>::vector(InputIterator first, InputIterator last)
 	{
 		size_t size = 0;
+//		typename std::iterator_traits<InputIterator>::iterator_category copy_first_iter = first;
 		InputIterator copy_first_iter = first;
 		for (; copy_first_iter < last; ++copy_first_iter)
 			++size;
