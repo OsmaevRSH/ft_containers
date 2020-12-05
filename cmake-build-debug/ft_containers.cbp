@@ -92,6 +92,9 @@
 		<Unit filename="/Users/ltheresi/CLionProjects/ft_containers/iterator/random_access_iterator.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
+		<Unit filename="/Users/ltheresi/CLionProjects/ft_containers/test.hpp">
+			<Option target="ft_containers"/>
+		</Unit>
 		<Unit filename="/Users/ltheresi/CLionProjects/ft_containers/vector/vector.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
