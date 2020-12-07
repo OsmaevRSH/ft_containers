@@ -32,12 +32,8 @@ namespace ft
 			//iterator_func
 			iterator begin();
 			iterator end();
-			const_iterator cbegin();
-			const_iterator cend();
 			reverse_iterator rbegin();
 			reverse_iterator rend();
-			const_reverse_iterator crbegin();
-			const_reverse_iterator crend();
 
 			//constructor
 			explicit vector(const allocator_type &alloc = allocator_type());
@@ -52,6 +48,15 @@ namespace ft
 			//operator
 			reference operator[](size_type n);
 			const_reference operator[](size_type n) const;
+			vector<T, Alloc> &operator=(const vector &x);
+
+			//capacity_func
+			size_type size() const;
+			size_type max_size() const;
+			void resize(size_type n, value_type val = value_type());
+			size_type capacity() const;
+			bool empty() const;
+			void reserve (size_type n);
 		private:
 			//vector_types
 			pointer _vector_start;
@@ -116,16 +121,6 @@ namespace ft
 		return vector_iterator<pointer>(this->_vector_start, _curent_size);
 	}
 	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::cbegin()
-	{
-		return vector_iterator<const_pointer>(this->_vector_start, 0);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::cend()
-	{
-		return vector_iterator<const_pointer>(this->_vector_start, _curent_size);
-	}
-	template<class T, class Alloc>
 	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
 	{
 		return vector_iterator<pointer>(this->_vector_start, _curent_size - 1);
@@ -134,16 +129,6 @@ namespace ft
 	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend()
 	{
 		return vector_iterator<pointer>(this->_vector_start, -1);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::crbegin()
-	{
-		return vector_iterator<const_pointer>(this->_vector_start, _curent_size - 1);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::crend()
-	{
-		return vector_iterator<const_pointer>(this->_vector_start, -1);
 	}
 	template<class T, class Alloc>
 	vector<T, Alloc>::vector(const allocator_type &alloc)
@@ -190,6 +175,76 @@ namespace ft
 	}
 	template<class T, class Alloc>
 	vector<T, Alloc>::~vector() { _new_alloc.deallocate(_vector_start, _alloc_size); }
+	template<class T, class Alloc>
+	vector<T, Alloc> &vector<T, Alloc>::operator=(const vector &x)
+	{
+		if (x != *this) {
+			_new_alloc = x._new_alloc;
+			_curent_size = x._curent_size;
+			_alloc_size = x._alloc_size;
+			_vector_start = _new_alloc.allocate(_alloc_size);
+			for (int i = 0; i < _curent_size; ++i) {
+				_vector_start[i] = x._vector_start[i];
+			}
+		}
+		return *this;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::size() const
+	{
+		return _curent_size;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::max_size() const
+	{
+		return -1 / sizeof(value_type);
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::resize(vector::size_type n, value_type val)
+	{
+		pointer tmp = _new_alloc.allocate(n);
+		if (n < _curent_size) {
+			for (int i = 0; i < n; ++i) {
+				tmp[i] = _vector_start[i];
+			}
+		}
+		else {
+			for (int i = 0; i < _curent_size; ++i) {
+				tmp[i] = _vector_start[i];
+			}
+			for (int i = _curent_size; i < n; ++i) {
+				tmp[i] = val;
+			}
+		}
+		_new_alloc.deallocate(_vector_start, _alloc_size);
+		_curent_size = n;
+		_alloc_size = n;
+		_vector_start = tmp;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::capacity() const
+	{
+		return _alloc_size;
+	}
+	template<class T, class Alloc>
+	bool vector<T, Alloc>::empty() const
+	{
+		return _curent_size == 0;
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::reserve(vector::size_type n)
+	{
+		if (n > _alloc_size)
+		{
+			pointer tmp = _new_alloc.allocate(n);
+			for (int i = 0; i < _curent_size; ++i) {
+				tmp[i] = _vector_start[i];
+			}
+			_new_alloc.deallocate(_vector_start, _alloc_size);
+			_alloc_size = n;
+			_vector_start = tmp;
+		}
+	}
 }
 
 #endif
