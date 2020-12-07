@@ -46,9 +46,17 @@ namespace ft
 			~vector();
 
 			//operator
+			vector<T, Alloc> &operator=(const vector &x);
+
+			//element_access
 			reference operator[](size_type n);
 			const_reference operator[](size_type n) const;
-			vector<T, Alloc> &operator=(const vector &x);
+			reference at(size_type n);
+			const_reference at(size_type n) const;
+			reference front();
+			const_reference front() const;
+			reference back();
+			const_reference back() const;
 
 			//capacity_func
 			size_type size() const;
@@ -56,7 +64,13 @@ namespace ft
 			void resize(size_type n, value_type val = value_type());
 			size_type capacity() const;
 			bool empty() const;
-			void reserve (size_type n);
+			void reserve(size_type n);
+
+			//modifiers
+			template<class InputIterator>
+			void assign(InputIterator first, InputIterator last);
+			void assign(size_type n, const value_type &val);
+
 		private:
 			//vector_types
 			pointer _vector_start;
@@ -234,8 +248,7 @@ namespace ft
 	template<class T, class Alloc>
 	void vector<T, Alloc>::reserve(vector::size_type n)
 	{
-		if (n > _alloc_size)
-		{
+		if (n > _alloc_size) {
 			pointer tmp = _new_alloc.allocate(n);
 			for (int i = 0; i < _curent_size; ++i) {
 				tmp[i] = _vector_start[i];
@@ -243,6 +256,65 @@ namespace ft
 			_new_alloc.deallocate(_vector_start, _alloc_size);
 			_alloc_size = n;
 			_vector_start = tmp;
+		}
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::at(vector::size_type n)
+	{
+		if (n < 0 || n >= _curent_size) {
+			throw std::out_of_range("vector");
+		}
+		return _vector_start[n];
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::at(vector::size_type n) const
+	{
+		if (n < 0 || n >= _curent_size) {
+			throw std::out_of_range("vector");
+		}
+		return _vector_start[n];
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::front()
+	{
+		return _vector_start[0];
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::front() const
+	{
+		return _vector_start[0];;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::back()
+	{
+		return _vector_start[_curent_size - 1];
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::back() const
+	{
+		return _vector_start[_curent_size - 1];
+	}
+	template<class T, class Alloc>
+	template<class InputIterator>
+	void vector<T, Alloc>::assign(InputIterator first, InputIterator last)
+	{
+		if (last - first > _curent_size) {
+			_curent_size = last - first;
+			allocator_type tmp = _new_alloc.allocate(_curent_size);
+			for (int i = 0; first < last; ++first, ++i) {
+				tmp[i] = *first;
+			}
+			_new_alloc.reallocate(_vector_start, _alloc_size);
+			_alloc_size = _curent_size;
+			_vector_start = tmp;
+		}
+		else {
+			for (_curent_size = 0; first < last; ++first, ++_curent_size) {
+				_vector_start[_curent_size] = *first;
+			}
+			for (int i = _curent_size; i < _alloc_size; ++i) {
+				_vector_start[i] = value_type();
+			}
 		}
 	}
 }
