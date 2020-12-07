@@ -3,299 +3,193 @@
 
 #include <iostream>
 #include <cmath>
-#include "../iterator/random_access_iterator.hpp"
 
 namespace ft
 {
-	template<class T>
+	template<class T, class Alloc = std::allocator<T> >
 	class vector
 	{
 		private:
-			T *ptr;
-			int vector_len;
-			int alloc_size;
-
+			template<class Ptr_type>
+			class vector_iterator;
+			template<class Ptr_type>
+			class reverse_vector_iterator;
 		public:
+			//member_types
+			typedef T value_type;
+			typedef Alloc allocator_type;
+			typedef typename allocator_type::reference reference;
+			typedef typename allocator_type::const_reference const_reference;
+			typedef typename allocator_type::pointer pointer;
+			typedef typename allocator_type::const_pointer const_pointer;
+			typedef typename vector<T, Alloc>::vector_iterator<reference> iterator;
+			typedef typename vector<T, Alloc>::vector_iterator<const_reference> const_iterator;
+			typedef typename vector<T, Alloc>::reverse_vector_iterator<reference> reverse_iterator;
+			typedef typename vector<T, Alloc>::reverse_vector_iterator<const_reference> const_reverse_iterator;
+			typedef ptrdiff_t difference_type;
+			typedef size_t size_type;
 
-			//Constructor
-			explicit vector();
-			explicit vector(size_t n, const T &val = T());
+			//iterator_func
+			iterator begin();
+			iterator end();
+			const_iterator cbegin();
+			const_iterator cend();
+			reverse_iterator rbegin();
+			reverse_iterator rend();
+			const_reverse_iterator crbegin();
+			const_reverse_iterator crend();
+
+			//constructor
+			explicit vector(const allocator_type &alloc = allocator_type());
+			explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type());
 			template<class InputIterator>
-//			explicit vector(typename std::iterator_traits<InputIterator>::iterator_category first,
-//					typename std::iterator_traits<InputIterator>::iterator_category last);
-			explicit vector(InputIterator first, InputIterator last);
+			vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type());
 			vector(const vector &x);
 
-			//Destructor
+			//destructor
 			~vector();
 
-			//Operator
-			vector &operator=(const vector &x);
-			T &operator[](const size_t &);
-			friend bool operator==(const vector<T> &lhs, const vector<T> &rhs);
-			friend bool operator!=(const vector<T> &lhs, const vector<T> &rhs);
-			friend bool operator<(const vector<T> &lhs, const vector<T> &rhs);
-			friend bool operator<=(const vector<T> &lhs, const vector<T> &rhs);
-			friend bool operator>(const vector<T> &lhs, const vector<T> &rhs);
-			friend bool operator>=(const vector<T> &lhs, const vector<T> &rhs);
+			//operator
+			reference operator[](size_type n);
+			const_reference operator[](size_type n) const;
+		private:
+			//vector_types
+			pointer _vector_start;
+			size_type _curent_size;
+			size_type _alloc_size;
+			allocator_type _new_alloc;
 
-			//Capacity
-			size_t size() const;
-			size_t max_size() const;
-			size_t capacity() const;
-			void resize(size_t n, T val = T());
-			void reserve(size_t n);
-			bool empty() const;
-
-			//Function
-			void push_back(const T &val);
-
-			//Iterator
-			class iterator : public Random_access_iterator<T>
+			//iterator_class
+			template<class Ptr_type>
+			class vector_iterator
 			{
+				private:
+					Ptr_type ptr;
+					int curent_posicion;
 				public:
-					iterator();
-					explicit iterator(const T *);
-					iterator(const iterator &);
-					iterator &operator=(const iterator &);
-					~iterator();
+					vector_iterator() {};
+					vector_iterator(const vector<T, Alloc> &m, size_type pos)
+							: ptr(m._vector_start), curent_posicion(pos) {};
+					vector_iterator(const vector_iterator<Ptr_type> &copy)
+							: ptr(copy.ptr), curent_posicion(copy.curent_posicion) {};
+					vector_iterator<Ptr_type> &operator=(const vector_iterator<Ptr_type> &copy)
+					{
+						if (copy != *this) {
+							ptr = copy.ptr;
+							curent_posicion = copy.curent_posicion;
+						}
+						return *this;
+					};
+					~vector_iterator() {};
 			};
-
-			iterator &begin();
-			iterator &end();
+			template<class Ptr_type>
+			class reverse_vector_iterator
+			{
+				private:
+					Ptr_type ptr;
+					int curent_posicion;
+				public:
+					reverse_vector_iterator() {};
+					reverse_vector_iterator(const vector<T, Alloc> &m, size_type pos)
+							: ptr(m._vector_start), curent_posicion(pos) {};
+					reverse_vector_iterator(const reverse_vector_iterator<Ptr_type> &copy)
+							: ptr(copy.ptr), curent_posicion(copy.curent_posicion) {};
+					reverse_vector_iterator<Ptr_type> &operator=(const reverse_vector_iterator<Ptr_type> &copy)
+					{
+						if (copy != *this) {
+							ptr = copy.ptr;
+							curent_posicion = copy.curent_posicion;
+						}
+						return *this;
+					};
+					~reverse_vector_iterator() {};
+			};
 	};
-
-	template<class T>
-	vector<T>::iterator::iterator() : Random_access_iterator<T>()
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
+	{
+		return vector_iterator<pointer>(this->_vector_start, 0);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
+	{
+		return vector_iterator<pointer>(this->_vector_start, _curent_size);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::cbegin()
+	{
+		return vector_iterator<const_pointer>(this->_vector_start, 0);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::cend()
+	{
+		return vector_iterator<const_pointer>(this->_vector_start, _curent_size);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
+	{
+		return vector_iterator<pointer>(this->_vector_start, _curent_size - 1);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend()
+	{
+		return vector_iterator<pointer>(this->_vector_start, -1);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::crbegin()
+	{
+		return vector_iterator<const_pointer>(this->_vector_start, _curent_size - 1);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::crend()
+	{
+		return vector_iterator<const_pointer>(this->_vector_start, -1);
+	}
+	template<class T, class Alloc>
+	vector<T, Alloc>::vector(const allocator_type &alloc)
+			: _alloc_size(0), _curent_size(0), _vector_start(nullptr), _new_alloc(alloc)
 	{
 	}
-
-	template<class T>
-	vector<T>::iterator::iterator(const vector::iterator &copy)
-			: Random_access_iterator<T>(copy)
+	template<class T, class Alloc>
+	vector<T, Alloc>::vector(vector::size_type n, const value_type &val, const allocator_type &alloc)
+			: _alloc_size(n), _curent_size(n), _new_alloc(alloc)
 	{
+		_vector_start = _new_alloc.allocate(n);
+		for (int i = 0; i < n; ++i) {
+			_vector_start[i] = val;
+		}
 	}
-
-	template<class T>
-	typename vector<T>::iterator &vector<T>::iterator::operator=(const vector::iterator &copy)
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::operator[](vector::size_type n)
 	{
-		this->m = copy.m;
-		return *this;
+		return _vector_start[n];
 	}
-
-	template<class T>
-	vector<T>::iterator::~iterator()
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::operator[](vector::size_type n) const
 	{
+		return _vector_start[n];
 	}
-
-	template<class T>
-	vector<T>::iterator::iterator(const T *c)
-	{
-		this->m = c;
-	}
-
-	template<class T>
-	vector<T>::vector() : vector_len(0), alloc_size(0)
-	{
-		ptr = new T[0];
-	}
-
-	template<class T>
-	vector<T>::vector(size_t n, const T &val)
-			: vector_len(n), alloc_size(n)
-	{
-		ptr = new T[n];
-		for (int i = 0; i < n; ++i)
-			ptr[i] = val;
-	}
-
-	template<class T>
+	template<class T, class Alloc>
 	template<class InputIterator>
-//	vector<T>::vector(typename std::iterator_traits<InputIterator>::iterator_category first,
-//			typename std::iterator_traits<InputIterator>::iterator_category last)
-	vector<T>::vector(InputIterator first, InputIterator last)
+	vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type &alloc)
+			: _curent_size(last - first), _alloc_size(last - first), _new_alloc(alloc)
 	{
-		size_t size = 0;
-//		typename std::iterator_traits<InputIterator>::iterator_category copy_first_iter = first;
-		InputIterator copy_first_iter = first;
-		for (; copy_first_iter < last; ++copy_first_iter)
-			++size;
-		vector_len = size;
-		ptr = new T[(int)pow(2, ceil(log(vector_len)/log(2)))];
-		alloc_size = (int)pow(2, ceil(log(vector_len)/log(2)));
-		for (int i = 0; i < size; ++i)
-		{
-			ptr[i] = *first;
-			++first;
+		_vector_start = _new_alloc.allocate(last - first);
+		for (int i = 0; first < last; ++first, ++i) {
+			_vector_start[i] = *first;
 		}
 	}
-
-	template<class T>
-	vector<T>::vector(const vector &x)
-			: vector_len(x.vector_len), alloc_size(x.alloc_size)
+	template<class T, class Alloc>
+	vector<T, Alloc>::vector(const vector &x)
+			: _alloc_size(x._alloc_size), _curent_size(x._curent_size), _new_alloc(x._new_alloc)
 	{
-		ptr = new T[x.vector_len];
-		for (int i = 0; i < x.vector_len; ++i)
-			ptr[i] = x.ptr[i];
-	}
-
-	template<class T>
-	vector<T>::~vector()
-	{
-		delete[] ptr;
-	}
-
-	template<class T>
-	vector<T> &vector<T>::operator=(const vector &x)
-	{
-		if (x != *this)
-		{
-			delete[] ptr;
-			vector_len = x.vector_len;
-			alloc_size = x.alloc_size;
-			ptr = new T[alloc_size];
-			for (int i = 0; i < vector_len; ++i)
-				ptr[i] = x.ptr[i];
-		}
-		return *this;
-	}
-
-	template<class T>
-	void vector<T>::push_back(const T &val)
-	{
-		if (vector_len < alloc_size - 1)
-		{
-			ptr[vector_len] = val;
-			++vector_len;
-		}
-		else
-		{
-			++vector_len;
-			T *tmp_ptr = new T[alloc_size = pow(2, ceil(log(vector_len)/log(2)))];
-			for (int i = 0; i < vector_len - 1; ++i)
-				tmp_ptr[i] = ptr[i];
-			tmp_ptr[vector_len - 1] = val;
-			delete[] ptr;
-			ptr = tmp_ptr;
+		_vector_start = _new_alloc.allocate(_curent_size);
+		for (int i = 0; i < _curent_size; ++i) {
+			_vector_start[i] = x._vector_start[i];
 		}
 	}
-	template<class T>
-	T &vector<T>::operator[](const size_t &i)
-	{
-		return ptr[i];
-	}
-	template<class T>
-
-	bool operator==(const vector<T> &lhs, const vector<T> &rhs)
-	{
-
-	}
-	template<class T>
-	bool operator!=(const vector<T> &lhs, const vector<T> &rhs)
-	{
-		if (lhs.vector_len == rhs.vector_len)
-			return false;
-		return true;
-	}
-	template<class T>
-	bool operator<(const vector<T> &lhs, const vector<T> &rhs)
-	{
-		if (lhs.vector_len < rhs.vector_len)
-			return true;
-		return false;
-	}
-	template<class T>
-	bool operator<=(const vector<T> &lhs, const vector<T> &rhs)
-	{
-		return false;
-	}
-	template<class T>
-	bool operator>(const vector<T> &lhs, const vector<T> &rhs)
-	{
-		return false;
-	}
-	template<class T>
-	bool operator>=(const vector<T> &lhs, const vector<T> &rhs)
-	{
-		return false;
-	}
-
-	template<class T>
-	typename vector<T>::iterator &vector<T>::begin()
-	{
-		return iterator(this->ptr[0]);
-	}
-
-	template<class T>
-	typename vector<T>::iterator &vector<T>::end()
-	{
-		return iterator(this->ptr[this->vector_len]);
-	}
-
-	template<class T>
-	size_t vector<T>::size() const
-	{
-		return vector_len;
-	}
-
-	template<class T>
-	size_t vector<T>::capacity() const
-	{
-		return alloc_size;
-	}
-
-	template<class T>
-	bool vector<T>::empty() const
-	{
-		return vector_len == 0;
-	}
-
-	template<class T>
-	size_t vector<T>::max_size() const
-	{
-		size_t tmp = -1 / sizeof(T);
-		return tmp;
-	}
-
-	template<class T>
-	void vector<T>::resize(size_t n, T val)
-	{
-		if (n < vector_len)
-		{
-			T *tmp = new T[n];
-			for (int i = 0; i < n; ++i)
-				tmp[i] = ptr[i];
-			delete[] ptr;
-			ptr = tmp;
-		}
-		else
-		{
-			T *tmp = new T[n];
-			for (int i = 0; i < vector_len; ++i)
-				tmp[i] = ptr[i];
-			for (int i = vector_len; i < n; ++i)
-				tmp[i] = val;
-			delete[] ptr;
-			ptr = tmp;
-		}
-		if (n > alloc_size)
-			alloc_size = pow(2, ceil(log(n)/log(2)));
-		vector_len = n;
-	}
-
-	template<class T>
-	void vector<T>::reserve(size_t n)
-	{
-		if (n > alloc_size)
-		{
-			T *tmp = new T[n];
-			for (int i = 0; i < vector_len; ++i)
-				tmp[i] = ptr[i];
-			delete[] ptr;
-			ptr = tmp;
-			alloc_size = n;
-		}
-	}
+	template<class T, class Alloc>
+	vector<T, Alloc>::~vector() { _new_alloc.deallocate(_vector_start, _alloc_size); }
 }
 
 #endif
