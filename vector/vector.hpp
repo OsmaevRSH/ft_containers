@@ -10,9 +10,7 @@ namespace ft
 	class vector
 	{
 		private:
-			template<class Ptr_type>
 			class vector_iterator;
-			template<class Ptr_type>
 			class reverse_vector_iterator;
 		public:
 			//member_types
@@ -22,18 +20,22 @@ namespace ft
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
-			typedef typename vector<T, Alloc>::vector_iterator<reference> iterator;
-			//			typedef typename vector<T, Alloc>::vector_iterator<const_reference> const_iterator;
-			typedef typename vector<T, Alloc>::reverse_vector_iterator<reference> reverse_iterator;
-			//			typedef typename vector<T, Alloc>::reverse_vector_iterator<const_reference> const_reverse_iterator;
+			typedef typename vector<T, Alloc>::vector_iterator iterator;
+			typedef typename vector<T, Alloc>::vector_iterator const_iterator;
+			typedef typename vector<T, Alloc>::reverse_vector_iterator reverse_iterator;
+			typedef typename vector<T, Alloc>::reverse_vector_iterator const_reverse_iterator;
 			typedef ptrdiff_t difference_type;
 			typedef size_t size_type;
 
 			//iterator_func
 			iterator begin();
+			const_iterator begin() const;
 			iterator end();
+			const_iterator end() const;
 			reverse_iterator rbegin();
+			const_reverse_iterator rbegin() const;
 			reverse_iterator rend();
+			const_reverse_iterator rend() const;
 
 			//constructor
 			explicit vector(const allocator_type &alloc = allocator_type());
@@ -81,8 +83,6 @@ namespace ft
 			void swap(vector &x);
 			void clear();
 
-			//non-member_function_overloads
-
 		private:
 			//vector_types
 			pointer _vector_start;
@@ -91,70 +91,166 @@ namespace ft
 			allocator_type _new_alloc;
 
 			//iterator_class
-			template<class Ptr_type>
-			class vector_iterator
+			class base_iterator
 			{
-				private:
-					Ptr_type ptr;
-					int curent_posicion;
+				protected:
+					pointer ptr;
 				public:
-					vector_iterator() {};
-					vector_iterator(const vector<T, Alloc> &m, size_type pos)
-							: ptr(m._vector_start), curent_posicion(pos) {};
-					vector_iterator(const vector_iterator<Ptr_type> &copy)
-							: ptr(copy.ptr), curent_posicion(copy.curent_posicion) {};
-					vector_iterator<Ptr_type> &operator=(const vector_iterator<Ptr_type> &copy)
+					base_iterator() {};
+					base_iterator(pointer m) : ptr(m) {};
+					base_iterator(const vector_iterator &copy) : ptr(copy.ptr) {};
+					base_iterator &operator=(const base_iterator &copy)
 					{
 						if (copy != *this) {
 							ptr = copy.ptr;
-							curent_posicion = copy.curent_posicion;
 						}
 						return *this;
 					};
-					~vector_iterator() {};
+					~base_iterator() {};
+
+					friend bool operator==(const_iterator &lhs, const_iterator &rhs);
+					friend bool operator!=(const_iterator &lhs, const_iterator &rhs);
+					friend bool operator<(const_iterator &lhs, const_iterator &rhs);
+					friend bool operator>(const_iterator &lhs, const_iterator &rhs);
+					friend bool operator<=(const_iterator &lhs, const_iterator &rhs);
+					friend bool operator>=(const_iterator &lhs, const_iterator &rhs);
+					virtual reference operator*();
+					pointer operator->();
+					virtual base_iterator &operator++();
+					virtual base_iterator &operator++(int);
+					virtual base_iterator &operator--();
+					virtual base_iterator &operator--(int);
+					friend base_iterator operator+(const_iterator &lhs, size_type n);
+					base_iterator operator+(size_type n, const_iterator &rhs);
 			};
-			template<class Ptr_type>
-			class reverse_vector_iterator
+			class vector_iterator : public base_iterator
 			{
-				private:
-					Ptr_type ptr;
-					int curent_posicion;
 				public:
-					reverse_vector_iterator() {};
-					reverse_vector_iterator(const vector<T, Alloc> &m, size_type pos)
-							: ptr(m._vector_start), curent_posicion(pos) {};
-					reverse_vector_iterator(const reverse_vector_iterator<Ptr_type> &copy)
-							: ptr(copy.ptr), curent_posicion(copy.curent_posicion) {};
-					reverse_vector_iterator<Ptr_type> &operator=(const reverse_vector_iterator<Ptr_type> &copy)
+					vector_iterator() : base_iterator() {};
+					vector_iterator(pointer m) : base_iterator(m) {};
+					vector_iterator(const vector_iterator &copy) : base_iterator(copy) {};
+					vector_iterator &operator=(const vector_iterator &copy)
 					{
-						if (copy != *this) {
-							ptr = copy.ptr;
-							curent_posicion = copy.curent_posicion;
-						}
+						if (*this != copy)
+							this->ptr = copy.ptr;
 						return *this;
-					};
-					~reverse_vector_iterator() {};
+					}
+			};
+			class reverse_vector_iterator : public base_iterator
+			{
 			};
 	};
 	template<class T, class Alloc>
+	bool operator==(typename vector<T, Alloc>::const_iterator &lhs, typename vector<T, Alloc>::const_iterator &rhs)
+	{
+		return (lhs.ptr == rhs.ptr);
+	}
+	template<class T, class Alloc>
+	bool operator!=(typename vector<T, Alloc>::const_iterator &lhs, typename vector<T, Alloc>::const_iterator &rhs)
+	{
+		return !(lhs == rhs);
+	}
+	template<class T, class Alloc>
+	bool operator<(typename vector<T, Alloc>::const_iterator &lhs, typename vector<T, Alloc>::const_iterator &rhs)
+	{
+		return (lhs.ptr < rhs.ptr);
+	}
+	template<class T, class Alloc>
+	bool operator>(typename vector<T, Alloc>::const_iterator &lhs, typename vector<T, Alloc>::const_iterator &rhs)
+	{
+		return (rhs < lhs);
+	}
+	template<class T, class Alloc>
+	bool operator<=(typename vector<T, Alloc>::const_iterator &lhs, typename vector<T, Alloc>::const_iterator &rhs)
+	{
+		return !(rhs < lhs);
+	}
+	template<class T, class Alloc>
+	bool operator>=(typename vector<T, Alloc>::const_iterator &lhs, typename vector<T, Alloc>::const_iterator &rhs)
+	{
+		return !(lhs < rhs);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::base_iterator::operator*()
+	{
+		return *ptr;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::pointer vector<T, Alloc>::base_iterator::operator->()
+	{
+		return ptr;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::base_iterator &vector<T, Alloc>::base_iterator::operator++()
+	{
+		++ptr;
+		return *this;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::base_iterator &vector<T, Alloc>::base_iterator::operator++(int)
+	{
+		vector<T, Alloc>::base_iterator tmp = vector<T, Alloc>::base_iterator(*this);
+		++ptr;
+		return tmp;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::base_iterator &vector<T, Alloc>::base_iterator::operator--()
+	{
+		--ptr;
+		return *this;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::base_iterator &vector<T, Alloc>::base_iterator::operator--(int)
+	{
+		vector<T, Alloc>::base_iterator tmp = vector<T, Alloc>::base_iterator(*this);
+		--ptr;
+		return tmp;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::base_iterator operator+(typename vector<T, Alloc>::const_iterator &lhs, typename vector<T, Alloc>::size_type n)
+	{
+		return typename vector<T, Alloc>::base_iterator();
+	}
+	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
 	{
-		return vector_iterator<pointer>(this->_vector_start, 0);
+		return vector_iterator(this->_vector_start, 0);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
+	{
+		vector<T, Alloc>::const_iterator tmp = vector_iterator(this->_vector_start, 0);
+		return tmp;
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
 	{
-		return vector_iterator<pointer>(this->_vector_start, _curent_size);
+		return vector_iterator(this->_vector_start, _curent_size);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
+	{
+		return vector_iterator(this->_vector_start, _curent_size);
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
 	{
-		return vector_iterator<pointer>(this->_vector_start, _curent_size - 1);
+		return vector_iterator(this->_vector_start, _curent_size - 1);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rbegin() const
+	{
+		return vector_iterator(this->_vector_start, _curent_size - 1);
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend()
 	{
-		return vector_iterator<pointer>(this->_vector_start, -1);
+		return vector_iterator(this->_vector_start, -1);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rend() const
+	{
+		return vector_iterator(this->_vector_start, -1);
 	}
 	template<class T, class Alloc>
 	vector<T, Alloc>::vector(const allocator_type &alloc)
@@ -399,7 +495,7 @@ namespace ft
 		}
 		_new_alloc.deallocate(_vector_start, check ? _alloc_size / 2 : _alloc_size);
 		_vector_start = tmp;
-		return vector_iterator<pointer>(_vector_start, iter_val);
+		return vector_iterator(_vector_start, iter_val);
 	}
 	template<class T, class Alloc>
 	void vector<T, Alloc>::insert(vector::iterator position, vector::size_type n, const value_type &val)
@@ -476,7 +572,7 @@ namespace ft
 		}
 		_new_alloc.deallocate(_vector_start, _alloc_size);
 		_vector_start = tmp;
-		return vector_iterator<pointer>(_vector_start, save_pos);
+		return vector_iterator(_vector_start, save_pos);
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(vector::iterator first, vector::iterator last)
@@ -494,7 +590,7 @@ namespace ft
 		}
 		_new_alloc.deallocate(_vector_start, _alloc_size);
 		_vector_start = tmp;
-		return vector_iterator<pointer>(_vector_start, save_pos);
+		return vector_iterator(_vector_start, save_pos);
 	}
 	template<class T, class Alloc>
 	void vector<T, Alloc>::swap(vector &x)
@@ -533,8 +629,9 @@ namespace ft
 		}
 		else {
 			for (int i = 0; i < lhs.size(); ++i) {
-				if (lhs[i] != rhs[i])
+				if (lhs[i] != rhs[i]) {
 					return false;
+				}
 			}
 		}
 		return true;
@@ -548,8 +645,9 @@ namespace ft
 	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
 		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i) {
-			if (lhs[i] >= rhs[i])
+			if (lhs[i] >= rhs[i]) {
 				return false;
+			}
 		}
 		return true;
 	}
