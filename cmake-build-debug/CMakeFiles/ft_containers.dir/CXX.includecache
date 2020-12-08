@@ -6,23 +6,23 @@
 
 #IncludeRegexTransform: 
 
-/Users/ruslanosmaev/Desktop/ft_containers/test.hpp
+/Users/ltheresi/CLionProjects/ft_containers/test.hpp
 
-/Users/ruslanosmaev/Desktop/ft_containers/vector/vector.hpp
+/Users/ltheresi/CLionProjects/ft_containers/vector/vector.hpp
 iostream
 -
 cmath
 -
 
-/Users/ruslanosmaev/Desktop/ft_containers/vector/vector_main.cpp
+/Users/ltheresi/CLionProjects/ft_containers/vector/vector_main.cpp
 iostream
 -
 vector
 -
 vector.hpp
-/Users/ruslanosmaev/Desktop/ft_containers/vector/vector.hpp
+/Users/ltheresi/CLionProjects/ft_containers/vector/vector.hpp
 ../test.hpp
-/Users/ruslanosmaev/Desktop/ft_containers/test.hpp
+/Users/ltheresi/CLionProjects/ft_containers/test.hpp
 math.h
 -
 sstream

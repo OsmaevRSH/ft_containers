@@ -23,9 +23,9 @@ namespace ft
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
 			typedef typename vector<T, Alloc>::vector_iterator<reference> iterator;
-			typedef typename vector<T, Alloc>::vector_iterator<const_reference> const_iterator;
+			//			typedef typename vector<T, Alloc>::vector_iterator<const_reference> const_iterator;
 			typedef typename vector<T, Alloc>::reverse_vector_iterator<reference> reverse_iterator;
-			typedef typename vector<T, Alloc>::reverse_vector_iterator<const_reference> const_reverse_iterator;
+			//			typedef typename vector<T, Alloc>::reverse_vector_iterator<const_reference> const_reverse_iterator;
 			typedef ptrdiff_t difference_type;
 			typedef size_t size_type;
 
@@ -70,6 +70,12 @@ namespace ft
 			template<class InputIterator>
 			void assign(InputIterator first, InputIterator last);
 			void assign(size_type n, const value_type &val);
+			void push_back(const value_type &val);
+			void pop_back();
+			iterator insert(iterator position, const value_type &val);
+			void insert(iterator position, size_type n, const value_type &val);
+			template<class InputIterator>
+			void insert(iterator position, InputIterator first, InputIterator last);
 
 		private:
 			//vector_types
@@ -316,6 +322,137 @@ namespace ft
 				_vector_start[i] = value_type();
 			}
 		}
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::assign(vector::size_type n, const value_type &val)
+	{
+		if (n > _curent_size) {
+			_curent_size = n;
+			allocator_type tmp = _new_alloc.allocate(_curent_size);
+			for (int i = 0; i < _curent_size; ++i) {
+				tmp[i] = val;
+			}
+			_new_alloc.reallocate(_vector_start, _alloc_size);
+			_alloc_size = _curent_size;
+			_vector_start = tmp;
+		}
+		else {
+			for (_curent_size = 0; _curent_size < n; ++_curent_size) {
+				_vector_start[_curent_size] = val;
+			}
+			for (int i = _curent_size; i < _alloc_size; ++i) {
+				_vector_start[i] = value_type();
+			}
+		}
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::push_back(const value_type &val)
+	{
+		if (_curent_size < _alloc_size) {
+			_vector_start[_curent_size++] = val;
+		}
+		else {
+			pointer tmp = _new_alloc.allocate(_alloc_size * 2);
+			for (int i = 0; i < _curent_size; ++i) {
+				tmp[i] = _vector_start[i];
+			}
+			tmp[_curent_size++] = val;
+			_new_alloc.deallocate(_vector_start, _alloc_size);
+			_alloc_size *= 2;
+			_vector_start = tmp;
+		}
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::pop_back()
+	{
+		_vector_start[--_curent_size] = value_type();
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(vector::iterator position, const value_type &val)
+	{
+		typename vector<T, Alloc>::iterator start = this->begin();
+		pointer tmp;
+		bool check = false;
+		size_type iter_val;
+		if (_curent_size < _alloc_size) {
+			tmp = _new_alloc.allocate(_alloc_size);
+		}
+		else {
+			tmp = _new_alloc.allocate(_alloc_size *= 2);
+			check = true;
+		}
+		if (!tmp) {
+			throw std::bad_alloc();
+		}
+		for (_curent_size = 0; start < position; ++start, ++_curent_size) {
+			tmp[_curent_size] = *start;
+		}
+		tmp[iter_val = _curent_size++] = *position;
+		for (; start < this->end(); ++start, ++_curent_size) {
+			tmp[_curent_size] = *start;
+		}
+		_new_alloc.deallocate(_vector_start, check ? _alloc_size / 2 : _alloc_size);
+		_vector_start = tmp;
+		return vector_iterator<pointer>(_vector_start, iter_val);
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::insert(vector::iterator position, vector::size_type n, const value_type &val)
+	{
+		typename vector<T, Alloc>::iterator start = this->begin();
+		pointer tmp;
+		bool check = false;
+		if (_curent_size + n < _alloc_size) {
+			tmp = _new_alloc.allocate(_alloc_size);
+		}
+		else {
+			tmp = _new_alloc.allocate(_alloc_size + n);
+			check = true;
+		}
+		if (!tmp) {
+			throw std::bad_alloc();
+		}
+		for (_curent_size = 0; start < position; ++start, ++_curent_size) {
+			tmp[_curent_size] = *start;
+		}
+		for (int i = 0; i < n; ++i, ++_curent_size) {
+			tmp[_curent_size] = val;
+		}
+		for (; start < this->end(); ++start, ++_curent_size) {
+			tmp[_curent_size] = *start;
+		}
+		_new_alloc.deallocate(_vector_start, _alloc_size);
+		check ? _alloc_size = _curent_size : 0;
+		_vector_start = tmp;
+	}
+	template<class T, class Alloc>
+	template<class InputIterator>
+	void vector<T, Alloc>::insert(vector::iterator position, InputIterator first, InputIterator last)
+	{
+		typename vector<T, Alloc>::iterator start = this->begin();
+		pointer tmp;
+		bool check = false;
+		if (_curent_size + (last - first) < _alloc_size) {
+			tmp = _new_alloc.allocate(_alloc_size);
+		}
+		else {
+			tmp = _new_alloc.allocate(_alloc_size + (last - first));
+			check = true;
+		}
+		if (!tmp) {
+			throw std::bad_alloc();
+		}
+		for (_curent_size = 0; start < position; ++start, ++_curent_size) {
+			tmp[_curent_size] = *start;
+		}
+		for (; first < last; ++first, ++_curent_size) {
+			tmp[_curent_size] = *first;
+		}
+		for (; start < this->end(); ++start, ++_curent_size) {
+			tmp[_curent_size] = *start;
+		}
+		_new_alloc.deallocate(_vector_start, _alloc_size);
+		check ? _alloc_size = _curent_size : 0;
+		_vector_start = tmp;
 	}
 }
 

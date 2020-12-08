@@ -1,3 +1,3 @@
-/Users/ruslanosmaev/Desktop/ft_containers/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/ruslanosmaev/Desktop/ft_containers/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/ruslanosmaev/Desktop/ft_containers/cmake-build-debug/CMakeFiles/ft_containers.dir
+/Users/ltheresi/CLionProjects/ft_containers/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/ltheresi/CLionProjects/ft_containers/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/ltheresi/CLionProjects/ft_containers/cmake-build-debug/CMakeFiles/ft_containers.dir
