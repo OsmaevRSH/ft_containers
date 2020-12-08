@@ -78,6 +78,10 @@ namespace ft
 			void insert(iterator position, InputIterator first, InputIterator last);
 			iterator erase(iterator position);
 			iterator erase(iterator first, iterator last);
+			void swap(vector &x);
+			void clear();
+
+			//non-member_function_overloads
 
 		private:
 			//vector_types
@@ -491,6 +495,78 @@ namespace ft
 		_new_alloc.deallocate(_vector_start, _alloc_size);
 		_vector_start = tmp;
 		return vector_iterator<pointer>(_vector_start, save_pos);
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::swap(vector &x)
+	{
+		pointer tmp_vector_start = x._vector_start;
+		x._vector_start = _vector_start;
+		_vector_start = tmp_vector_start;
+
+		size_type tmp_cur_size = x._curent_size;
+		x._curent_size = _curent_size;
+		_curent_size = tmp_cur_size;
+
+		size_type tmp_alloc_size = x._alloc_size;
+		x._alloc_size = _alloc_size;
+		_alloc_size = tmp_alloc_size;
+
+		allocator_type tmp_new_alloc = x._new_alloc;
+		x._new_alloc = _new_alloc;
+		_new_alloc = tmp_new_alloc;
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::clear()
+	{
+		_curent_size = 0;
+	}
+	template<class T, class Alloc>
+	void swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
+	{
+		x.swap(y);
+	}
+	template<class T, class Alloc>
+	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		if (lhs.size() != rhs.size()) {
+			return false;
+		}
+		else {
+			for (int i = 0; i < lhs.size(); ++i) {
+				if (lhs[i] != rhs[i])
+					return false;
+			}
+		}
+		return true;
+	}
+	template<class T, class Alloc>
+	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return !(lhs == rhs);
+	}
+	template<class T, class Alloc>
+	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i) {
+			if (lhs[i] >= rhs[i])
+				return false;
+		}
+		return true;
+	}
+	template<class T, class Alloc>
+	bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return !(rhs < lhs);
+	}
+	template<class T, class Alloc>
+	bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return (rhs < lhs);
+	}
+	template<class T, class Alloc>
+	bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return !(lhs < rhs);
 	}
 }
 

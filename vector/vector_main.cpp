@@ -139,16 +139,14 @@ void vec_comparison(vector<T> &first, ft::vector<T> &second)
 
 int main()
 {
-	vector<int> a(200, 9);
-	vector<int>::iterator it = a.begin();
-	//	a.reserve(10);
-	a.erase(it, it + 100);
-	cout << a.capacity() << endl;
-	//	a.resize(10, 12);
-	//	cout << a.capacity() << endl;
-	for (int i = 0; i < a.size(); ++i) {
+	vector<int> a(20, 9);
+	a.clear();
+	cout << a.capacity() << endl << a.size() << endl << a[2] << endl;
+	for (int i = 0; i < 21; ++i) {
 		cout << a[i] << " ";
 	}
+//	swap(a, b);
+//	cout << a.capacity() << endl << b.capacity() << endl;
 	//	cout << a.capacity();
 	//	cout << YELLOW << "=====================vector()=====================\n" << RESET;
 	//	{
