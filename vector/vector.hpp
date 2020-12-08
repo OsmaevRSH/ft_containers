@@ -76,6 +76,8 @@ namespace ft
 			void insert(iterator position, size_type n, const value_type &val);
 			template<class InputIterator>
 			void insert(iterator position, InputIterator first, InputIterator last);
+			iterator erase(iterator position);
+			iterator erase(iterator first, iterator last);
 
 		private:
 			//vector_types
@@ -370,7 +372,7 @@ namespace ft
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(vector::iterator position, const value_type &val)
 	{
-		typename vector<T, Alloc>::iterator start = this->begin();
+		iterator start = this->begin();
 		pointer tmp;
 		bool check = false;
 		size_type iter_val;
@@ -398,7 +400,7 @@ namespace ft
 	template<class T, class Alloc>
 	void vector<T, Alloc>::insert(vector::iterator position, vector::size_type n, const value_type &val)
 	{
-		typename vector<T, Alloc>::iterator start = this->begin();
+		iterator start = this->begin();
 		pointer tmp;
 		bool check = false;
 		if (_curent_size + n < _alloc_size) {
@@ -428,7 +430,7 @@ namespace ft
 	template<class InputIterator>
 	void vector<T, Alloc>::insert(vector::iterator position, InputIterator first, InputIterator last)
 	{
-		typename vector<T, Alloc>::iterator start = this->begin();
+		iterator start = this->begin();
 		pointer tmp;
 		bool check = false;
 		if (_curent_size + (last - first) < _alloc_size) {
@@ -453,6 +455,42 @@ namespace ft
 		_new_alloc.deallocate(_vector_start, _alloc_size);
 		check ? _alloc_size = _curent_size : 0;
 		_vector_start = tmp;
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(vector::iterator position)
+	{
+		pointer tmp = _new_alloc.allocate(_alloc_size);
+		iterator it = this->begin();
+		size_type save_pos;
+		for (_curent_size = 0; it < position; ++it, ++_curent_size) {
+			tmp[_curent_size] = *it;
+		}
+		++it;
+		save_pos = _curent_size;
+		for (; it < this->end(); ++it, ++_curent_size) {
+			tmp[_curent_size] = *it;
+		}
+		_new_alloc.deallocate(_vector_start, _alloc_size);
+		_vector_start = tmp;
+		return vector_iterator<pointer>(_vector_start, save_pos);
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(vector::iterator first, vector::iterator last)
+	{
+		pointer tmp = _new_alloc.allocate(_alloc_size);
+		iterator it = this->begin();
+		size_type save_pos;
+		for (_curent_size = 0; it < first; ++it, ++_curent_size) {
+			tmp[_curent_size] = *it;
+		}
+		it = last;
+		save_pos = _curent_size;
+		for (; it < this->end(); ++it, ++_curent_size) {
+			tmp[_curent_size] = *it;
+		}
+		_new_alloc.deallocate(_vector_start, _alloc_size);
+		_vector_start = tmp;
+		return vector_iterator<pointer>(_vector_start, save_pos);
 	}
 }
 
