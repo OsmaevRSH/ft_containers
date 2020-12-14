@@ -139,47 +139,37 @@ void vec_comparison(vector<T> &first, ft::vector<T> &second)
 
 int main()
 {
-	vector<int> a(20, 9);
-	ft::vector<int> b((size_t)20, 9);
-	vector<int>::iterator it;
-//	ft::vector<int>::const_iterator it = b.begin();
-//	a.clear();
-//	cout << a.capacity() << endl << a.size() << endl << a[2] << endl;
-//	for (int i = 0; i < 21; ++i) {
-//		cout << a[i] << " ";
-//	}
-//	swap(a, b);
-//	cout << a.capacity() << endl << b.capacity() << endl;
-	//	cout << a.capacity();
-	//	cout << YELLOW << "=====================vector()=====================\n" << RESET;
-	//	{
-	//		vector<int> first;
-	//		ft::vector<int> second;
-	//		capacity_part(first, second);
-	//		vec_comparison(first, second);
-	//	}
-	//	cout << YELLOW << "=====================vector(size_type n)=====================\n" << RESET;
-	//	{
-	//		vector<int> first(10);
-	//		ft::vector<int> second(10);
-	//		capacity_part(first, second);
-	//		vec_comparison(first, second);
-	//	}
-	//	cout << YELLOW << "=====================vector(size_type n, const value_type& val)=====================\n" << RESET;
-	//	{
-	//		vector<int> first(10, 4);
-	//		ft::vector<int> second(static_cast<size_t>(10), 4);
-	//		capacity_part(first, second);
-	//		vec_comparison(first, second);
-	//	}
-	//	vector<int> first(10);
-	//	ft::vector<int> second(10);
-	//	capacity_part(first, second);
-	//	vec_resize(first, second, 4, 2);
-	//	vec_resize(first, second, 7, 10);
-	//	vec_resize(first, second, 2, int());
-	//	vec_reserve(first, second, 1000);
-	//	vec_push_back(first, second);
-
-	//	pow(2, ceil(log(vector_len) / log(2)))
+	cout << YELLOW << "=====================vector()=====================\n" << RESET;
+	{
+		vector<int> first;
+		ft::vector<int> second;
+		capacity_part(first, second);
+		vec_comparison(first, second);
+	}
+	cout << YELLOW << "=====================vector(size_type n)=====================\n" << RESET;
+	{
+		vector<int> first(10);
+		ft::vector<int> second(10);
+		capacity_part(first, second);
+		vec_comparison(first, second);
+	}
+	cout << YELLOW << "=====================vector(size_type n, const value_type& val)=====================\n" << RESET;
+	{
+		vector<int> first(10, 4);
+		ft::vector<int> second(static_cast<size_t>(10), 4);
+		capacity_part(first, second);
+		vec_comparison(first, second);
+	}
+	cout << YELLOW << "=====================iterators=====================\n" << RESET;
+	{
+		vector<int> first(10, 4);
+		ft::vector<int> second(static_cast<size_t>(10), 4);
+		vector<int>::iterator it1 = first.begin();
+		ft::vector<int>::iterator it2 = second.begin();
+		for (int i = 0; i < first.size(); ++i) {
+			cout << *it1 << " " << *it2 << endl;
+			++it1;
+			++it2;
+		}
+	}
 }

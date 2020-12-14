@@ -3,4 +3,4 @@ project(ft_containers)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(ft_containers vector/vector_main.cpp vector/vector.hpp test.hpp vector/base_iterator.hpp)
+add_executable(ft_containers vector/vector_main.cpp vector/vector.hpp test.hpp)
