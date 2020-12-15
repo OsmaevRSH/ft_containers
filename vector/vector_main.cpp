@@ -163,10 +163,12 @@ int main()
 	cout << YELLOW << "=====================iterators=====================\n" << RESET;
 	{
 		vector<int> first(10, 4);
-		ft::vector<int> second(static_cast<size_t>(10), 4);
+		ft::vector<int> second((size_t)(10), 4);
 		vector<int>::iterator it1 = first.begin();
+		vector<int>::const_iterator itt1 = first.cbegin();
 		ft::vector<int>::iterator it2 = second.begin();
-		for (int i = 0; i < first.size(); ++i) {
+		ft::vector<int>::const_iterator itt2 = second.begin();
+		for (int i = 0; i < second.size(); ++i) {
 			cout << *it1 << " " << *it2 << endl;
 			++it1;
 			++it2;

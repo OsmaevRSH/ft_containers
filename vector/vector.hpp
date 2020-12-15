@@ -50,7 +50,7 @@ namespace ft
 			~vector();
 
 			//operator
-			vector<T, Alloc> &operator=(const vector &x);
+			vector &operator=(const vector &x);
 
 			//element_access
 			reference operator[](size_type n);
@@ -92,70 +92,90 @@ namespace ft
 			size_type _alloc_size;
 			allocator_type _new_alloc;
 
-			//iterator_class
-			template<class Iter, class Point, class Ref>
-			class base_iterator
+			class vector_iterator
 			{
 				protected:
 					pointer ptr;
 				public:
-					base_iterator() {};
-					base_iterator(pointer m) : ptr(m) {};
-					base_iterator(const vector_iterator &copy) : ptr(copy.ptr) {};
-					base_iterator &operator=(const base_iterator &copy)
-					{
-						if (copy != *this) {
-							ptr = copy.ptr;
-						}
-						return *this;
-					};
-					virtual ~base_iterator() {};
-
-					friend bool operator==(Iter &lhs, Iter &rhs);
-					friend bool operator!=(Iter &lhs, Iter &rhs);
-					friend bool operator<(Iter &lhs, Iter &rhs);
-					friend bool operator>(Iter &lhs, Iter &rhs);
-					friend bool operator<=(Iter &lhs, Iter &rhs);
-					friend bool operator>=(Iter &lhs, Iter &rhs);
-					Ref operator*();
-					Point operator->();
-					virtual Iter &operator++();
-					virtual Iter operator++(int);
-					virtual Iter &operator--();
-					virtual Iter operator--(int);
-					virtual Iter operator+(size_type n);
-					friend Iter operator+(size_type n, Iter &rhs);
-					virtual Iter operator-(size_type n);
-					friend Iter operator-(Iter &lhs, Iter &rhs);
-					virtual Iter &operator+=(size_type n);
-					virtual Iter &operator-=(size_type n);
-					Ref operator[](size_type n);
-			};
-			template<class Iter, class Point, class Ref>
-			class vector_iterator : public base_iterator<iterator, pointer, reference>
-			{
-				public:
-					vector_iterator() : base_iterator<iterator, pointer, reference>() {};
-					vector_iterator(pointer m) : base_iterator<iterator, pointer, reference>(m) {};
-					vector_iterator(const vector_iterator &copy) : base_iterator<iterator, pointer, reference>(copy) {};
+					vector_iterator() {};
+					vector_iterator(pointer m) : ptr(m) {};
+					vector_iterator(const vector_iterator &copy) : ptr(copy.ptr) {};
 					vector_iterator &operator=(const vector_iterator &copy)
 					{
 						if (*this != copy) {
-							this->ptr = copy.ptr;
+							ptr = copy.ptr;
 						}
 						return *this;
 					}
-					~vector_iterator() {};
+					virtual ~vector_iterator() {};
+
+					bool operator==(iterator &rhs) { return ptr == rhs.ptr; }
+					bool operator!=(iterator &rhs) { return ptr != rhs.ptr; }
+					bool operator<(iterator &rhs) { return ptr < rhs.ptr; }
+					bool operator>(iterator &rhs) { return ptr > rhs.ptr; }
+					bool operator<=(iterator &rhs) { return ptr <= rhs.ptr; }
+					bool operator>=(iterator &rhs) { return ptr >= rhs.ptr; }
+					virtual reference operator*() { return *ptr; }
+					pointer operator->() { return ptr; }
+					virtual reference operator[](size_type n) { return *(ptr + n); }
+					iterator &operator++()
+					{
+						++ptr;
+						return *this;
+					}
+					iterator operator++(int)
+					{
+						vector_iterator tmp(*this);
+						++ptr;
+						return tmp;
+					}
+					iterator &operator--()
+					{
+						--ptr;
+						return *this;
+					}
+					iterator operator--(int)
+					{
+						vector_iterator tmp(*this);
+						--ptr;
+						return tmp;
+					}
+					iterator operator+(size_type n)
+					{
+						vector_iterator tmp(*this);
+						tmp.ptr += n;
+						return tmp;
+					}
+					friend iterator operator+(size_type n, iterator &rhs);
+					iterator operator-(size_type n)
+					{
+						vector_iterator tmp(*this);
+						tmp.ptr -= n;
+						return tmp;
+					}
+					iterator operator-(iterator &rhs)
+					{
+						vector_iterator tmp(*this);
+						tmp.ptr += rhs.ptr;
+						return tmp;
+					}
+					iterator &operator+=(size_type n)
+					{
+						this->ptr += n;
+						return *this;
+					}
+					iterator &operator-=(size_type n)
+					{
+						this->ptr -= n;
+						return *this;
+					}
 			};
-			template<class Iter, class Point, class Ref>
-			class const_vector_iterator : public base_iterator<const_iterator, const_pointer, const_reference>
+			class const_vector_iterator : public vector_iterator
 			{
 				public:
-					const_vector_iterator() : base_iterator<const_iterator, const_pointer, const_reference>() {};
-					const_vector_iterator(pointer m)
-							: base_iterator<const_iterator, const_pointer, const_reference>(m) {};
-					const_vector_iterator(const const_vector_iterator &copy)
-							: base_iterator<const_iterator, const_pointer, const_reference>(copy) {};
+					const_vector_iterator() {};
+					const_vector_iterator(pointer m) : vector_iterator(m) {};
+					const_vector_iterator(const const_vector_iterator &copy) : vector_iterator(copy) {};
 					const_vector_iterator &operator=(const const_vector_iterator &copy)
 					{
 						if (*this != copy) {
@@ -164,46 +184,97 @@ namespace ft
 						return *this;
 					}
 					~const_vector_iterator() {};
+
+					const_reference operator*() { return *(this->ptr); }
+					const_reference operator[](size_type n) { return *(this->ptr + n); }
+
+
 			};
-			template<class Iter, class Point, class Ref>
-			class reverse_vector_iterator : public base_iterator<reverse_iterator, pointer, reference>
+			class reverse_vector_iterator
 			{
+				protected:
+					pointer ptr;
 				public:
-					reverse_vector_iterator() : base_iterator<reverse_iterator, pointer, reference>() {};
-					reverse_vector_iterator(pointer m) : base_iterator<reverse_iterator, pointer, reference>(m) {};
-					reverse_vector_iterator(const reverse_vector_iterator &copy)
-							: base_iterator<reverse_iterator, pointer, reference>(copy) {};
+					reverse_vector_iterator(){};
+					reverse_vector_iterator(pointer m) : ptr(m) {};
+					reverse_vector_iterator(const reverse_vector_iterator &copy) : ptr(copy.ptr) {};
 					reverse_vector_iterator &operator=(const reverse_vector_iterator &copy)
 					{
 						if (*this != copy) {
-							this->ptr = copy.ptr;
+							ptr = copy.ptr;
 						}
 						return *this;
 					}
 					~reverse_vector_iterator() {};
 
-					reverse_iterator &operator++();
-					reverse_iterator operator++(int);
-					reverse_iterator &operator--();
-					reverse_iterator operator--(int);
-					reverse_iterator operator+(size_type n);
+					bool operator==(reverse_iterator &rhs) { return ptr == rhs.ptr; }
+					bool operator!=(reverse_iterator &rhs) { return ptr != rhs.ptr; }
+					bool operator<(reverse_iterator &rhs) { return ptr > rhs.ptr; }
+					bool operator>(reverse_iterator &rhs) { return ptr < rhs.ptr; }
+					bool operator<=(reverse_iterator &rhs) { return ptr >= rhs.ptr; }
+					bool operator>=(reverse_iterator &rhs) { return ptr <= rhs.ptr; }
+					virtual reference operator*() { return *ptr; }
+					pointer operator->() { return ptr; }
+					virtual reference operator[](size_type n) { return *(ptr - n); }
+					reverse_iterator &operator++()
+					{
+						--ptr;
+						return *this;
+					}
+					reverse_iterator operator++(int)
+					{
+						vector_iterator tmp(*this);
+						--ptr;
+						return tmp;
+					}
+					reverse_iterator &operator--()
+					{
+						++ptr;
+						return *this;
+					}
+					reverse_iterator operator--(int)
+					{
+						vector_iterator tmp(*this);
+						++ptr;
+						return tmp;
+					}
+					reverse_iterator operator+(size_type n)
+					{
+						vector_iterator tmp(*this);
+						tmp.ptr -= n;
+						return tmp;
+					}
 					friend reverse_iterator operator+(size_type n, reverse_iterator &rhs);
-					reverse_iterator operator-(size_type n);
-					friend reverse_iterator operator-(reverse_iterator &lhs, reverse_iterator &rhs);
-					reverse_iterator &operator+=(size_type n);
-					reverse_iterator &operator-=(size_type n);
+					reverse_iterator operator-(size_type n)
+					{
+						vector_iterator tmp(*this);
+						tmp.ptr += n;
+						return tmp;
+					}
+					reverse_iterator operator-(iterator &rhs)
+					{
+						vector_iterator tmp(*this);
+						tmp.ptr += rhs.ptr;
+						return tmp;
+					}
+					reverse_iterator &operator+=(size_type n)
+					{
+						this->ptr -= n;
+						return *this;
+					}
+					reverse_iterator &operator-=(size_type n)
+					{
+						this->ptr += n;
+						return *this;
+					}
 			};
-			template<class Iter, class Point, class Ref>
-			class const_reverse_vector_iterator
-					: public base_iterator<const_reverse_iterator, const_pointer, const_reference>
+			class const_reverse_vector_iterator : public reverse_vector_iterator
 			{
 				public:
-					const_reverse_vector_iterator()
-							: base_iterator<const_reverse_iterator, const_pointer, const_reference>() {};
-					const_reverse_vector_iterator(pointer m)
-							: base_iterator<const_reverse_iterator, const_pointer, const_reference>(m) {};
+					const_reverse_vector_iterator() : reverse_vector_iterator() {};
+					const_reverse_vector_iterator(pointer m) : reverse_vector_iterator(m) {};
 					const_reverse_vector_iterator(const const_reverse_vector_iterator &copy)
-							: base_iterator<const_reverse_iterator, const_pointer, const_reference>(copy) {};
+							: reverse_vector_iterator(copy) {};
 					const_reverse_vector_iterator &operator=(const const_reverse_vector_iterator &copy)
 					{
 						if (*this != copy) {
@@ -213,241 +284,23 @@ namespace ft
 					}
 					~const_reverse_vector_iterator() {};
 
-					const_reverse_iterator &operator++();
-					const_reverse_iterator operator++(int);
-					const_reverse_iterator &operator--();
-					const_reverse_iterator operator--(int);
-					const_reverse_iterator operator+(size_type n);
-					friend const_reverse_iterator operator+(size_type n, const_reverse_iterator &rhs);
-					const_reverse_iterator operator-(size_type n);
-					friend const_reverse_iterator operator-(const_reverse_iterator &lhs, const_reverse_iterator &rhs);
-					const_reverse_iterator &operator+=(size_type n);
-					const_reverse_iterator &operator-=(size_type n);
+					const_reverse_iterator operator*() { return *(this->ptr); }
+					const_reverse_iterator operator[](size_type n) { return *(this->ptr - n); }
 			};
 	};
-	template<class Iter>
-	bool operator==(Iter &lhs, Iter &rhs)
-	{
-		return lhs.ptr == rhs.ptr;
-	}
-	template<class Iter>
-	bool operator!=(Iter &lhs, Iter &rhs)
-	{
-		return !(lhs.ptr == rhs.ptr);
-	}
-	template<class Iter>
-	bool operator<(Iter &lhs, Iter &rhs)
-	{
-		return (lhs.ptr < rhs.ptr);
-	}
-	template<class Iter>
-	bool operator>(Iter &lhs, Iter &rhs)
-	{
-		return (lhs.ptr > rhs.ptr);
-	}
-	template<class Iter>
-	bool operator<=(Iter &lhs, Iter &rhs)
-	{
-		return (lhs.ptr <= rhs.ptr);
-	}
-	template<class Iter>
-	bool operator>=(Iter &lhs, Iter &rhs)
-	{
-		return (lhs.ptr >= rhs.ptr);
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Ref vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator*()
-	{
-		return *(this->ptr);
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Point vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator->()
-	{
-		return this->ptr;
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter &vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator++()
-	{
-		++ptr;
-		return *this;
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator++(int)
-	{
-		Iter tmp = base_iterator<Iter, Point, Ref>(*this);
-		++ptr;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter &vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator--()
-	{
-		--ptr;
-		return *this;
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator--(int)
-	{
-		Iter tmp = base_iterator<Iter, Point, Ref>(*this);
-		--ptr;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator operator+(typename vector<T, Alloc>::size_type n, typename vector<T, Alloc>::const_reverse_iterator &rhs)
-	{
-		typename vector<T, Alloc>::const_reverse_iterator tmp = rhs;
-		tmp.ptr += n;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator operator-(typename vector<T, Alloc>::const_reverse_iterator &lhs, typename vector<T, Alloc>::const_reverse_iterator &rhs)
-	{
-		typename vector<T, Alloc>::const_reverse_iterator tmp = lhs;
-		tmp.ptr -= rhs.ptr;
-		return tmp;
-	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::reverse_iterator operator+(typename vector<T, Alloc>::size_type n, typename vector<T, Alloc>::reverse_iterator &rhs)
 	{
-		typename vector<T, Alloc>::reverse_iterator tmp = rhs;
-		tmp.ptr += n;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator operator-(typename vector<T, Alloc>::reverse_iterator &lhs, typename vector<T, Alloc>::reverse_iterator &rhs)
-	{
-		typename vector<T, Alloc>::reverse_iterator tmp = lhs;
-		tmp.ptr -= rhs.ptr;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator &vector<T, Alloc>::const_reverse_vector_iterator::operator++()
-	{
-		return vector<T, Alloc>::base_iterator<const_reverse_iterator, const_pointer, const_reference>::operator--();
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::const_reverse_vector_iterator::operator++(int)
-	{
-		const_reverse_iterator tmp = const_vector_iterator(*this);
-		--this->ptr;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator &vector<T, Alloc>::const_reverse_vector_iterator::operator--()
-	{
-		return vector<T, Alloc>::base_iterator<const_reverse_iterator, const_pointer, const_reference>::operator++();
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::const_reverse_vector_iterator::operator--(int)
-	{
-		const_reverse_vector_iterator tmp = const_reverse_vector_iterator(*this);
-		++this->ptr;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::const_reverse_vector_iterator::operator+(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<const_reverse_iterator, const_pointer, const_reference>::operator-(n);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::const_reverse_vector_iterator::operator-(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<const_reverse_iterator, const_pointer, const_reference>::operator+(n);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator &vector<T, Alloc>::const_reverse_vector_iterator::operator+=(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<const_reverse_iterator, const_pointer, const_reference>::operator-=(n);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator &vector<T, Alloc>::const_reverse_vector_iterator::operator-=(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<const_reverse_iterator, const_pointer, const_reference>::operator+=(n);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator &vector<T, Alloc>::reverse_vector_iterator::operator++()
-	{
-		return vector<T, Alloc>::base_iterator<reverse_iterator, pointer, reference>::operator--();
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::reverse_vector_iterator::operator++(int)
-	{
-		reverse_vector_iterator tmp = reverse_vector_iterator(*this);
-		--this->ptr;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator &vector<T, Alloc>::reverse_vector_iterator::operator--()
-	{
-		return vector<T, Alloc>::base_iterator<reverse_iterator, pointer, reference>::operator++();
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::reverse_vector_iterator::operator--(int)
-	{
-		reverse_vector_iterator tmp = reverse_vector_iterator(*this);
-		++this->ptr;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::reverse_vector_iterator::operator-(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<reverse_iterator, pointer, reference>::operator+(n);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::reverse_vector_iterator::operator+(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<reverse_iterator, pointer, reference>::operator-(n);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator &vector<T, Alloc>::reverse_vector_iterator::operator+=(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<reverse_iterator, pointer, reference>::operator-=(n);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator &vector<T, Alloc>::reverse_vector_iterator::operator-=(vector::size_type n)
-	{
-		return vector<T, Alloc>::base_iterator<reverse_iterator, pointer, reference>::operator+=(n);
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Ref vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator[](vector::size_type n)
-	{
-		return this->ptr[n];
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator+(vector::size_type n)
-	{
-		Iter tmp = *this;
-		tmp.ptr += n;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator-(vector::size_type n)
-	{
-		Iter tmp = *this;
+		typename vector<T, Alloc>::vector_iterator tmp(rhs.ptr);
 		tmp.ptr -= n;
 		return tmp;
 	}
 	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter &vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator+=(vector::size_type n)
+	typename vector<T, Alloc>::iterator operator+(typename vector<T, Alloc>::size_type n, typename vector<T, Alloc>::iterator &rhs)
 	{
-		this->ptr += n;
-		return *this;
-	}
-	template<class T, class Alloc>
-	template<class Iter, class Point, class Ref>
-	Iter &vector<T, Alloc>::base_iterator<Iter, Point, Ref>::operator-=(vector::size_type n)
-	{
-		this->ptr -= n;
-		return *this;
+		typename vector<T, Alloc>::vector_iterator tmp(rhs.ptr);
+		tmp.ptr += n;
+		return tmp;
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
