@@ -115,9 +115,9 @@ namespace ft
 					bool operator>(iterator &rhs) { return ptr > rhs.ptr; }
 					bool operator<=(iterator &rhs) { return ptr <= rhs.ptr; }
 					bool operator>=(iterator &rhs) { return ptr >= rhs.ptr; }
-					virtual reference operator*() { return *ptr; }
+					reference operator*() { return *ptr; }
 					pointer operator->() { return ptr; }
-					virtual reference operator[](size_type n) { return *(ptr + n); }
+					reference operator[](size_type n) { return *(ptr + n); }
 					iterator &operator++()
 					{
 						++ptr;
@@ -173,7 +173,8 @@ namespace ft
 			class const_vector_iterator : public vector_iterator
 			{
 				public:
-					const_vector_iterator() {};
+					const_vector_iterator() : vector_iterator() {};
+					const_vector_iterator(iterator) : vector_iterator() {}
 					const_vector_iterator(pointer m) : vector_iterator(m) {};
 					const_vector_iterator(const const_vector_iterator &copy) : vector_iterator(copy) {};
 					const_vector_iterator &operator=(const const_vector_iterator &copy)
@@ -195,7 +196,7 @@ namespace ft
 				protected:
 					pointer ptr;
 				public:
-					reverse_vector_iterator(){};
+					reverse_vector_iterator() {};
 					reverse_vector_iterator(pointer m) : ptr(m) {};
 					reverse_vector_iterator(const reverse_vector_iterator &copy) : ptr(copy.ptr) {};
 					reverse_vector_iterator &operator=(const reverse_vector_iterator &copy)
@@ -213,9 +214,9 @@ namespace ft
 					bool operator>(reverse_iterator &rhs) { return ptr < rhs.ptr; }
 					bool operator<=(reverse_iterator &rhs) { return ptr >= rhs.ptr; }
 					bool operator>=(reverse_iterator &rhs) { return ptr <= rhs.ptr; }
-					virtual reference operator*() { return *ptr; }
+					reference operator*() { return *ptr; }
 					pointer operator->() { return ptr; }
-					virtual reference operator[](size_type n) { return *(ptr - n); }
+					reference operator[](size_type n) { return *(ptr - n); }
 					reverse_iterator &operator++()
 					{
 						--ptr;
@@ -272,6 +273,7 @@ namespace ft
 			{
 				public:
 					const_reverse_vector_iterator() : reverse_vector_iterator() {};
+					const_reverse_vector_iterator(reverse_iterator) : reverse_vector_iterator() {};
 					const_reverse_vector_iterator(pointer m) : reverse_vector_iterator(m) {};
 					const_reverse_vector_iterator(const const_reverse_vector_iterator &copy)
 							: reverse_vector_iterator(copy) {};

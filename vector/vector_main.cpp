@@ -167,7 +167,7 @@ int main()
 		vector<int>::iterator it1 = first.begin();
 		vector<int>::const_iterator itt1 = first.cbegin();
 		ft::vector<int>::iterator it2 = second.begin();
-		ft::vector<int>::const_iterator itt2 = second.begin();
+		ft::vector<int>::const_reverse_iterator itt2 = second.rbegin();
 		for (int i = 0; i < second.size(); ++i) {
 			cout << *it1 << " " << *it2 << endl;
 			++it1;
