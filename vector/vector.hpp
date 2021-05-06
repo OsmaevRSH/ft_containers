@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include "Vector_Iterator.hpp"
 
 namespace ft
 {
@@ -10,10 +11,9 @@ namespace ft
 	class vector
 	{
 		private:
-			class vector_iterator;
-			class const_vector_iterator;
-			class reverse_vector_iterator;
-			class const_reverse_vector_iterator;
+			//			class const_vector_iterator;
+			//			class reverse_vector_iterator;
+			//			class const_reverse_vector_iterator;
 		public:
 			//member_types
 			typedef T value_type;
@@ -22,22 +22,22 @@ namespace ft
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
-			typedef typename vector<T, Alloc>::vector_iterator iterator;
-			typedef typename vector<T, Alloc>::const_vector_iterator const_iterator;
-			typedef typename vector<T, Alloc>::reverse_vector_iterator reverse_iterator;
-			typedef typename vector<T, Alloc>::const_reverse_vector_iterator const_reverse_iterator;
+			typedef Vector_Iterator<T> iterator;
+			//			typedef typename vector<T, Alloc>::const_vector_iterator const_iterator;
+			//			typedef typename vector<T, Alloc>::reverse_vector_iterator reverse_iterator;
+			//			typedef typename vector<T, Alloc>::const_reverse_vector_iterator const_reverse_iterator;
 			typedef ptrdiff_t difference_type;
 			typedef size_t size_type;
 
 			//iterator_func
 			iterator begin();
-			const_iterator begin() const;
+			//			const_iterator begin() const;
 			iterator end();
-			const_iterator end() const;
-			reverse_iterator rbegin();
-			const_reverse_iterator rbegin() const;
-			reverse_iterator rend();
-			const_reverse_iterator rend() const;
+			//			const_iterator end() const;
+			//			reverse_iterator rbegin();
+			//			const_reverse_iterator rbegin() const;
+			//			reverse_iterator rend();
+			//			const_reverse_iterator rend() const;
 
 			//constructor
 			explicit vector(const allocator_type &alloc = allocator_type());
@@ -92,258 +92,258 @@ namespace ft
 			size_type _alloc_size;
 			allocator_type _new_alloc;
 
-			class vector_iterator
-			{
-				protected:
-					pointer ptr;
-				public:
-					vector_iterator() {};
-					vector_iterator(pointer m) : ptr(m) {};
-					vector_iterator(const vector_iterator &copy) : ptr(copy.ptr) {};
-					vector_iterator &operator=(const vector_iterator &copy)
-					{
-						if (*this != copy) {
-							ptr = copy.ptr;
-						}
-						return *this;
-					}
-					virtual ~vector_iterator() {};
-
-					bool operator==(iterator &rhs) { return ptr == rhs.ptr; }
-					bool operator!=(iterator &rhs) { return ptr != rhs.ptr; }
-					bool operator<(iterator &rhs) { return ptr < rhs.ptr; }
-					bool operator>(iterator &rhs) { return ptr > rhs.ptr; }
-					bool operator<=(iterator &rhs) { return ptr <= rhs.ptr; }
-					bool operator>=(iterator &rhs) { return ptr >= rhs.ptr; }
-					reference operator*() { return *ptr; }
-					pointer operator->() { return ptr; }
-					reference operator[](size_type n) { return *(ptr + n); }
-					iterator &operator++()
-					{
-						++ptr;
-						return *this;
-					}
-					iterator operator++(int)
-					{
-						vector_iterator tmp(*this);
-						++ptr;
-						return tmp;
-					}
-					iterator &operator--()
-					{
-						--ptr;
-						return *this;
-					}
-					iterator operator--(int)
-					{
-						vector_iterator tmp(*this);
-						--ptr;
-						return tmp;
-					}
-					iterator operator+(size_type n)
-					{
-						vector_iterator tmp(*this);
-						tmp.ptr += n;
-						return tmp;
-					}
-					friend iterator operator+(size_type n, iterator &rhs);
-					iterator operator-(size_type n)
-					{
-						vector_iterator tmp(*this);
-						tmp.ptr -= n;
-						return tmp;
-					}
-					iterator operator-(iterator &rhs)
-					{
-						vector_iterator tmp(*this);
-						tmp.ptr += rhs.ptr;
-						return tmp;
-					}
-					iterator &operator+=(size_type n)
-					{
-						this->ptr += n;
-						return *this;
-					}
-					iterator &operator-=(size_type n)
-					{
-						this->ptr -= n;
-						return *this;
-					}
-			};
-			class const_vector_iterator : public vector_iterator
-			{
-				public:
-					const_vector_iterator() : vector_iterator() {};
-					const_vector_iterator(iterator) : vector_iterator() {}
-					const_vector_iterator(pointer m) : vector_iterator(m) {};
-					const_vector_iterator(const const_vector_iterator &copy) : vector_iterator(copy) {};
-					const_vector_iterator &operator=(const const_vector_iterator &copy)
-					{
-						if (*this != copy) {
-							this->ptr = copy.ptr;
-						}
-						return *this;
-					}
-					~const_vector_iterator() {};
-
-					const_reference operator*() { return *(this->ptr); }
-					const_reference operator[](size_type n) { return *(this->ptr + n); }
-
-
-			};
-			class reverse_vector_iterator
-			{
-				protected:
-					pointer ptr;
-				public:
-					reverse_vector_iterator() {};
-					reverse_vector_iterator(pointer m) : ptr(m) {};
-					reverse_vector_iterator(const reverse_vector_iterator &copy) : ptr(copy.ptr) {};
-					reverse_vector_iterator &operator=(const reverse_vector_iterator &copy)
-					{
-						if (*this != copy) {
-							ptr = copy.ptr;
-						}
-						return *this;
-					}
-					~reverse_vector_iterator() {};
-
-					bool operator==(reverse_iterator &rhs) { return ptr == rhs.ptr; }
-					bool operator!=(reverse_iterator &rhs) { return ptr != rhs.ptr; }
-					bool operator<(reverse_iterator &rhs) { return ptr > rhs.ptr; }
-					bool operator>(reverse_iterator &rhs) { return ptr < rhs.ptr; }
-					bool operator<=(reverse_iterator &rhs) { return ptr >= rhs.ptr; }
-					bool operator>=(reverse_iterator &rhs) { return ptr <= rhs.ptr; }
-					reference operator*() { return *ptr; }
-					pointer operator->() { return ptr; }
-					reference operator[](size_type n) { return *(ptr - n); }
-					reverse_iterator &operator++()
-					{
-						--ptr;
-						return *this;
-					}
-					reverse_iterator operator++(int)
-					{
-						vector_iterator tmp(*this);
-						--ptr;
-						return tmp;
-					}
-					reverse_iterator &operator--()
-					{
-						++ptr;
-						return *this;
-					}
-					reverse_iterator operator--(int)
-					{
-						vector_iterator tmp(*this);
-						++ptr;
-						return tmp;
-					}
-					reverse_iterator operator+(size_type n)
-					{
-						vector_iterator tmp(*this);
-						tmp.ptr -= n;
-						return tmp;
-					}
-					friend reverse_iterator operator+(size_type n, reverse_iterator &rhs);
-					reverse_iterator operator-(size_type n)
-					{
-						vector_iterator tmp(*this);
-						tmp.ptr += n;
-						return tmp;
-					}
-					reverse_iterator operator-(iterator &rhs)
-					{
-						vector_iterator tmp(*this);
-						tmp.ptr += rhs.ptr;
-						return tmp;
-					}
-					reverse_iterator &operator+=(size_type n)
-					{
-						this->ptr -= n;
-						return *this;
-					}
-					reverse_iterator &operator-=(size_type n)
-					{
-						this->ptr += n;
-						return *this;
-					}
-			};
-			class const_reverse_vector_iterator : public reverse_vector_iterator
-			{
-				public:
-					const_reverse_vector_iterator() : reverse_vector_iterator() {};
-					const_reverse_vector_iterator(reverse_iterator) : reverse_vector_iterator() {};
-					const_reverse_vector_iterator(pointer m) : reverse_vector_iterator(m) {};
-					const_reverse_vector_iterator(const const_reverse_vector_iterator &copy)
-							: reverse_vector_iterator(copy) {};
-					const_reverse_vector_iterator &operator=(const const_reverse_vector_iterator &copy)
-					{
-						if (*this != copy) {
-							this->ptr = copy.ptr;
-						}
-						return *this;
-					}
-					~const_reverse_vector_iterator() {};
-
-					const_reverse_iterator operator*() { return *(this->ptr); }
-					const_reverse_iterator operator[](size_type n) { return *(this->ptr - n); }
-			};
+			//			class vector_iterator
+			//			{
+			//				protected:
+			//					pointer ptr;
+			//				public:
+			//					vector_iterator() {};
+			//					vector_iterator(pointer m) : ptr(m) {};
+			//					vector_iterator(const vector_iterator &copy) : ptr(copy.ptr) {};
+			//					vector_iterator &operator=(const vector_iterator &copy)
+			//					{
+			//						if (*this != copy) {
+			//							ptr = copy.ptr;
+			//						}
+			//						return *this;
+			//					}
+			//					virtual ~vector_iterator() {};
+			//
+			//					bool operator==(iterator &rhs) { return ptr == rhs.ptr; }
+			//					bool operator!=(iterator &rhs) { return ptr != rhs.ptr; }
+			//					bool operator<(iterator &rhs) { return ptr < rhs.ptr; }
+			//					bool operator>(iterator &rhs) { return ptr > rhs.ptr; }
+			//					bool operator<=(iterator &rhs) { return ptr <= rhs.ptr; }
+			//					bool operator>=(iterator &rhs) { return ptr >= rhs.ptr; }
+			//					virtual reference operator*() { return *ptr; }
+			//					pointer operator->() { return ptr; }
+			//					reference operator[](size_type n) { return *(ptr + n); }
+			//					iterator &operator++()
+			//					{
+			//						++ptr;
+			//						return *this;
+			//					}
+			//					iterator operator++(int)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						++ptr;
+			//						return tmp;
+			//					}
+			//					iterator &operator--()
+			//					{
+			//						--ptr;
+			//						return *this;
+			//					}
+			//					iterator operator--(int)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						--ptr;
+			//						return tmp;
+			//					}
+			//					iterator operator+(size_type n)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						tmp.ptr += n;
+			//						return tmp;
+			//					}
+			//					friend iterator operator+(size_type n, iterator &rhs);
+			//					iterator operator-(size_type n)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						tmp.ptr -= n;
+			//						return tmp;
+			//					}
+			//					iterator operator-(iterator &rhs)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						tmp.ptr += rhs.ptr;
+			//						return tmp;
+			//					}
+			//					iterator &operator+=(size_type n)
+			//					{
+			//						this->ptr += n;
+			//						return *this;
+			//					}
+			//					iterator &operator-=(size_type n)
+			//					{
+			//						this->ptr -= n;
+			//						return *this;
+			//					}
+			//			};
+			//			class const_vector_iterator : public vector_iterator
+			//			{
+			//				public:
+			//					const_vector_iterator() : vector_iterator() {};
+			//					const_vector_iterator(iterator) : vector_iterator() {}
+			//					const_vector_iterator(pointer m) : vector_iterator(m) {};
+			//					const_vector_iterator(const const_vector_iterator &copy) : vector_iterator(copy) {};
+			//					const_vector_iterator &operator=(const const_vector_iterator &copy)
+			//					{
+			//						if (*this != copy) {
+			//							this->ptr = copy.ptr;
+			//						}
+			//						return *this;
+			//					}
+			//					~const_vector_iterator() {};
+			//
+			//					const_reference operator*() { return *(this->ptr); }
+			//					const_reference operator[](size_type n) { return *(this->ptr + n); }
+			//
+			//
+			//			};
+			//			class reverse_vector_iterator
+			//			{
+			//				protected:
+			//					pointer ptr;
+			//				public:
+			//					reverse_vector_iterator() {};
+			//					reverse_vector_iterator(pointer m) : ptr(m) {};
+			//					reverse_vector_iterator(const reverse_vector_iterator &copy) : ptr(copy.ptr) {};
+			//					reverse_vector_iterator &operator=(const reverse_vector_iterator &copy)
+			//					{
+			//						if (*this != copy) {
+			//							ptr = copy.ptr;
+			//						}
+			//						return *this;
+			//					}
+			//					~reverse_vector_iterator() {};
+			//
+			//					bool operator==(reverse_iterator &rhs) { return ptr == rhs.ptr; }
+			//					bool operator!=(reverse_iterator &rhs) { return ptr != rhs.ptr; }
+			//					bool operator<(reverse_iterator &rhs) { return ptr > rhs.ptr; }
+			//					bool operator>(reverse_iterator &rhs) { return ptr < rhs.ptr; }
+			//					bool operator<=(reverse_iterator &rhs) { return ptr >= rhs.ptr; }
+			//					bool operator>=(reverse_iterator &rhs) { return ptr <= rhs.ptr; }
+			//					reference operator*() { return *ptr; }
+			//					pointer operator->() { return ptr; }
+			//					reference operator[](size_type n) { return *(ptr - n); }
+			//					reverse_iterator &operator++()
+			//					{
+			//						--ptr;
+			//						return *this;
+			//					}
+			//					reverse_iterator operator++(int)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						--ptr;
+			//						return tmp;
+			//					}
+			//					reverse_iterator &operator--()
+			//					{
+			//						++ptr;
+			//						return *this;
+			//					}
+			//					reverse_iterator operator--(int)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						++ptr;
+			//						return tmp;
+			//					}
+			//					reverse_iterator operator+(size_type n)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						tmp.ptr -= n;
+			//						return tmp;
+			//					}
+			//					friend reverse_iterator operator+(size_type n, reverse_iterator &rhs);
+			//					reverse_iterator operator-(size_type n)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						tmp.ptr += n;
+			//						return tmp;
+			//					}
+			//					reverse_iterator operator-(iterator &rhs)
+			//					{
+			//						vector_iterator tmp(*this);
+			//						tmp.ptr += rhs.ptr;
+			//						return tmp;
+			//					}
+			//					reverse_iterator &operator+=(size_type n)
+			//					{
+			//						this->ptr -= n;
+			//						return *this;
+			//					}
+			//					reverse_iterator &operator-=(size_type n)
+			//					{
+			//						this->ptr += n;
+			//						return *this;
+			//					}
+			//			};
+			//			class const_reverse_vector_iterator : public reverse_vector_iterator
+			//			{
+			//				public:
+			//					const_reverse_vector_iterator() : reverse_vector_iterator() {};
+			//					const_reverse_vector_iterator(reverse_iterator) : reverse_vector_iterator() {};
+			//					const_reverse_vector_iterator(pointer m) : reverse_vector_iterator(m) {};
+			//					const_reverse_vector_iterator(const const_reverse_vector_iterator &copy)
+			//							: reverse_vector_iterator(copy) {};
+			//					const_reverse_vector_iterator &operator=(const const_reverse_vector_iterator &copy)
+			//					{
+			//						if (*this != copy) {
+			//							this->ptr = copy.ptr;
+			//						}
+			//						return *this;
+			//					}
+			//					~const_reverse_vector_iterator() {};
+			//
+			//					const_reverse_iterator operator*() { return *(this->ptr); }
+			//					const_reverse_iterator operator[](size_type n) { return *(this->ptr - n); }
+			//			};
 	};
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator operator+(typename vector<T, Alloc>::size_type n, typename vector<T, Alloc>::reverse_iterator &rhs)
-	{
-		typename vector<T, Alloc>::vector_iterator tmp(rhs.ptr);
-		tmp.ptr -= n;
-		return tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::iterator operator+(typename vector<T, Alloc>::size_type n, typename vector<T, Alloc>::iterator &rhs)
-	{
-		typename vector<T, Alloc>::vector_iterator tmp(rhs.ptr);
-		tmp.ptr += n;
-		return tmp;
-	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::reverse_iterator operator+(typename vector<T, Alloc>::size_type n, typename vector<T, Alloc>::reverse_iterator &rhs)
+	//	{
+	//		typename vector<T, Alloc>::vector_iterator tmp(rhs.ptr);
+	//		tmp.ptr -= n;
+	//		return tmp;
+	//	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::iterator operator+(typename vector<T, Alloc>::size_type n, typename vector<T, Alloc>::iterator &rhs)
+	//	{
+	//		typename vector<T, Alloc>::vector_iterator tmp(rhs.ptr);
+	//		tmp.ptr += n;
+	//		return tmp;
+	//	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
 	{
-		return vector_iterator(this->_vector_start);
+		return Vector_Iterator<T>(this->_vector_start);
 	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
-	{
-		return const_vector_iterator(this->_vector_start);
-	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
+	//	{
+	//		return const_vector_iterator(this->_vector_start);
+	//	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
 	{
-		return vector_iterator(this->_vector_start + _curent_size);
+		return Vector_Iterator<T>(this->_vector_start + _curent_size);
 	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
-	{
-		return const_vector_iterator(this->_vector_start + _curent_size);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
-	{
-		return reverse_vector_iterator(this->_vector_start + _curent_size - 1);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rbegin() const
-	{
-		return const_reverse_vector_iterator(this->_vector_start + _curent_size - 1);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend()
-	{
-		return reverse_vector_iterator(this->_vector_start - 1);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rend() const
-	{
-		return const_reverse_vector_iterator(this->_vector_start - 1);
-	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
+	//	{
+	//		return const_vector_iterator(this->_vector_start + _curent_size);
+	//	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
+	//	{
+	//		return reverse_vector_iterator(this->_vector_start + _curent_size - 1);
+	//	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rbegin() const
+	//	{
+	//		return const_reverse_vector_iterator(this->_vector_start + _curent_size - 1);
+	//	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend()
+	//	{
+	//		return reverse_vector_iterator(this->_vector_start - 1);
+	//	}
+	//	template<class T, class Alloc>
+	//	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rend() const
+	//	{
+	//		return const_reverse_vector_iterator(this->_vector_start - 1);
+	//	}
 	template<class T, class Alloc>
 	vector<T, Alloc>::vector(const allocator_type &alloc)
 			: _alloc_size(0), _curent_size(0), _vector_start(nullptr), _new_alloc(alloc)
@@ -354,8 +354,10 @@ namespace ft
 			: _alloc_size(n), _curent_size(n), _new_alloc(alloc)
 	{
 		_vector_start = _new_alloc.allocate(n);
-		for (int i = 0; i < n; ++i) {
-			_vector_start[i] = val;
+		for (int i = 0; i < n; ++i)
+		{
+			_new_alloc.construct(_vector_start + i, val);
+			//			_vector_start[i] = val;
 		}
 	}
 	template<class T, class Alloc>
@@ -374,7 +376,8 @@ namespace ft
 			: _curent_size(last - first), _alloc_size(last - first), _new_alloc(alloc)
 	{
 		_vector_start = _new_alloc.allocate(last - first);
-		for (int i = 0; first < last; ++first, ++i) {
+		for (int i = 0; first < last; ++first, ++i)
+		{
 			_vector_start[i] = *first;
 		}
 	}
@@ -383,21 +386,30 @@ namespace ft
 			: _alloc_size(x._alloc_size), _curent_size(x._curent_size), _new_alloc(x._new_alloc)
 	{
 		_vector_start = _new_alloc.allocate(_curent_size);
-		for (int i = 0; i < _curent_size; ++i) {
+		for (int i = 0; i < _curent_size; ++i)
+		{
 			_vector_start[i] = x._vector_start[i];
 		}
 	}
 	template<class T, class Alloc>
-	vector<T, Alloc>::~vector() { _new_alloc.deallocate(_vector_start, _alloc_size); }
+	vector<T, Alloc>::~vector()
+	{
+		for (int i = 0; i < _curent_size; ++i) {
+			_new_alloc.destroy(_vector_start + i);
+		}
+		_new_alloc.deallocate(_vector_start, _alloc_size);
+	}
 	template<class T, class Alloc>
 	vector<T, Alloc> &vector<T, Alloc>::operator=(const vector<T, Alloc> &x)
 	{
-		if (x != *this) {
+		if (x != *this)
+		{
 			_new_alloc = x._new_alloc;
 			_curent_size = x._curent_size;
 			_alloc_size = x._alloc_size;
 			_vector_start = _new_alloc.allocate(_alloc_size);
-			for (int i = 0; i < _curent_size; ++i) {
+			for (int i = 0; i < _curent_size; ++i)
+			{
 				_vector_start[i] = x._vector_start[i];
 			}
 		}
@@ -417,16 +429,21 @@ namespace ft
 	void vector<T, Alloc>::resize(vector::size_type n, value_type val)
 	{
 		pointer tmp = _new_alloc.allocate(n);
-		if (n < _curent_size) {
-			for (int i = 0; i < n; ++i) {
+		if (n < _curent_size)
+		{
+			for (int i = 0; i < n; ++i)
+			{
 				tmp[i] = _vector_start[i];
 			}
 		}
-		else {
-			for (int i = 0; i < _curent_size; ++i) {
+		else
+		{
+			for (int i = 0; i < _curent_size; ++i)
+			{
 				tmp[i] = _vector_start[i];
 			}
-			for (int i = _curent_size; i < n; ++i) {
+			for (int i = _curent_size; i < n; ++i)
+			{
 				tmp[i] = val;
 			}
 		}
@@ -448,9 +465,11 @@ namespace ft
 	template<class T, class Alloc>
 	void vector<T, Alloc>::reserve(vector::size_type n)
 	{
-		if (n > _alloc_size) {
+		if (n > _alloc_size)
+		{
 			pointer tmp = _new_alloc.allocate(n);
-			for (int i = 0; i < _curent_size; ++i) {
+			for (int i = 0; i < _curent_size; ++i)
+			{
 				tmp[i] = _vector_start[i];
 			}
 			_new_alloc.deallocate(_vector_start, _alloc_size);
@@ -461,7 +480,8 @@ namespace ft
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::reference vector<T, Alloc>::at(vector::size_type n)
 	{
-		if (n < 0 || n >= _curent_size) {
+		if (n < 0 || n >= _curent_size)
+		{
 			throw std::out_of_range("vector");
 		}
 		return _vector_start[n];
@@ -469,7 +489,8 @@ namespace ft
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::const_reference vector<T, Alloc>::at(vector::size_type n) const
 	{
-		if (n < 0 || n >= _curent_size) {
+		if (n < 0 || n >= _curent_size)
+		{
 			throw std::out_of_range("vector");
 		}
 		return _vector_start[n];
@@ -498,21 +519,26 @@ namespace ft
 	template<class InputIterator>
 	void vector<T, Alloc>::assign(InputIterator first, InputIterator last)
 	{
-		if (last - first > _curent_size) {
+		if (last - first > _curent_size)
+		{
 			_curent_size = last - first;
 			allocator_type tmp = _new_alloc.allocate(_curent_size);
-			for (int i = 0; first < last; ++first, ++i) {
+			for (int i = 0; first < last; ++first, ++i)
+			{
 				tmp[i] = *first;
 			}
 			_new_alloc.reallocate(_vector_start, _alloc_size);
 			_alloc_size = _curent_size;
 			_vector_start = tmp;
 		}
-		else {
-			for (_curent_size = 0; first < last; ++first, ++_curent_size) {
+		else
+		{
+			for (_curent_size = 0; first < last; ++first, ++_curent_size)
+			{
 				_vector_start[_curent_size] = *first;
 			}
-			for (int i = _curent_size; i < _alloc_size; ++i) {
+			for (int i = _curent_size; i < _alloc_size; ++i)
+			{
 				_vector_start[i] = value_type();
 			}
 		}
@@ -520,21 +546,26 @@ namespace ft
 	template<class T, class Alloc>
 	void vector<T, Alloc>::assign(vector::size_type n, const value_type &val)
 	{
-		if (n > _curent_size) {
+		if (n > _curent_size)
+		{
 			_curent_size = n;
 			allocator_type tmp = _new_alloc.allocate(_curent_size);
-			for (int i = 0; i < _curent_size; ++i) {
+			for (int i = 0; i < _curent_size; ++i)
+			{
 				tmp[i] = val;
 			}
 			_new_alloc.reallocate(_vector_start, _alloc_size);
 			_alloc_size = _curent_size;
 			_vector_start = tmp;
 		}
-		else {
-			for (_curent_size = 0; _curent_size < n; ++_curent_size) {
+		else
+		{
+			for (_curent_size = 0; _curent_size < n; ++_curent_size)
+			{
 				_vector_start[_curent_size] = val;
 			}
-			for (int i = _curent_size; i < _alloc_size; ++i) {
+			for (int i = _curent_size; i < _alloc_size; ++i)
+			{
 				_vector_start[i] = value_type();
 			}
 		}
@@ -542,12 +573,20 @@ namespace ft
 	template<class T, class Alloc>
 	void vector<T, Alloc>::push_back(const value_type &val)
 	{
-		if (_curent_size < _alloc_size) {
+		pointer tmp;
+		if (_curent_size < _alloc_size)
+		{
 			_vector_start[_curent_size++] = val;
 		}
-		else {
-			pointer tmp = _new_alloc.allocate(_alloc_size * 2);
-			for (int i = 0; i < _curent_size; ++i) {
+		else
+		{
+			_alloc_size = _alloc_size == 0 ? 1 : _alloc_size;
+			if (_alloc_size == 0)
+				tmp = _new_alloc.allocate(1);
+			else
+				tmp = _new_alloc.allocate(_alloc_size * 2);
+			for (int i = 0; i < _curent_size; ++i)
+			{
 				tmp[i] = _vector_start[i];
 			}
 			tmp[_curent_size++] = val;
@@ -568,21 +607,29 @@ namespace ft
 		pointer tmp;
 		bool check = false;
 		size_type iter_val;
-		if (_curent_size < _alloc_size) {
+		if (_curent_size < _alloc_size)
+		{
 			tmp = _new_alloc.allocate(_alloc_size);
 		}
-		else {
-			tmp = _new_alloc.allocate(_alloc_size *= 2);
+		else
+		{
+			if (_alloc_size == 0)
+				tmp = _new_alloc.allocate(_alloc_size = 1);
+			else
+				tmp = _new_alloc.allocate(_alloc_size *= 2);
 			check = true;
 		}
-		if (!tmp) {
+		if (!tmp)
+		{
 			throw std::bad_alloc();
 		}
-		for (_curent_size = 0; start < position; ++start, ++_curent_size) {
+		for (_curent_size = 0; start < position; ++start, ++_curent_size)
+		{
 			tmp[_curent_size] = *start;
 		}
 		tmp[iter_val = _curent_size++] = *position;
-		for (; start < this->end(); ++start, ++_curent_size) {
+		for (; start < this->end(); ++start, ++_curent_size)
+		{
 			tmp[_curent_size] = *start;
 		}
 		_new_alloc.deallocate(_vector_start, check ? _alloc_size / 2 : _alloc_size);
@@ -595,23 +642,29 @@ namespace ft
 		iterator start = this->begin();
 		pointer tmp;
 		bool check = false;
-		if (_curent_size + n < _alloc_size) {
+		if (_curent_size + n < _alloc_size)
+		{
 			tmp = _new_alloc.allocate(_alloc_size);
 		}
-		else {
+		else
+		{
 			tmp = _new_alloc.allocate(_alloc_size + n);
 			check = true;
 		}
-		if (!tmp) {
+		if (!tmp)
+		{
 			throw std::bad_alloc();
 		}
-		for (_curent_size = 0; start < position; ++start, ++_curent_size) {
+		for (_curent_size = 0; start < position; ++start, ++_curent_size)
+		{
 			tmp[_curent_size] = *start;
 		}
-		for (int i = 0; i < n; ++i, ++_curent_size) {
+		for (int i = 0; i < n; ++i, ++_curent_size)
+		{
 			tmp[_curent_size] = val;
 		}
-		for (; start < this->end(); ++start, ++_curent_size) {
+		for (; start < this->end(); ++start, ++_curent_size)
+		{
 			tmp[_curent_size] = *start;
 		}
 		_new_alloc.deallocate(_vector_start, _alloc_size);
@@ -625,23 +678,29 @@ namespace ft
 		iterator start = this->begin();
 		pointer tmp;
 		bool check = false;
-		if (_curent_size + (last - first) < _alloc_size) {
+		if (_curent_size + (last - first) < _alloc_size)
+		{
 			tmp = _new_alloc.allocate(_alloc_size);
 		}
-		else {
+		else
+		{
 			tmp = _new_alloc.allocate(_alloc_size + (last - first));
 			check = true;
 		}
-		if (!tmp) {
+		if (!tmp)
+		{
 			throw std::bad_alloc();
 		}
-		for (_curent_size = 0; start < position; ++start, ++_curent_size) {
+		for (_curent_size = 0; start < position; ++start, ++_curent_size)
+		{
 			tmp[_curent_size] = *start;
 		}
-		for (; first < last; ++first, ++_curent_size) {
+		for (; first < last; ++first, ++_curent_size)
+		{
 			tmp[_curent_size] = *first;
 		}
-		for (; start < this->end(); ++start, ++_curent_size) {
+		for (; start < this->end(); ++start, ++_curent_size)
+		{
 			tmp[_curent_size] = *start;
 		}
 		_new_alloc.deallocate(_vector_start, _alloc_size);
@@ -654,12 +713,14 @@ namespace ft
 		pointer tmp = _new_alloc.allocate(_alloc_size);
 		iterator it = this->begin();
 		size_type save_pos;
-		for (_curent_size = 0; it < position; ++it, ++_curent_size) {
+		for (_curent_size = 0; it < position; ++it, ++_curent_size)
+		{
 			tmp[_curent_size] = *it;
 		}
 		++it;
 		save_pos = _curent_size;
-		for (; it < this->end(); ++it, ++_curent_size) {
+		for (; it < this->end(); ++it, ++_curent_size)
+		{
 			tmp[_curent_size] = *it;
 		}
 		_new_alloc.deallocate(_vector_start, _alloc_size);
@@ -672,12 +733,14 @@ namespace ft
 		pointer tmp = _new_alloc.allocate(_alloc_size);
 		iterator it = this->begin();
 		size_type save_pos;
-		for (_curent_size = 0; it < first; ++it, ++_curent_size) {
+		for (_curent_size = 0; it < first; ++it, ++_curent_size)
+		{
 			tmp[_curent_size] = *it;
 		}
 		it = last;
 		save_pos = _curent_size;
-		for (; it < this->end(); ++it, ++_curent_size) {
+		for (; it < this->end(); ++it, ++_curent_size)
+		{
 			tmp[_curent_size] = *it;
 		}
 		_new_alloc.deallocate(_vector_start, _alloc_size);
@@ -716,12 +779,16 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		if (lhs.size() != rhs.size()) {
+		if (lhs.size() != rhs.size())
+		{
 			return false;
 		}
-		else {
-			for (int i = 0; i < lhs.size(); ++i) {
-				if (lhs[i] != rhs[i]) {
+		else
+		{
+			for (int i = 0; i < lhs.size(); ++i)
+			{
+				if (lhs[i] != rhs[i])
+				{
 					return false;
 				}
 			}
@@ -736,8 +803,10 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i) {
-			if (lhs[i] >= rhs[i]) {
+		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		{
+			if (lhs[i] >= rhs[i])
+			{
 				return false;
 			}
 		}
