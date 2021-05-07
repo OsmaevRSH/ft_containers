@@ -5,7 +5,7 @@
 template<class T>
 class Const_Input_Iterator : public Input_Iterator<T>
 {
-	private:
+	protected:
 		Const_Input_Iterator() {};
 	public:
 		Const_Input_Iterator(const Const_Input_Iterator<T> &copy);

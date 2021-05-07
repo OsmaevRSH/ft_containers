@@ -7,7 +7,7 @@ class Forward_Iterator : public Input_Iterator<T>
 {
 	public:
 		Forward_Iterator() {};
-		Forward_Iterator(T *new_ptr);
+		explicit Forward_Iterator(T *new_ptr);
 		Forward_Iterator(const Forward_Iterator<T> &copy);
 		Forward_Iterator<T> &operator=(const Forward_Iterator<T> &copy);
 		virtual ~Forward_Iterator();

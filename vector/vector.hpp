@@ -3,18 +3,13 @@
 
 #include <iostream>
 #include <cmath>
-#include "Vector_Iterator.hpp"
-#include "Const_Vector_Iterator.hpp"
+#include "vector_iterator.hpp"
 
 namespace ft
 {
 	template<class T, class Alloc = std::allocator<T> >
 	class vector
 	{
-		private:
-			//			class const_vector_iterator;
-			//			class reverse_vector_iterator;
-			//			class const_reverse_vector_iterator;
 		public:
 			//member_types
 			typedef T value_type;
@@ -23,8 +18,8 @@ namespace ft
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
-			typedef Vector_Iterator<T> iterator;
-			typedef Const_Vector_Iterator<T> const_iterator;
+			typedef Random_Access_Iterator<T> iterator;
+			typedef Const_Random_Access_Iterator<T> const_iterator;
 			//			typedef typename vector<T, Alloc>::reverse_vector_iterator reverse_iterator;
 			//			typedef typename vector<T, Alloc>::const_reverse_vector_iterator const_reverse_iterator;
 			typedef ptrdiff_t difference_type;
@@ -308,22 +303,22 @@ namespace ft
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
 	{
-		return Vector_Iterator<T>(this->_vector_start);
+		return iterator(this->_vector_start);
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
 	{
-		return Const_Vector_Iterator<T>(this->_vector_start);
+		return const_iterator(this->_vector_start);
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
 	{
-		return Vector_Iterator<T>(this->_vector_start + _curent_size);
+		return iterator(this->_vector_start + _curent_size);
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
 	{
-		return Const_Vector_Iterator<T>(this->_vector_start + _curent_size);
+		return const_iterator(this->_vector_start + _curent_size);
 	}
 	//	template<class T, class Alloc>
 	//	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()

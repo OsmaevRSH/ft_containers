@@ -8,7 +8,7 @@ class Bidirectional_Iterator : public Forward_Iterator<T>
 {
 	public:
 		Bidirectional_Iterator() {};
-		Bidirectional_Iterator(T *new_ptr);
+		explicit Bidirectional_Iterator(T *new_ptr);
 		Bidirectional_Iterator(const Bidirectional_Iterator<T> &copy);
 		Bidirectional_Iterator<T> &operator=(const Bidirectional_Iterator<T> &copy);
 		virtual ~Bidirectional_Iterator();
@@ -32,14 +32,14 @@ Bidirectional_Iterator<T>::~Bidirectional_Iterator(){}
 template<class T>
 Bidirectional_Iterator<T> &Bidirectional_Iterator<T>::operator--()
 {
-	--ptr;
+	--(this->ptr);
 	return *this;
 }
 template<class T>
 Bidirectional_Iterator<T> Bidirectional_Iterator<T>::operator--(int)
 {
 	Bidirectional_Iterator<T> copy(*this);
-	--ptr;
+	--(this->ptr);
 	return copy;
 }
 

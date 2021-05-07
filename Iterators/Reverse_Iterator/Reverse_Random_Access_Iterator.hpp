@@ -7,7 +7,7 @@ class Reverse_Random_Access_Iterator : public Reverse_Bidirectional_Iterator<T>
 {
 	public:
 		Reverse_Random_Access_Iterator() {};
-		Reverse_Random_Access_Iterator(T *new_ptr);
+		explicit Reverse_Random_Access_Iterator(T *new_ptr);
 		Reverse_Random_Access_Iterator(const Reverse_Random_Access_Iterator<T> &copy);
 		Reverse_Random_Access_Iterator<T> &operator=(const Reverse_Random_Access_Iterator<T> &copy);
 		virtual ~Reverse_Random_Access_Iterator();
@@ -16,13 +16,13 @@ class Reverse_Random_Access_Iterator : public Reverse_Bidirectional_Iterator<T>
 		bool operator>(const Reverse_Random_Access_Iterator<T> &iterator);
 		bool operator<=(const Reverse_Random_Access_Iterator<T> &iterator);
 		bool operator>=(const Reverse_Random_Access_Iterator<T> &iterator);
-		Reverse_Random_Access_Iterator<T> operator+(size_type n);
-		Reverse_Random_Access_Iterator<T> operator+(size_type n, Reverse_Random_Access_Iterator<T> &rhs);
-		Reverse_Random_Access_Iterator<T> operator-(size_type n);
+		Reverse_Random_Access_Iterator<T> operator+(size_t n);
+		friend Reverse_Random_Access_Iterator<T> operator+(size_t n, Reverse_Random_Access_Iterator<T> &rhs);
+		Reverse_Random_Access_Iterator<T> operator-(size_t n);
 		Reverse_Random_Access_Iterator<T> operator-(Reverse_Random_Access_Iterator<T> &rhs);
-		Reverse_Random_Access_Iterator<T> &operator+=(size_type n);
-		Reverse_Random_Access_Iterator<T> &operator-=(size_type n);
-		virtual T &operator[](size_type n);
+		Reverse_Random_Access_Iterator<T> &operator+=(size_t n);
+		Reverse_Random_Access_Iterator<T> &operator-=(size_t n);
+		virtual T &operator[](size_t n);
 };
 template<class T>
 Reverse_Random_Access_Iterator<T>::Reverse_Random_Access_Iterator(T *new_ptr):Reverse_Bidirectional_Iterator<T>(new_ptr) {}
@@ -58,21 +58,21 @@ bool Reverse_Random_Access_Iterator<T>::operator>=(const Reverse_Random_Access_I
 	return this->ptr <= iterator.ptr;
 }
 template<class T>
-Reverse_Random_Access_Iterator<T> Reverse_Random_Access_Iterator<T>::operator+(size_type n)
+Reverse_Random_Access_Iterator<T> Reverse_Random_Access_Iterator<T>::operator+(size_t n)
 {
 	Reverse_Random_Access_Iterator<T> tmp(*this);
 	tmp.ptr -= n;
 	return tmp;
 }
 template<class T>
-Reverse_Random_Access_Iterator<T> Reverse_Random_Access_Iterator<T>::operator+(size_type n, Reverse_Random_Access_Iterator<T> &rhs)
+Reverse_Random_Access_Iterator<T> operator+(size_t n, Reverse_Random_Access_Iterator<T> &rhs)
 {
 	Reverse_Random_Access_Iterator<T> tmp(rhs);
 	tmp.ptr -= n;
 	return tmp;
 }
 template<class T>
-Reverse_Random_Access_Iterator<T> Reverse_Random_Access_Iterator<T>::operator-(size_type n)
+Reverse_Random_Access_Iterator<T> Reverse_Random_Access_Iterator<T>::operator-(size_t n)
 {
 	Reverse_Random_Access_Iterator<T> tmp(*this);
 	tmp.ptr += n;
@@ -86,19 +86,19 @@ Reverse_Random_Access_Iterator<T> Reverse_Random_Access_Iterator<T>::operator-(R
 	return tmp;
 }
 template<class T>
-Reverse_Random_Access_Iterator<T> &Reverse_Random_Access_Iterator<T>::operator+=(size_type n)
+Reverse_Random_Access_Iterator<T> &Reverse_Random_Access_Iterator<T>::operator+=(size_t n)
 {
 	this->ptr -= n;
 	return *this;
 }
 template<class T>
-Reverse_Random_Access_Iterator<T> &Reverse_Random_Access_Iterator<T>::operator-=(size_type n)
+Reverse_Random_Access_Iterator<T> &Reverse_Random_Access_Iterator<T>::operator-=(size_t n)
 {
 	this->ptr += n;
 	return *this;
 }
 template<class T>
-T &Reverse_Random_Access_Iterator<T>::operator[](size_type n)
+T &Reverse_Random_Access_Iterator<T>::operator[](size_t n)
 {
 	return *(this->ptr - n);
 }

@@ -7,7 +7,7 @@ class Const_Reverse_Bidirectional_Iterator : Reverse_Bidirectional_Iterator<T>
 {
 	public:
 		Const_Reverse_Bidirectional_Iterator() {};
-		Const_Reverse_Bidirectional_Iterator(T *new_ptr);
+		explicit Const_Reverse_Bidirectional_Iterator(T *new_ptr);
 		Const_Reverse_Bidirectional_Iterator(const Const_Reverse_Bidirectional_Iterator<T> &copy);
 		Const_Reverse_Bidirectional_Iterator<T> &operator=(const Const_Reverse_Bidirectional_Iterator<T> &copy);
 		virtual ~Const_Reverse_Bidirectional_Iterator();

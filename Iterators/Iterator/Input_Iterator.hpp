@@ -5,9 +5,8 @@
 template<class T>
 class Input_Iterator
 {
-	private:
-		Input_Iterator() {};
 	protected:
+		Input_Iterator() {};
 		T *ptr;
 	public:
 		Input_Iterator(const Input_Iterator<T> &copy);
@@ -16,11 +15,11 @@ class Input_Iterator
 
 		bool operator==(const Input_Iterator<T> &iterator);
 		bool operator!=(const Input_Iterator<T> &iterator);
-		Input_Iterator<T> &operator++();
 		Input_Iterator<T> operator++(int);
-		virtual T &operator*();
-		T *operator->();
+		Input_Iterator<T> &operator++();
+		T &operator*();
 
+		T *operator->();
 };
 
 template<class T>

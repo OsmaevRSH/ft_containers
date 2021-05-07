@@ -7,7 +7,7 @@ class Reverse_Forward_Iterator : public Reverse_Input_Iterator<T>
 {
 	public:
 		Reverse_Forward_Iterator() {};
-		Reverse_Forward_Iterator(T *new_ptr);
+		explicit Reverse_Forward_Iterator(T *new_ptr);
 		Reverse_Forward_Iterator(const Reverse_Forward_Iterator<T> &copy);
 		Reverse_Forward_Iterator<T> &operator=(const Reverse_Forward_Iterator<T> &copy);
 		virtual ~Reverse_Forward_Iterator();

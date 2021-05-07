@@ -8,7 +8,7 @@ class Reverse_Bidirectional_Iterator : public Reverse_Forward_Iterator<T>
 {
 	public:
 		Reverse_Bidirectional_Iterator() {};
-		Reverse_Bidirectional_Iterator(T *new_ptr);
+		explicit Reverse_Bidirectional_Iterator(T *new_ptr);
 		Reverse_Bidirectional_Iterator(const Reverse_Bidirectional_Iterator<T> &copy);
 		Reverse_Bidirectional_Iterator<T> &operator=(const Reverse_Bidirectional_Iterator<T> &copy);
 		virtual ~Reverse_Bidirectional_Iterator();
@@ -32,14 +32,14 @@ Reverse_Bidirectional_Iterator<T>::~Reverse_Bidirectional_Iterator(){}
 template<class T>
 Reverse_Bidirectional_Iterator<T> &Reverse_Bidirectional_Iterator<T>::operator--()
 {
-	++ptr;
+	++(this->ptr);
 	return *this;
 }
 template<class T>
 Reverse_Bidirectional_Iterator<T> Reverse_Bidirectional_Iterator<T>::operator--(int)
 {
 	Reverse_Bidirectional_Iterator<T> copy(*this);
-	++ptr;
+	++(this->ptr);
 	return copy;
 }
 

@@ -7,13 +7,13 @@ class Const_Reverse_Random_Access_Iterator : Reverse_Random_Access_Iterator<T>
 {
 	public:
 		Const_Reverse_Random_Access_Iterator() {};
-		Const_Reverse_Random_Access_Iterator(T *new_ptr);
+		explicit Const_Reverse_Random_Access_Iterator(T *new_ptr);
 		Const_Reverse_Random_Access_Iterator(const Const_Reverse_Random_Access_Iterator<T> &copy);
 		Const_Reverse_Random_Access_Iterator<T> &operator=(const Const_Reverse_Random_Access_Iterator<T> &copy);
 		virtual ~Const_Reverse_Random_Access_Iterator();
 
 		const T &operator*();
-		const T &operator[](size_type n);
+		const T &operator[](size_t n);
 };
 template<class T>
 Const_Reverse_Random_Access_Iterator<T>::Const_Reverse_Random_Access_Iterator(T *new_ptr):Reverse_Random_Access_Iterator<T>(new_ptr) {}
@@ -32,7 +32,7 @@ Const_Reverse_Random_Access_Iterator<T>::~Const_Reverse_Random_Access_Iterator()
 template<class T>
 const T &Const_Reverse_Random_Access_Iterator<T>::operator*() { return *(this->ptr); }
 template<class T>
-const T &Const_Reverse_Random_Access_Iterator<T>::operator[](size_type n)
+const T &Const_Reverse_Random_Access_Iterator<T>::operator[](size_t n)
 {
 	return *(this->ptr + n);
 }

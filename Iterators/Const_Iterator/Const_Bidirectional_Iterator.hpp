@@ -7,7 +7,7 @@ class Const_Bidirectional_Iterator : Bidirectional_Iterator<T>
 {
 	public:
 		Const_Bidirectional_Iterator() {};
-		Const_Bidirectional_Iterator(T *new_ptr);
+		explicit Const_Bidirectional_Iterator(T *new_ptr);
 		Const_Bidirectional_Iterator(const Const_Bidirectional_Iterator<T> &copy);
 		Const_Bidirectional_Iterator<T> &operator=(const Const_Bidirectional_Iterator<T> &copy);
 		virtual ~Const_Bidirectional_Iterator();
@@ -27,6 +27,6 @@ Const_Bidirectional_Iterator<T> &Const_Bidirectional_Iterator<T>::operator=(cons
 	return *this;
 }
 template<class T>
-Const_Bidirectional_Iterator<T>::~Const_Bidirectional_Iterator() {}
+Const_Bidirectional_Iterator<T>::~Const_Bidirectional_Iterator() = default;
 template<class T>
 const T &Const_Bidirectional_Iterator<T>::operator*() { return *(this->ptr); }

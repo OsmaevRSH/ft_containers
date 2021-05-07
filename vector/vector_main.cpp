@@ -169,8 +169,15 @@ int main()
 	}
 	cout << YELLOW << "=====================iterators=====================\n" << RESET;
 	{
-		vector<int>::iterator a;
-		vector<int>::iterator c;
-		vector<int>::const_iterator b;
+		vector<int> first(10,5);
+		ft::vector<int> second((size_t)10, 5);
+		vector<int>::const_iterator a = first.begin();
+		ft::vector<int>::const_iterator b = second.begin();
+		for (int i = 0; i < 10; ++i)
+		{
+			cout << *a << " " << *b << endl;
+			a++;
+			b++;
+		}
 	}
 }

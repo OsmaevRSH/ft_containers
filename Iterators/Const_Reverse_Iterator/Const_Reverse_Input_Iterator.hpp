@@ -5,7 +5,7 @@
 template<class T>
 class Const_Reverse_Input_Iterator : public Reverse_Input_Iterator<T>
 {
-	private:
+	protected:
 		Const_Reverse_Input_Iterator() {};
 	public:
 		Const_Reverse_Input_Iterator(const Const_Reverse_Input_Iterator<T> &copy);
