@@ -169,24 +169,8 @@ int main()
 	}
 	cout << YELLOW << "=====================iterators=====================\n" << RESET;
 	{
-		vector<int> first;
-		first.push_back(1);
-		first.push_back(2);
-		first.push_back(3);
-		first.push_back(4);
-		first.push_back(5);
-		ft::vector<int> second;
-		second.push_back(1);
-		second.push_back(2);
-		second.push_back(3);
-		second.push_back(4);
-		second.push_back(5);
-		vector<int>::iterator it1 = first.begin();
-		ft::vector<int>::iterator it2 = second.begin();
-		for (int i = 0; i < second.size(); ++i) {
-			cout << *it1 << " " << *it2 << endl;
-			++it1;
-			++it2;
-		}
+		vector<int>::iterator a;
+		vector<int>::iterator c;
+		vector<int>::const_iterator b;
 	}
 }

@@ -143,33 +143,6 @@ ft_containers/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/build
 .PHONY : ft_containers/fast
 
-Iterators/IteratorTests.o: Iterators/IteratorTests.cpp.o
-
-.PHONY : Iterators/IteratorTests.o
-
-# target to build an object file
-Iterators/IteratorTests.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/Iterators/IteratorTests.cpp.o
-.PHONY : Iterators/IteratorTests.cpp.o
-
-Iterators/IteratorTests.i: Iterators/IteratorTests.cpp.i
-
-.PHONY : Iterators/IteratorTests.i
-
-# target to preprocess a source file
-Iterators/IteratorTests.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/Iterators/IteratorTests.cpp.i
-.PHONY : Iterators/IteratorTests.cpp.i
-
-Iterators/IteratorTests.s: Iterators/IteratorTests.cpp.s
-
-.PHONY : Iterators/IteratorTests.s
-
-# target to generate assembly for a file
-Iterators/IteratorTests.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ft_containers.dir/build.make CMakeFiles/ft_containers.dir/Iterators/IteratorTests.cpp.s
-.PHONY : Iterators/IteratorTests.cpp.s
-
 vector/vector_main.o: vector/vector_main.cpp.o
 
 .PHONY : vector/vector_main.o
@@ -206,9 +179,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... ft_containers"
-	@echo "... Iterators/IteratorTests.o"
-	@echo "... Iterators/IteratorTests.i"
-	@echo "... Iterators/IteratorTests.s"
 	@echo "... vector/vector_main.o"
 	@echo "... vector/vector_main.i"
 	@echo "... vector/vector_main.s"

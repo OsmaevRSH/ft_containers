@@ -44,8 +44,10 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators"/>
-					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterators"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Iterator"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterator"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Reverse_Iterator"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Reverse_Iterator"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.0/include"/>
@@ -67,8 +69,10 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators"/>
-					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterators"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Iterator"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterator"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Reverse_Iterator"/>
+					<Add directory="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Reverse_Iterator"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.0/include"/>
@@ -84,31 +88,19 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators/Bidirectional.hpp">
+		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterator/Const_Input_Iterator.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators/Forward.hpp">
+		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Reverse_Iterator/Const_Reverse_Input_Iterator.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators/Input.hpp">
+		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Iterator/Input_Iterator.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators/Iterator.hpp">
-			<Option target="ft_containers"/>
-		</Unit>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators/Random_Access.hpp">
-			<Option target="ft_containers"/>
-		</Unit>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterators/Const_Bidirectional.hpp">
-			<Option target="ft_containers"/>
-		</Unit>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/IteratorTests.cpp">
+		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Reverse_Iterator/Reverse_Input_Iterator.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
 		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/test.hpp">
-			<Option target="ft_containers"/>
-		</Unit>
-		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/vector/Vector_Iterator.hpp">
 			<Option target="ft_containers"/>
 		</Unit>
 		<Unit filename="/Users/ruslanosmaev/CLionProjects/ft_containers/vector/vector.hpp">

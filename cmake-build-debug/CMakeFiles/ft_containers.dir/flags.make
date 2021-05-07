@@ -6,5 +6,5 @@ CXX_FLAGS = -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.0.sdk
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Base_Iterators -I/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterators 
+CXX_INCLUDES = -I/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Iterator -I/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Iterator -I/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Reverse_Iterator -I/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/Const_Reverse_Iterator 
 

@@ -1,5 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ft_containers.dir/Iterators/IteratorTests.cpp.o"
   "CMakeFiles/ft_containers.dir/vector/vector_main.cpp.o"
   "ft_containers"
   "ft_containers.pdb"

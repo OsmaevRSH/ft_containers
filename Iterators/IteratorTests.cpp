@@ -4,7 +4,6 @@
 //using namespace std;
 //int main()
 //{
-//	Const_Bidirectional<bidirectional_iterator_tag, char> *test = new Const_Bidirectional<bidirectional_iterator_tag, char>();
-//	test->operator*();
+//	char *test = "test";
 //	return 0;
 //}

@@ -4,15 +4,16 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/ruslanosmaev/CLionProjects/ft_containers/Iterators/IteratorTests.cpp" "/Users/ruslanosmaev/CLionProjects/ft_containers/cmake-build-debug/CMakeFiles/ft_containers.dir/Iterators/IteratorTests.cpp.o"
   "/Users/ruslanosmaev/CLionProjects/ft_containers/vector/vector_main.cpp" "/Users/ruslanosmaev/CLionProjects/ft_containers/cmake-build-debug/CMakeFiles/ft_containers.dir/vector/vector_main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../Iterators/Base_Iterators"
-  "../Iterators/Const_Iterators"
+  "../Iterators/Iterator"
+  "../Iterators/Const_Iterator"
+  "../Iterators/Reverse_Iterator"
+  "../Iterators/Const_Reverse_Iterator"
   )
 
 # Targets to which this target links.

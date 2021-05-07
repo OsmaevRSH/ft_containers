@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include "Vector_Iterator.hpp"
+#include "Const_Vector_Iterator.hpp"
 
 namespace ft
 {
@@ -23,7 +24,7 @@ namespace ft
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
 			typedef Vector_Iterator<T> iterator;
-			//			typedef typename vector<T, Alloc>::const_vector_iterator const_iterator;
+			typedef Const_Vector_Iterator<T> const_iterator;
 			//			typedef typename vector<T, Alloc>::reverse_vector_iterator reverse_iterator;
 			//			typedef typename vector<T, Alloc>::const_reverse_vector_iterator const_reverse_iterator;
 			typedef ptrdiff_t difference_type;
@@ -31,9 +32,9 @@ namespace ft
 
 			//iterator_func
 			iterator begin();
-			//			const_iterator begin() const;
+			const_iterator begin() const;
 			iterator end();
-			//			const_iterator end() const;
+			const_iterator end() const;
 			//			reverse_iterator rbegin();
 			//			const_reverse_iterator rbegin() const;
 			//			reverse_iterator rend();
@@ -309,21 +310,21 @@ namespace ft
 	{
 		return Vector_Iterator<T>(this->_vector_start);
 	}
-	//	template<class T, class Alloc>
-	//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
-	//	{
-	//		return const_vector_iterator(this->_vector_start);
-	//	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
+	{
+		return Const_Vector_Iterator<T>(this->_vector_start);
+	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
 	{
 		return Vector_Iterator<T>(this->_vector_start + _curent_size);
 	}
-	//	template<class T, class Alloc>
-	//	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
-	//	{
-	//		return const_vector_iterator(this->_vector_start + _curent_size);
-	//	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
+	{
+		return Const_Vector_Iterator<T>(this->_vector_start + _curent_size);
+	}
 	//	template<class T, class Alloc>
 	//	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
 	//	{
@@ -394,7 +395,8 @@ namespace ft
 	template<class T, class Alloc>
 	vector<T, Alloc>::~vector()
 	{
-		for (int i = 0; i < _curent_size; ++i) {
+		for (int i = 0; i < _curent_size; ++i)
+		{
 			_new_alloc.destroy(_vector_start + i);
 		}
 		_new_alloc.deallocate(_vector_start, _alloc_size);
