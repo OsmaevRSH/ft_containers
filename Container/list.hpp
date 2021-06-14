@@ -291,6 +291,8 @@ namespace ft
 				}
 			}
 
+			bool Unique_Binary_Predicate(const_reference lhs, const_reference rhs) { return lhs == rhs; }
+
 		public:
 			bool empty() const { return _head == nullptr; }
 
@@ -493,6 +495,57 @@ namespace ft
 				Clear_List();
 			}
 
+			void unique()
+			{
+				unique(Unique_Binary_Predicate);
+			}
+
+			template<class BinaryPredicate>
+			void unique(BinaryPredicate binary_pred)
+			{
+				iterator first = begin();
+				iterator last = end();
+				while (first.ptr->_next != last.ptr)
+				{
+					if (binary_pred(*first, first.ptr->_next->_data))
+					{
+						first = erase(first);
+						continue;
+					}
+					++first
+				}
+			}
+
+			void remove(const value_type &val)
+			{
+				iterator first = begin();
+				iterator last = end();
+				while (first != end())
+				{
+					if (*first == val)
+					{
+						first = erase(first);
+						continue;
+					}
+					++first;
+				}
+			}
+
+			template<class Predicate>
+			void remove_if(Predicate pred)
+			{
+				iterator first = begin();
+				iterator last = end();
+				while (first != end())
+				{
+					if (pred(*first))
+					{
+						first = erase(first);
+						continue;
+					}
+					++first;
+				}
+			}
 
 	};
 
@@ -541,4 +594,7 @@ namespace ft
 
 	template<class T, class Alloc>
 	bool operator>=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs < rhs) }
+
+	template<class T, class Alloc>
+	void swap(list<T, Alloc> &x, list<T, Alloc> &y) { x.swap(y); }
 }
