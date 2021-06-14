@@ -1,9 +1,8 @@
-#ifndef FT_CONTAINERS_VECTOR_HPP
-#define FT_CONTAINERS_VECTOR_HPP
+#pragma once
 
 #include <iostream>
 #include <cmath>
-#include "Iterator.hpp"
+#include "Vector_Iterator.hpp"
 
 namespace ft
 {
@@ -33,7 +32,6 @@ namespace ft
 			typedef Const_Iterator<T> const_iterator;
 			typedef Reverse_Iterator<T> reverse_iterator;
 			typedef Const_Reverse_Iterator<T> const_reverse_iterator;
-			typedef ptrdiff_t difference_type;
 			typedef size_t size_type;
 
 		private:
@@ -41,7 +39,7 @@ namespace ft
 			pointer _vector_start;
 			size_type _curent_size;
 			size_type _alloc_size;
-			allocator_type _new_alloc;
+			allocator_type _allocator;
 
 		public:
 			//iterator_func
@@ -56,32 +54,32 @@ namespace ft
 
 			//constructor
 			explicit vector(const allocator_type &alloc = allocator_type())
-					: _alloc_size(0), _curent_size(0), _vector_start(nullptr), _new_alloc(alloc) {}
+					: _alloc_size(0), _curent_size(0), _vector_start(nullptr), _allocator(alloc) {}
 			explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
-					: _alloc_size(n), _curent_size(n), _new_alloc(alloc)
+					: _alloc_size(n), _curent_size(n), _allocator(alloc)
 			{
-				_vector_start = _new_alloc.allocate(n);
+				_vector_start = _allocator.allocate(n);
 				for (int i = 0; i < n; ++i)
 				{
-					_new_alloc.construct(_vector_start + i, val);
+					_allocator.construct(_vector_start + i, val);
 				}
 			}
 			template<class InputIterator>
 			vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
-					: _curent_size(static_cast<size_type>(last - first)), _alloc_size(last - first), _new_alloc(alloc)
+					: _curent_size(static_cast<size_type>(last - first)), _alloc_size(last - first), _allocator(alloc)
 			{
-				_vector_start = _new_alloc.allocate(last - first);
+				_vector_start = _allocator.allocate(last.operator->() - first.operator->());
 				for (int i = 0; first < last; ++first, ++i)
 				{
-					_new_alloc.construct(_vector_start + i, *first);
+					_allocator.construct(_vector_start + i, *first);
 				}
 			}
-			vector(const vector &x) : _alloc_size(x._alloc_size), _curent_size(x._curent_size), _new_alloc(x._new_alloc)
+			vector(const vector &x) : _alloc_size(x._alloc_size), _curent_size(x._curent_size), _allocator(x._allocator)
 			{
-				_vector_start = _new_alloc.allocate(_curent_size);
+				_vector_start = _allocator.allocate(_curent_size);
 				for (int i = 0; i < _curent_size; ++i)
 				{
-					_new_alloc.construct(_vector_start + i, x._vector_start[i]);
+					_allocator.construct(_vector_start + i, x._vector_start[i]);
 				}
 			}
 
@@ -90,23 +88,23 @@ namespace ft
 			{
 				for (int i = 0; i < _curent_size; ++i)
 				{
-					_new_alloc.destroy(_vector_start + i);
+					_allocator.destroy(_vector_start + i);
 				}
-				_new_alloc.deallocate(_vector_start, _alloc_size);
+				_allocator.deallocate(_vector_start, _alloc_size);
 			}
 
 			//operator
 			vector &operator=(const vector &x)
 			{
-				if (x != *this)
+				if (&x != this)
 				{
-					_new_alloc = x._new_alloc;
+					_allocator = x._allocator;
 					_curent_size = x._curent_size;
 					_alloc_size = x._alloc_size;
-					_vector_start = _new_alloc.allocate(_alloc_size);
+					_vector_start = _allocator.allocate(_alloc_size);
 					for (int i = 0; i < _curent_size; ++i)
 					{
-						_new_alloc.construct(_vector_start + i, x._vector_start[i]);
+						_allocator.construct(_vector_start + i, x._vector_start[i]);
 					}
 				}
 				return *this;
@@ -138,7 +136,7 @@ namespace ft
 
 			//capacity_func
 			size_type size() const { return _curent_size; }
-			size_type max_size() const { return -1 / sizeof(value_type); }
+			size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
 			void resize(size_type n, value_type val = value_type())
 			{
 				{
@@ -146,26 +144,25 @@ namespace ft
 					{
 						for (int i = n; i < _curent_size; ++i)
 						{
-							_new_alloc.destroy(_vector_start + i);
+							_allocator.destroy(_vector_start + i);
 						}
-						_new_alloc.deallocate(_vector_start + n, _curent_size - n);
 					}
 					else
 					{
 						pointer resized;
-						resized = _new_alloc.allocate(n);
+						resized = _allocator.allocate(n);
 						for (int i = 0; i < _curent_size; ++i)
 						{
-							_new_alloc.construct(resized + i, _vector_start[i]);
+							_allocator.construct(resized + i, _vector_start[i]);
 						}
 						for (int i = 0; i < _curent_size; ++i)
 						{
-							_new_alloc.destroy(_vector_start + i);
+							_allocator.destroy(_vector_start + i);
 						}
-						_new_alloc.deallocate(_vector_start + n, _curent_size - n);
+						_allocator.deallocate(_vector_start, _curent_size);
 						for (int i = _curent_size; i < n; ++i)
 						{
-							_new_alloc.construct(resized + i, val);
+							_allocator.construct(resized + i, val);
 						}
 						_vector_start = resized;
 					}
@@ -180,13 +177,13 @@ namespace ft
 				{
 					if (n > _alloc_size)
 					{
-						pointer reserve = _new_alloc.allocate(n);
+						pointer reserve = _allocator.allocate(n);
 						for (int i = 0; i < _curent_size; ++i)
 						{
-							_new_alloc.construct(reserve + i, _vector_start[i]);
-							_new_alloc.destroy(_vector_start + i);
+							_allocator.construct(reserve + i, _vector_start[i]);
+							_allocator.destroy(_vector_start + i);
 						}
-						_new_alloc.deallocate(_vector_start, _alloc_size);
+						_allocator.deallocate(_vector_start, _alloc_size);
 						_alloc_size = n;
 						_vector_start = reserve;
 					}
@@ -197,27 +194,27 @@ namespace ft
 			template<class InputIterator>
 			void assign(InputIterator first, InputIterator last)
 			{
-				int length = std::abs(last - first);
+				int length = std::abs(last.operator->() - first.operator->());
 				for (int i = 0; i < _curent_size; ++i)
 				{
-					_new_alloc.destroy(_vector_start + i);
+					_allocator.destroy(_vector_start + i);
 				}
 				_curent_size = length;
 				if (length > _alloc_size)
 				{
-					_new_alloc.deallocate(_vector_start, _alloc_size);
+					_allocator.deallocate(_vector_start, _alloc_size);
 					_alloc_size = _curent_size;
-					_vector_start = _new_alloc.allocate(_curent_size);
+					_vector_start = _allocator.allocate(_curent_size);
 					for (int i = 0; first < last; ++first, ++i)
 					{
-						_new_alloc.construct(_vector_start + i, *first);
+						_allocator.construct(_vector_start + i, *first);
 					}
 				}
 				else
 				{
 					for (int i = 0; first < last; ++first, ++i)
 					{
-						_new_alloc.construct(_vector_start + i, *first);
+						_allocator.construct(_vector_start + i, *first);
 					}
 				}
 			}
@@ -225,24 +222,24 @@ namespace ft
 			{
 				for (int i = 0; i < _curent_size; ++i)
 				{
-					_new_alloc.destroy(_vector_start + i);
+					_allocator.destroy(_vector_start + i);
 				}
 				_curent_size = n;
 				if (n > _alloc_size)
 				{
-					_new_alloc.deallocate(_vector_start, _alloc_size);
+					_allocator.deallocate(_vector_start, _alloc_size);
 					_alloc_size = _curent_size;
-					_vector_start = _new_alloc.allocate(_curent_size);
+					_vector_start = _allocator.allocate(_curent_size);
 					for (int i = 0; i < n; ++i)
 					{
-						_new_alloc.construct(_vector_start + i, val);
+						_allocator.construct(_vector_start + i, val);
 					}
 				}
 				else
 				{
 					for (int i = 0; i < n; ++i)
 					{
-						_new_alloc.construct(_vector_start + i, val);
+						_allocator.construct(_vector_start + i, val);
 					}
 				}
 			}
@@ -251,36 +248,176 @@ namespace ft
 				pointer push_back;
 				if (_curent_size < _alloc_size)
 				{
-					_new_alloc.construct(_vector_start + _curent_size++, val);
+					_allocator.construct(_vector_start + _curent_size++, val);
 				}
 				else
 				{
 					_alloc_size = _alloc_size == 0 ? 1 : _alloc_size;
 					if (_alloc_size == 0)
-						push_back = _new_alloc.allocate(1);
+						push_back = _allocator.allocate(1);
 					else
-						push_back = _new_alloc.allocate(_alloc_size * 2);
+						push_back = _allocator.allocate(_alloc_size * 2);
 					for (int i = 0; i < _curent_size; ++i)
 					{
-						_new_alloc.construct(push_back + i, _vector_start[i]);
+						_allocator.construct(push_back + i, _vector_start[i]);
 					}
 					for (int i = 0; i < _curent_size; ++i)
 					{
-						_new_alloc.destroy(_vector_start + i);
+						_allocator.destroy(_vector_start + i);
 					}
-					_new_alloc.deallocate(_vector_start, _alloc_size);
-					_new_alloc.construct(push_back + _curent_size++, val);
+					_allocator.deallocate(_vector_start, _alloc_size);
+					_allocator.construct(push_back + _curent_size++, val);
 					_alloc_size *= 2;
 					_vector_start = push_back;
 				}
 			}
-			void pop_back() { _new_alloc.destroy(_vector_start + --_curent_size); }
-			iterator insert(iterator position, const value_type &val);
-			void insert(iterator position, size_type n, const value_type &val);
+			void pop_back() { _allocator.destroy(_vector_start + --_curent_size); }
+			iterator insert(iterator position, const value_type &val)
+			{
+				pointer save_ptr = nullptr;
+				if (_curent_size >= _alloc_size)
+				{
+					pointer reserve = _allocator.allocate(_alloc_size * 2);
+					for (int i = 0; i < _curent_size; ++i)
+					{
+						if (_vector_start + i == position.operator->())
+							save_ptr = reserve + i;
+						_allocator.construct(reserve + i, _vector_start[i]);
+						_allocator.destroy(_vector_start + i);
+					}
+					_allocator.deallocate(_vector_start, _alloc_size);
+					_vector_start = reserve;
+					_alloc_size *= 2;
+					iterator it = begin();
+					while (it.operator->() != save_ptr)
+					{
+						++it;
+					}
+					position = it;
+				}
+				for (iterator it = end() - 1; it >= position; --it)
+				{
+					_allocator.construct(it.operator->() + 1, *it);
+					_allocator.destroy(it.operator->());
+				}
+				_allocator.construct(position.operator->(), val);
+				++_curent_size;
+
+				return position;
+			}
+			void insert(iterator position, size_type n, const value_type &val)
+			{
+				pointer save_ptr = nullptr;
+				int alloc_size = n / _alloc_size >= 1 ? _curent_size + n : _alloc_size * 2;
+				if (_curent_size + n - 1 >= _alloc_size)
+				{
+
+					pointer reserve = _allocator.allocate(alloc_size);
+					for (int i = 0; i <= _curent_size; ++i)
+					{
+						if (_vector_start + i == position.operator->())
+							save_ptr = reserve + i;
+						_allocator.construct(reserve + i, _vector_start[i]);
+						_allocator.destroy(_vector_start + i);
+					}
+					_allocator.deallocate(_vector_start, _alloc_size);
+					_vector_start = reserve;
+					_alloc_size = alloc_size;
+					iterator it = begin();
+					while (it.operator->() != save_ptr)
+					{
+						++it;
+					}
+					position = it;
+				}
+				for (iterator it = end() - 1; it >= position; --it)
+				{
+					_allocator.construct(it.operator->() + n, *it);
+					_allocator.destroy(it.operator->());
+				}
+				for (int i = 0; i < n; ++i)
+				{
+					_allocator.construct(position.operator->() + i, val);
+					++_curent_size;
+				}
+			}
 			template<class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last);
-			iterator erase(iterator position);
-			iterator erase(iterator first, iterator last);
+			void insert(iterator position, InputIterator first, InputIterator last, typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
+			{
+				int n = std::abs(last.operator->() - first.operator->());
+				pointer save_ptr = nullptr;
+				int alloc_size = (n / _alloc_size) >= 1 ? _curent_size + n : _alloc_size * 2;
+				if (_curent_size + n - 1 >= _alloc_size)
+				{
+
+					pointer reserve = _allocator.allocate(alloc_size);
+					for (int i = 0; i <= _curent_size; ++i)
+					{
+						if (_vector_start + i == position.operator->())
+							save_ptr = reserve + i;
+						_allocator.construct(reserve + i, _vector_start[i]);
+						_allocator.destroy(_vector_start + i);
+					}
+					_allocator.deallocate(_vector_start, _alloc_size);
+					_vector_start = reserve;
+					_alloc_size = alloc_size;
+					iterator it = begin();
+					while (it.operator->() != save_ptr)
+					{
+						++it;
+					}
+					position = it;
+				}
+				for (iterator it = end() - 1; it >= position; --it)
+				{
+					_allocator.construct(it.operator->() + n, *it);
+					_allocator.destroy(it.operator->());
+				}
+				for (int i = 0; first < last; ++first, ++i)
+				{
+					_allocator.construct(position.operator->() + i, *first);
+					++_curent_size;
+				}
+			}
+			iterator erase(iterator position)
+			{
+				for (iterator iter = position; iter < end() - 1; ++iter)
+				{
+					_allocator.destroy(iter.operator->());
+					_allocator.construct(iter.operator->(), *(iter + 1));
+				}
+				_allocator.destroy((end() - 1).operator->());
+				--_curent_size;
+				return position;
+			}
+			iterator erase(iterator first, iterator last)
+			{
+				int size = std::abs(last.operator->() - first.operator->());
+				int size_to_end = std::abs(end().operator->() - last.operator->());
+				if (size_to_end >= size)
+				{
+					for (; last < end(); ++first, ++last)
+					{
+						_allocator.destroy(first.operator->());
+						_allocator.construct(first.operator->(), *last);
+					}
+					_allocator.destroy(last.operator->());
+				}
+				else
+				{
+					for (iterator it = first; it < last; ++it)
+					{
+						_allocator.destroy(it.operator->());
+					}
+					for (; last < end(); ++last, ++first)
+					{
+						_allocator.construct(first.operator->(), *last);
+						_allocator.destroy(first.operator->());
+					}
+				}
+				_curent_size -= size;
+				return first;
+			}
 			void swap(vector &x)
 			{
 				pointer tmp_vector_start = x._vector_start;
@@ -295,167 +432,19 @@ namespace ft
 				x._alloc_size = _alloc_size;
 				_alloc_size = tmp_alloc_size;
 
-				allocator_type tmp_new_alloc = x._new_alloc;
-				x._new_alloc = _new_alloc;
-				_new_alloc = tmp_new_alloc;
+				allocator_type tmp_new_alloc = x._allocator;
+				x._allocator = _allocator;
+				_allocator = tmp_new_alloc;
 			}
 			void clear()
 			{
 				for (int i = 0; i < _curent_size; ++i)
 				{
-					_new_alloc.destroy(_vector_start + i);
+					_allocator.destroy(_vector_start + i);
 				}
 				_curent_size = 0;
 			}
 	};
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(vector::iterator position, const value_type &val)
-	{
-		iterator start = this->begin();
-		pointer tmp;
-		bool check = false;
-		size_type iter_val;
-		if (_curent_size < _alloc_size)
-		{
-			tmp = _new_alloc.allocate(_alloc_size);
-		}
-		else
-		{
-			if (_alloc_size == 0)
-				tmp = _new_alloc.allocate(_alloc_size = 1);
-			else
-				tmp = _new_alloc.allocate(_alloc_size *= 2);
-			check = true;
-		}
-		if (!tmp)
-		{
-			throw std::bad_alloc();
-		}
-		for (_curent_size = 0; start < position; ++start, ++_curent_size)
-		{
-			tmp[_curent_size] = *start;
-		}
-		tmp[iter_val = _curent_size++] = *position;
-		for (; start < this->end(); ++start, ++_curent_size)
-		{
-			tmp[_curent_size] = *start;
-		}
-		_new_alloc.deallocate(_vector_start, check ? _alloc_size / 2 : _alloc_size);
-		_vector_start = tmp;
-		return vector_iterator(_vector_start, iter_val);
-	}
-	template<class T, class Alloc>
-	void vector<T, Alloc>::insert(vector::iterator position, vector::size_type n, const value_type &val)
-	{
-		iterator start = this->begin();
-		pointer tmp;
-		bool check = false;
-		if (_curent_size + n < _alloc_size)
-		{
-			tmp = _new_alloc.allocate(_alloc_size);
-		}
-		else
-		{
-			tmp = _new_alloc.allocate(_alloc_size + n);
-			check = true;
-		}
-		if (!tmp)
-		{
-			throw std::bad_alloc();
-		}
-		for (_curent_size = 0; start < position; ++start, ++_curent_size)
-		{
-			tmp[_curent_size] = *start;
-		}
-		for (int i = 0; i < n; ++i, ++_curent_size)
-		{
-			tmp[_curent_size] = val;
-		}
-		for (; start < this->end(); ++start, ++_curent_size)
-		{
-			tmp[_curent_size] = *start;
-		}
-		_new_alloc.deallocate(_vector_start, _alloc_size);
-		check ? _alloc_size = _curent_size : 0;
-		_vector_start = tmp;
-	}
-	template<class T, class Alloc>
-	template<class InputIterator>
-	void vector<T, Alloc>::insert(vector::iterator position, InputIterator first, InputIterator last)
-	{
-		iterator start = this->begin();
-		pointer tmp;
-		bool check = false;
-		if (_curent_size + (last - first) < _alloc_size)
-		{
-			tmp = _new_alloc.allocate(_alloc_size);
-		}
-		else
-		{
-			tmp = _new_alloc.allocate(_alloc_size + (last - first));
-			check = true;
-		}
-		if (!tmp)
-		{
-			throw std::bad_alloc();
-		}
-		for (_curent_size = 0; start < position; ++start, ++_curent_size)
-		{
-			tmp[_curent_size] = *start;
-		}
-		for (; first < last; ++first, ++_curent_size)
-		{
-			tmp[_curent_size] = *first;
-		}
-		for (; start < this->end(); ++start, ++_curent_size)
-		{
-			tmp[_curent_size] = *start;
-		}
-		_new_alloc.deallocate(_vector_start, _alloc_size);
-		check ? _alloc_size = _curent_size : 0;
-		_vector_start = tmp;
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(vector::iterator position)
-	{
-		pointer tmp = _new_alloc.allocate(_alloc_size);
-		iterator it = this->begin();
-		size_type save_pos;
-		for (_curent_size = 0; it < position; ++it, ++_curent_size)
-		{
-			tmp[_curent_size] = *it;
-		}
-		++it;
-		save_pos = _curent_size;
-		for (; it < this->end(); ++it, ++_curent_size)
-		{
-			tmp[_curent_size] = *it;
-		}
-		_new_alloc.deallocate(_vector_start, _alloc_size);
-		_vector_start = tmp;
-		return vector_iterator(_vector_start, save_pos);
-	}
-	template<class T, class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(vector::iterator first, vector::iterator last)
-	{
-		pointer tmp = _new_alloc.allocate(_alloc_size);
-		iterator it = this->begin();
-		size_type save_pos;
-		for (_curent_size = 0; it < first; ++it, ++_curent_size)
-		{
-			tmp[_curent_size] = *it;
-		}
-		it = last;
-		save_pos = _curent_size;
-		for (; it < this->end(); ++it, ++_curent_size)
-		{
-			tmp[_curent_size] = *it;
-		}
-		_new_alloc.deallocate(_vector_start, _alloc_size);
-		_vector_start = tmp;
-		return vector_iterator(_vector_start, save_pos);
-	}
-
 
 	//Non_member
 	template<class T, class Alloc>
@@ -536,5 +525,3 @@ namespace ft
 		x.swap(y);
 	}
 }
-
-#endif

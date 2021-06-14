@@ -5,12 +5,14 @@ set(CMAKE_CXX_STANDARD 98)
 
 add_executable(
         ft_containers
-        vector/Test/vector_main.cpp
-        vector/Container/vector.hpp
-        vector/Iterator/Iterator.hpp)
+        Test/vector_main.cpp
+        Container/vector.hpp
+        Iterator/Vector_Iterator.hpp
+        Container/list.hpp
+        Test/test.cpp)
 
 
 include_directories(./)
 include_directories(vector)
-include_directories(vector/Iterator)
-include_directories(vector/Container)
+include_directories(Iterator)
+include_directories(Container)
