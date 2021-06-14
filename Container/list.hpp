@@ -317,13 +317,13 @@ namespace ft
 
 			size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(node); }
 
-			reference front() { return _head->_data; }
+			reference front() { return *(_head->_data); }
 
-			const_reference front() const { return _head->_data; }
+			const_reference front() const { return *(_head->_data); }
 
-			reference back() { return _tail->_data; }
+			reference back() { return *(_tail->_data); }
 
-			const_reference back() const { return _tail->_data; }
+			const_reference back() const { return *(_tail->_data); }
 
 			template<class InputIterator>
 			void assign(InputIterator first, InputIterator last, typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
@@ -458,6 +458,11 @@ namespace ft
 
 			iterator erase(iterator first, iterator last)
 			{
+				if (first == begin() && last == end())
+				{
+					Clear_List();
+					return iterator(_center_element);
+				}
 				node *start = first.ptr->_prev;
 				node *finish = last.ptr;
 				start->_next = finish;
@@ -509,7 +514,7 @@ namespace ft
 				iterator last = end();
 				while (first.ptr->_next != last.ptr)
 				{
-					if (binary_pred(*first, first.ptr->_next->_data))
+					if (binary_pred(*first, *(first.ptr->_next->_data)))
 					{
 						first = erase(first);
 						continue;
