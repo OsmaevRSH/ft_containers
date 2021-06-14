@@ -215,7 +215,11 @@ namespace ft
 
 			~list()
 			{
-				Clear_List(&_head, &_tail, &_center_element);
+				Clear_List();
+				_allocator.destroy((_center_element)->_data);
+				_allocator.deallocate((_center_element)->_data, 1);
+				delete _center_element;
+				_center_element = nullptr;
 			}
 
 			list &operator=(const list &x)
@@ -248,34 +252,30 @@ namespace ft
 				}
 			}
 
-			void Clear_List(node **head, node **tail, node **center_element)
+			void Clear_List()
 			{
-				if (*head == *tail)
+				if (_head == _tail)
 				{
-					_allocator.destroy((*head)->_data);
-					_allocator.deallocate((*head)->_data, 1);
-					delete *head;
-					*head = nullptr;
+					_allocator.destroy((_head)->_data);
+					_allocator.deallocate((_head)->_data, 1);
+					delete _head;
+					_head = nullptr;
 				}
-				else if (*head)
+				else if (_head)
 				{
-					node *temp = *head;
-					while (temp != *center_element)
+					node *temp = _head;
+					while (temp != _center_element)
 					{
 						temp = temp->_next;
-						_allocator.destroy((*head)->_data);
-						_allocator.deallocate((*head)->_data, 1);
-						delete *head;
-						*head = nullptr;
-						*head = temp;
+						_allocator.destroy((_head)->_data);
+						_allocator.deallocate((_head)->_data, 1);
+						delete _head;
+						_head = nullptr;
+						_head = temp;
 					}
 				}
-				_allocator.destroy((*center_element)->_data);
-				_allocator.deallocate((*center_element)->_data, 1);
-				delete *center_element;
-				*center_element = nullptr;
-				*head = nullptr;
-				*tail = nullptr;
+				_head = nullptr;
+				_tail = nullptr;
 			}
 
 			void Clear_Range(iterator first, iterator last)
@@ -487,5 +487,58 @@ namespace ft
 				else
 					erase(begin, end);
 			}
+
+			void clear()
+			{
+				Clear_List();
+			}
+
+
 	};
+
+	template<class T, class Alloc>
+	bool operator==(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs)
+	{
+		typename list<T, Alloc>::const_iterator lhs_iter = lhs.begin();
+		typename list<T, Alloc>::const_iterator rhs_iter = rhs.begin();
+		for (; lhs_iter != lhs.end() && rhs_iter != rhs.end(); ++lhs_iter, ++rhs_iter)
+		{
+			if (*lhs_iter != *rhs_iter)
+				return false;
+		}
+		if (lhs_iter == lhs.end() && rhs_iter == rhs.end())
+			return true;
+		return false;
+	}
+
+	template<class T, class Alloc>
+	bool operator<(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs)
+	{
+		typename list<T, Alloc>::const_iterator lhs_iter = lhs.begin();
+		typename list<T, Alloc>::const_iterator rhs_iter = rhs.begin();
+		for (; lhs_iter != lhs.end() && rhs_iter != rhs.end(); ++lhs_iter, ++rhs_iter)
+		{
+			if (*lhs_iter < *rhs_iter)
+				return true;
+			else if (*lhs_iter > *rhs_iter)
+				return false;
+			else
+				continue;
+		}
+		if (lhs_iter == lhs.end() && rhs_iter != rhs.end())
+			return true;
+		return false;
+	}
+
+	template<class T, class Alloc>
+	bool operator!=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs == rhs) }
+
+	template<class T, class Alloc>
+	bool operator>(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return rhs < lhs }
+
+	template<class T, class Alloc>
+	bool operator<=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(rhs < lhs) }
+
+	template<class T, class Alloc>
+	bool operator>=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs < rhs) }
 }
