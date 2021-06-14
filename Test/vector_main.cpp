@@ -167,6 +167,7 @@ int main()
 	temp.push_back(6);
 	temp.push_back(7);
 	temp.push_back(8);
+	temp.reverse();
 	a.push_back(1);
 	a.push_back(2);
 	a.push_back(3);
@@ -175,38 +176,41 @@ int main()
 	a.push_back(6);
 	a.push_back(7);
 	a.push_back(8);
+	a.reverse();
+//		list<int>::reverse_iterator it1 = temp.rbegin();
+//		ft::list<int>::reverse_iterator it2 = a.rbegin();
 	list<int>::iterator it1 = temp.begin();
 	ft::list<int>::iterator it2 = a.begin();
-	for (int i = 0; i < 8; ++i, ++it1, ++it2)
+	for (int i = 0; i < 9; ++i, ++it1, ++it2)
 	{
 		cout << *it1 << "  " << *it2 << endl;
 	}
-	cout << endl<< endl;
-	temp.resize(20, 5);
-	a.resize(20, 5);
-	it1 = temp.begin();
-	it2 = a.begin();
-	for (int i = 0; i < 20; ++i, ++it1, ++it2)
-	{
-		cout << *it1 << "  " << *it2 << endl;
-	}
-//	a = temp;
-//	ft::list<int> temp1;
-//	ft::list<int> b;
-//	temp1.push_back(1);
-//	temp1.push_back(2);
-//	temp1.push_back(3);
-//	temp1.push_back(4);
-//	b = temp1;
-//	//	temp1.assign(++temp1.begin(), --temp1.end());
-//	list<int>::iterator ita = a.begin();
-//	ft::list<int>::iterator itb = b.begin();
-//	cout << a.size() << endl << b.size() << endl << endl << endl;
-//
-//	for (int i = 0; i < 10; ++i)
-//	{
-//		cout << *ita++ << "-" << *itb++ << endl;
-//	}
+	cout << endl << endl;
+	//	temp.resize(20, 5);
+	//	a.resize(20, 5);
+	//	it1 = temp.begin();
+	//	it2 = a.begin();
+	//	for (int i = 0; i < 20; ++i, ++it1, ++it2)
+	//	{
+	//		cout << *it1 << "  " << *it2 << endl;
+	//	}
+	//	a = temp;
+	//	ft::list<int> temp1;
+	//	ft::list<int> b;
+	//	temp1.push_back(1);
+	//	temp1.push_back(2);
+	//	temp1.push_back(3);
+	//	temp1.push_back(4);
+	//	b = temp1;
+	//	//	temp1.assign(++temp1.begin(), --temp1.end());
+	//	list<int>::iterator ita = a.begin();
+	//	ft::list<int>::iterator itb = b.begin();
+	//	cout << a.size() << endl << b.size() << endl << endl << endl;
+	//
+	//	for (int i = 0; i < 10; ++i)
+	//	{
+	//		cout << *ita++ << "-" << *itb++ << endl;
+	//	}
 
 	//	a.push_back(1);
 	//	a.push_back("2");

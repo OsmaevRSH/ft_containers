@@ -1,8 +1,10 @@
 #pragma once
 
+#include "iostream"
+
 namespace ft
 {
-	template<class T, class Alloc = std::allocator <T> >
+	template<class T, class Alloc = std::allocator<T> >
 	class list
 	{
 		private:
@@ -291,7 +293,7 @@ namespace ft
 				}
 			}
 
-			bool Unique_Binary_Predicate(const_reference lhs, const_reference rhs) { return lhs == rhs; }
+			static bool Unique_Binary_Predicate(const_reference lhs, const_reference rhs) { return lhs == rhs; }
 
 		public:
 			bool empty() const { return _head == nullptr; }
@@ -512,7 +514,7 @@ namespace ft
 						first = erase(first);
 						continue;
 					}
-					++first
+					++first;
 				}
 			}
 
@@ -545,6 +547,21 @@ namespace ft
 					}
 					++first;
 				}
+			}
+
+			void reverse()
+			{
+				node *temp = nullptr;
+				node *first = _center_element;
+				do
+				{
+					temp = first->_prev;
+					first->_prev = first->_next;
+					first->_next = temp;
+					first = first->_prev;
+				} while (first != _center_element);
+				_head = _center_element->_next;
+				_tail = _center_element->_prev;
 			}
 
 	};
@@ -584,16 +601,16 @@ namespace ft
 	}
 
 	template<class T, class Alloc>
-	bool operator!=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs == rhs) }
+	bool operator!=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs == rhs); }
 
 	template<class T, class Alloc>
-	bool operator>(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return rhs < lhs }
+	bool operator>(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return rhs < lhs; }
 
 	template<class T, class Alloc>
-	bool operator<=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(rhs < lhs) }
+	bool operator<=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(rhs < lhs); }
 
 	template<class T, class Alloc>
-	bool operator>=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs < rhs) }
+	bool operator>=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs < rhs); }
 
 	template<class T, class Alloc>
 	void swap(list<T, Alloc> &x, list<T, Alloc> &y) { x.swap(y); }
