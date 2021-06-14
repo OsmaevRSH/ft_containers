@@ -6,20 +6,20 @@
 
 namespace ft
 {
-	template<bool B, class T = void>
-	struct enable_if
-	{
-	};
-
-	template<class T>
-	struct enable_if<true, T>
-	{
-		typedef T type;
-	};
-
 	template<class T, class Alloc = std::allocator<T> >
 	class vector
 	{
+		private:
+			template<bool B, class T1 = void>
+			struct enable_if
+			{
+			};
+
+			template<class T1>
+			struct enable_if<true, T1>
+			{
+				typedef T1 type;
+			};
 		public:
 			//member_types
 			typedef T value_type;

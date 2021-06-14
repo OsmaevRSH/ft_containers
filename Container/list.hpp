@@ -2,15 +2,26 @@
 
 namespace ft
 {
-	template<class T, class Alloc = std::allocator<T> >
+	template<class T, class Alloc = std::allocator <T> >
 	class list
 	{
 		private:
+			template<bool B, class T1 = void>
+			struct enable_if
+			{
+			};
+
+			template<class T1>
+			struct enable_if<true, T1>
+			{
+				typedef T1 type;
+			};
+
 			typedef struct List_Node
 			{
 				List_Node() {}
 				explicit List_Node(const T &data) : _data(data) {}
-				T _data;
+				T *_data;
 				List_Node *_next;
 				List_Node *_prev;
 
@@ -35,8 +46,8 @@ namespace ft
 
 					friend bool operator==(const Iterator &left, const Iterator &right) { return left.ptr == right.ptr; }
 					friend bool operator!=(const Iterator &left, const Iterator &right) { return left.ptr != right.ptr; }
-					T &operator*() const { return this->ptr->_data; }
-					T *operator->() const { return &(this->ptr->_data); }
+					T &operator*() const { return *(this->ptr->_data); }
+					T *operator->() const { return this->ptr->_data; }
 					Iterator &operator++()
 					{
 						if (this->ptr)
@@ -81,8 +92,8 @@ namespace ft
 					}
 					virtual ~Const_Iterator() {}
 
-					const T &operator*() { return this->ptr->_data; }
-					const T *operator->() { return &(this->ptr->_data); }
+					const T &operator*() { return *(this->ptr->_data); }
+					const T *operator->() { return this->ptr->_data; }
 			};
 
 			class Reverse_Iterator
@@ -104,8 +115,8 @@ namespace ft
 
 					friend bool operator==(const Reverse_Iterator &left, const Reverse_Iterator &right) { return left.ptr == right.ptr; }
 					friend bool operator!=(const Reverse_Iterator &left, const Reverse_Iterator &right) { return left.ptr != right.ptr; }
-					T &operator*() const { return this->ptr->_data; }
-					T *operator->() const { return &(this->ptr->_data); }
+					T &operator*() const { return *(this->ptr->_data); }
+					T *operator->() const { return this->ptr->_data; }
 					Reverse_Iterator &operator++()
 					{
 						if (this->ptr)
@@ -150,8 +161,8 @@ namespace ft
 					}
 					virtual ~Const_Reverse_Iterator() {}
 
-					const T &operator*() { return this->ptr->_data; }
-					const T *operator->() { return &(this->ptr->_data); }
+					const T &operator*() { return *(this->ptr->_data); }
+					const T *operator->() { return this->ptr->_data; }
 			};
 		public:
 			//member_types
@@ -185,10 +196,10 @@ namespace ft
 			const_reverse_iterator rend() const { return const_reverse_iterator(_center_element); }
 
 			explicit list(const allocator_type &alloc = allocator_type())
-					: _head(nullptr), _tail(nullptr), _center_element(Create_Empty_Node()), _allocator(alloc) {}
+					: _head(nullptr), _tail(nullptr), _center_element(Create_Node()), _allocator(alloc) {}
 
 			explicit list(size_type n, const value_type &value = value_type(), const allocator_type &alloc = allocator_type())
-					: _head(nullptr), _tail(nullptr), _center_element(Create_Empty_Node()), _allocator(alloc)
+					: _head(nullptr), _tail(nullptr), _center_element(Create_Node()), _allocator(alloc)
 			{
 				for (int i = 0; i < n; ++i)
 				{
@@ -198,11 +209,9 @@ namespace ft
 
 			template<class InputIterator>
 			list(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
-					: _head(nullptr), _tail(nullptr), _center_element(Create_Empty_Node()),
-					_allocator(alloc) { Create_List_Copy(first, last); }
+					: _head(nullptr), _tail(nullptr), _center_element(Create_Node()), _allocator(alloc) { Create_List_Copy(first, last); }
 
-			list(const list &x)
-					: _head(nullptr), _tail(nullptr), _center_element(Create_Empty_Node()) { Create_List_Copy(x.begin(), x.end()); }
+			list(const list &x) : _head(nullptr), _tail(nullptr), _center_element(Create_Node()) { Create_List_Copy(x.begin(), x.end()); }
 
 			~list()
 			{
@@ -219,18 +228,11 @@ namespace ft
 			}
 
 		private:
-			node *Create_Empty_Node()
+			node *Create_Node(const_reference data = value_type())
 			{
 				node *new_node = new node;
-				new_node->_data = value_type();
-				new_node->_next = nullptr;
-				new_node->_prev = nullptr;
-				return new_node;
-			}
-
-			node *Create_Node_With_Data(const_reference data)
-			{
-				node *new_node = new node(data);
+				new_node->_data = _allocator.allocate(1);
+				_allocator.construct(new_node->_data, data);
 				new_node->_next = nullptr;
 				new_node->_prev = nullptr;
 				return new_node;
@@ -250,6 +252,8 @@ namespace ft
 			{
 				if (*head == *tail)
 				{
+					_allocator.destroy((*head)->_data);
+					_allocator.deallocate((*head)->_data, 1);
 					delete *head;
 					*head = nullptr;
 				}
@@ -259,11 +263,15 @@ namespace ft
 					while (temp != *center_element)
 					{
 						temp = temp->_next;
+						_allocator.destroy((*head)->_data);
+						_allocator.deallocate((*head)->_data, 1);
 						delete *head;
 						*head = nullptr;
 						*head = temp;
 					}
 				}
+				_allocator.destroy((*center_element)->_data);
+				_allocator.deallocate((*center_element)->_data, 1);
 				delete *center_element;
 				*center_element = nullptr;
 				*head = nullptr;
@@ -276,6 +284,8 @@ namespace ft
 				{
 					node *temp = first.ptr;
 					++first;
+					_allocator.destroy(temp->_data);
+					_allocator.deallocate(temp->_data, 1);
 					delete temp;
 					temp = nullptr;
 				}
@@ -316,9 +326,9 @@ namespace ft
 			{
 				iterator begin = iterator(_head);
 				iterator end = iterator(_center_element);
-				for (; _head != nullptr && _tail != nullptr && first != last && begin != end; ++first, ++begin)
+				for (; _head != nullptr && _center_element != nullptr && first != last && begin != end; ++first, ++begin)
 					*begin = *first;
-				if (begin == end || _head == nullptr || _tail == nullptr)
+				if (begin == end || _head == nullptr || _center_element == nullptr)
 					insert(end, first, last);
 				else
 					erase(begin, end);
@@ -328,9 +338,9 @@ namespace ft
 			{
 				iterator begin = iterator(_head);
 				iterator end = iterator(_center_element);
-				for (;_head != nullptr && _tail != nullptr &&  n > 0 && begin != end; --n, ++begin)
+				for (; _head != nullptr && _center_element != nullptr && n > 0 && begin != end; --n, ++begin)
 					*begin = val;
-				if (begin == end || _head == nullptr || _tail == nullptr)
+				if (begin == end || _head == nullptr || _center_element == nullptr)
 					insert(end, n, val);
 				else
 					erase(begin, end);
@@ -347,6 +357,8 @@ namespace ft
 				_center_element->_prev = _tail->_prev;
 				node *temp = _tail;
 				_tail = _tail->_prev;
+				_allocator.destroy(temp->_data);
+				_allocator.deallocate(temp->_data, 1);
 				delete temp;
 			}
 
@@ -361,12 +373,14 @@ namespace ft
 				_head->_next->_prev = _center_element;
 				node *temp = _head;
 				_head = _head->_next;
+				_allocator.destroy(temp->_data);
+				_allocator.deallocate(temp->_data, 1);
 				delete temp;
 			}
 
 			iterator insert(iterator position, const value_type &val)
 			{
-				node *temp = Create_Node_With_Data(val);
+				node *temp = Create_Node(val);
 				if (!_head)
 				{
 					_tail = temp;
@@ -431,6 +445,8 @@ namespace ft
 				temp->_prev->_next = temp->_next;
 				temp->_next->_prev = temp->_prev;
 				returned = temp->_next;
+				_allocator.destroy(temp->_data);
+				_allocator.deallocate(temp->_data, 1);
 				delete temp;
 				temp = nullptr;
 				return returned;
@@ -444,6 +460,32 @@ namespace ft
 				finish->_prev = start;
 				Clear_Range(first, last);
 				return last;
+			}
+
+			void swap(list &x)
+			{
+				node *temp_head = _head;
+				node *temp_tail = _tail;
+				node *temp_center_element = _center_element;
+
+				_head = x._head;
+				_tail = x._tail;
+				_center_element = x._center_element;
+
+				x._head = temp_head;
+				x._tail = temp_tail;
+				x._center_element = temp_center_element;
+			}
+
+			void resize(size_type n, value_type val = value_type())
+			{
+				iterator begin = iterator(_head);
+				iterator end = iterator(_center_element);
+				for (; _head != nullptr && _center_element != nullptr && n > 0 && begin != end; --n, ++begin);
+				if (begin == end || _head == nullptr || _center_element == nullptr)
+					insert(end, n, val);
+				else
+					erase(begin, end);
 			}
 	};
 }
