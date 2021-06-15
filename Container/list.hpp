@@ -181,7 +181,7 @@ namespace ft
 			typedef size_t size_type;
 
 		private:
-			node *_center_element;
+			node *_linked_elem;
 			node *_head;
 			node *_tail;
 			allocator_type _allocator;
@@ -190,19 +190,29 @@ namespace ft
 
 			iterator begin() { return iterator(_head); }
 			const_iterator begin() const { return const_iterator(_head); }
-			iterator end() { return iterator(_center_element); }
-			const_iterator end() const { return const_iterator(_center_element); }
+			iterator end() { return iterator(_linked_elem); }
+			const_iterator end() const { return const_iterator(_linked_elem); }
 			reverse_iterator rbegin() { return reverse_iterator(_tail); }
 			const_reverse_iterator rbegin() const { return const_reverse_iterator(_tail); }
-			reverse_iterator rend() { return reverse_iterator(_center_element); }
-			const_reverse_iterator rend() const { return const_reverse_iterator(_center_element); }
+			reverse_iterator rend() { return reverse_iterator(_linked_elem); }
+			const_reverse_iterator rend() const { return const_reverse_iterator(_linked_elem); }
 
 			explicit list(const allocator_type &alloc = allocator_type())
-					: _head(nullptr), _tail(nullptr), _center_element(Create_Node()), _allocator(alloc) {}
+					: _head(nullptr), _tail(nullptr), _linked_elem(Create_Node()), _allocator(alloc)
+			{
+				_head = _linked_elem;
+				_tail = _linked_elem;
+				_linked_elem->_next = _linked_elem;
+				_linked_elem->_prev = _linked_elem;
+			}
 
 			explicit list(size_type n, const value_type &value = value_type(), const allocator_type &alloc = allocator_type())
-					: _head(nullptr), _tail(nullptr), _center_element(Create_Node()), _allocator(alloc)
+					: _head(nullptr), _tail(nullptr), _linked_elem(Create_Node()), _allocator(alloc)
 			{
+				_head = _linked_elem;
+				_tail = _linked_elem;
+				_linked_elem->_next = _linked_elem;
+				_linked_elem->_prev = _linked_elem;
 				for (int i = 0; i < n; ++i)
 				{
 					push_back(value);
@@ -211,17 +221,31 @@ namespace ft
 
 			template<class InputIterator>
 			list(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
-					: _head(nullptr), _tail(nullptr), _center_element(Create_Node()), _allocator(alloc) { Create_List_Copy(first, last); }
+					: _head(nullptr), _tail(nullptr), _linked_elem(Create_Node()), _allocator(alloc)
+			{
+				_head = _linked_elem;
+				_tail = _linked_elem;
+				_linked_elem->_next = _linked_elem;
+				_linked_elem->_prev = _linked_elem;
+				Create_List_Copy(first, last);
+			}
 
-			list(const list &x) : _head(nullptr), _tail(nullptr), _center_element(Create_Node()) { Create_List_Copy(x.begin(), x.end()); }
+			list(const list &x) : _head(nullptr), _tail(nullptr), _linked_elem(Create_Node())
+			{
+				_head = _linked_elem;
+				_tail = _linked_elem;
+				_linked_elem->_next = _linked_elem;
+				_linked_elem->_prev = _linked_elem;
+				Create_List_Copy(x.begin(), x.end());
+			}
 
 			~list()
 			{
 				Clear_List();
-				_allocator.destroy((_center_element)->_data);
-				_allocator.deallocate((_center_element)->_data, 1);
-				delete _center_element;
-				_center_element = nullptr;
+				_allocator.destroy((_linked_elem)->_data);
+				_allocator.deallocate((_linked_elem)->_data, 1);
+				delete _linked_elem;
+				_linked_elem = nullptr;
 			}
 
 			list &operator=(const list &x)
@@ -256,7 +280,7 @@ namespace ft
 
 			void Clear_List()
 			{
-				if (_head == _tail)
+				if (_head == _tail && _head != _linked_elem)
 				{
 					_allocator.destroy((_head)->_data);
 					_allocator.deallocate((_head)->_data, 1);
@@ -266,7 +290,7 @@ namespace ft
 				else if (_head)
 				{
 					node *temp = _head;
-					while (temp != _center_element)
+					while (temp != _linked_elem)
 					{
 						temp = temp->_next;
 						_allocator.destroy((_head)->_data);
@@ -276,8 +300,8 @@ namespace ft
 						_head = temp;
 					}
 				}
-				_head = nullptr;
-				_tail = nullptr;
+				_head = _linked_elem;
+				_tail = _linked_elem;
 			}
 
 			void Clear_Range(iterator first, iterator last)
@@ -295,8 +319,63 @@ namespace ft
 
 			static bool Unique_Binary_Predicate(const_reference lhs, const_reference rhs) { return lhs == rhs; }
 
+			static bool Sort_Comparer(value_type lhs, value_type rhs) { return lhs < rhs; }
+
+			template<class Compare>
+			node *merge(node *first_part, node *second_part, Compare comp)
+			{
+				if (!first_part)
+					return second_part;
+
+				if (!second_part)
+					return first_part;
+
+				if (comp(*(first_part->_data), *(second_part->_data)))
+				{
+					first_part->_next = merge(first_part->_next, second_part, comp);
+					first_part->_next->_prev = first_part;
+					first_part->_prev = NULL;
+					return first_part;
+				}
+				else
+				{
+					second_part->_next = merge(first_part, second_part->_next, comp);
+					second_part->_next->_prev = second_part;
+					second_part->_prev = NULL;
+					return second_part;
+				}
+			}
+
+			template<class Compare>
+			node *mergeSort(node *start_node, Compare comp)
+			{
+				if (start_node == _linked_elem || start_node == nullptr || start_node->_next == _linked_elem ||
+				    start_node->_next == nullptr)
+					return start_node;
+				node *first_part = start_node;
+				node *second_part = start_node->_next;
+				while (second_part != nullptr && second_part != _linked_elem && second_part->_next != nullptr &&
+				       second_part->_next != _linked_elem)
+				{
+					start_node = start_node->_next;
+					second_part = second_part->_next->_next;
+				}
+				first_part->_prev = nullptr;
+				second_part = start_node->_next;
+				second_part->_prev = nullptr;
+				start_node->_next = nullptr;
+
+				node *temp = second_part;
+				while (temp->_next != _linked_elem && temp->_next != nullptr)
+				{
+					temp = temp->_next;
+				}
+				temp->_next = nullptr;
+				return merge(mergeSort(first_part, comp), mergeSort(second_part, comp), comp);
+			}
+
 		public:
-			bool empty() const { return _head == nullptr; }
+			bool empty() const { return _head == _linked_elem; }
 
 			size_type size() const
 			{
@@ -306,7 +385,7 @@ namespace ft
 				{
 					int count = 0;
 					node *temp = _head;
-					while (temp != _center_element)
+					while (temp != _linked_elem)
 					{
 						temp = temp->_next;
 						++count;
@@ -329,10 +408,10 @@ namespace ft
 			void assign(InputIterator first, InputIterator last, typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
 			{
 				iterator begin = iterator(_head);
-				iterator end = iterator(_center_element);
-				for (; _head != nullptr && _center_element != nullptr && first != last && begin != end; ++first, ++begin)
+				iterator end = iterator(_linked_elem);
+				for (; _head != nullptr && _linked_elem != nullptr && first != last && begin != end; ++first, ++begin)
 					*begin = *first;
-				if (begin == end || _head == nullptr || _center_element == nullptr)
+				if (begin == end || _head == nullptr || _linked_elem == nullptr)
 					insert(end, first, last);
 				else
 					erase(begin, end);
@@ -341,10 +420,10 @@ namespace ft
 			void assign(size_type n, const value_type &val)
 			{
 				iterator begin = iterator(_head);
-				iterator end = iterator(_center_element);
-				for (; _head != nullptr && _center_element != nullptr && n > 0 && begin != end; --n, ++begin)
+				iterator end = iterator(_linked_elem);
+				for (; _head != nullptr && _linked_elem != nullptr && n > 0 && begin != end; --n, ++begin)
 					*begin = val;
-				if (begin == end || _head == nullptr || _center_element == nullptr)
+				if (begin == end || _head == nullptr || _linked_elem == nullptr)
 					insert(end, n, val);
 				else
 					erase(begin, end);
@@ -357,8 +436,8 @@ namespace ft
 
 			void pop_back()
 			{
-				_tail->_prev->_next = _center_element;
-				_center_element->_prev = _tail->_prev;
+				_tail->_prev->_next = _linked_elem;
+				_linked_elem->_prev = _tail->_prev;
 				node *temp = _tail;
 				_tail = _tail->_prev;
 				_allocator.destroy(temp->_data);
@@ -373,8 +452,8 @@ namespace ft
 
 			void pop_front()
 			{
-				_center_element->_next = _head->_next;
-				_head->_next->_prev = _center_element;
+				_linked_elem->_next = _head->_next;
+				_head->_next->_prev = _linked_elem;
 				node *temp = _head;
 				_head = _head->_next;
 				_allocator.destroy(temp->_data);
@@ -385,28 +464,28 @@ namespace ft
 			iterator insert(iterator position, const value_type &val)
 			{
 				node *temp = Create_Node(val);
-				if (!_head)
+				if (empty())
 				{
 					_tail = temp;
 					_head = temp;
-					_head->_prev = _center_element;
-					_head->_next = _center_element;
-					_center_element->_next = _head;
-					_center_element->_prev = _head;
+					_head->_prev = _linked_elem;
+					_head->_next = _linked_elem;
+					_linked_elem->_next = _head;
+					_linked_elem->_prev = _head;
 				}
 				else if (position == end())
 				{
-					temp->_next = _center_element;
-					temp->_prev = _tail;
 					_tail->_next = temp;
-					_center_element->_prev = temp;
+					temp->_next = _linked_elem;
+					_linked_elem->_prev = temp;
+					temp->_prev = _tail;
 					_tail = temp;
 				}
 				else if (position == begin())
 				{
 					temp->_next = _head;
-					temp->_prev = _center_element;
-					_center_element->_next = temp;
+					temp->_prev = _linked_elem;
+					_linked_elem->_next = temp;
 					_head->_prev = temp;
 					_head = temp;
 				}
@@ -461,12 +540,16 @@ namespace ft
 				if (first == begin() && last == end())
 				{
 					Clear_List();
-					return iterator(_center_element);
+					_linked_elem->_next = _linked_elem;
+					_linked_elem->_prev = _linked_elem;
+					return iterator(_linked_elem);
 				}
 				node *start = first.ptr->_prev;
 				node *finish = last.ptr;
 				start->_next = finish;
 				finish->_prev = start;
+				_tail = _linked_elem->_prev;
+				_head = _linked_elem->_next;
 				Clear_Range(first, last);
 				return last;
 			}
@@ -475,23 +558,23 @@ namespace ft
 			{
 				node *temp_head = _head;
 				node *temp_tail = _tail;
-				node *temp_center_element = _center_element;
+				node *temp_center_element = _linked_elem;
 
 				_head = x._head;
 				_tail = x._tail;
-				_center_element = x._center_element;
+				_linked_elem = x._linked_elem;
 
 				x._head = temp_head;
 				x._tail = temp_tail;
-				x._center_element = temp_center_element;
+				x._linked_elem = temp_center_element;
 			}
 
 			void resize(size_type n, value_type val = value_type())
 			{
 				iterator begin = iterator(_head);
-				iterator end = iterator(_center_element);
-				for (; _head != nullptr && _center_element != nullptr && n > 0 && begin != end; --n, ++begin);
-				if (begin == end || _head == nullptr || _center_element == nullptr)
+				iterator end = iterator(_linked_elem);
+				for (; _head != nullptr && _linked_elem != nullptr && n > 0 && begin != end; --n, ++begin);
+				if (begin == end || _head == nullptr || _linked_elem == nullptr)
 					insert(end, n, val);
 				else
 					erase(begin, end);
@@ -557,18 +640,81 @@ namespace ft
 			void reverse()
 			{
 				node *temp = nullptr;
-				node *first = _center_element;
+				node *first = _linked_elem;
 				do
 				{
 					temp = first->_prev;
 					first->_prev = first->_next;
 					first->_next = temp;
 					first = first->_prev;
-				} while (first != _center_element);
-				_head = _center_element->_next;
-				_tail = _center_element->_prev;
+				} while (first != _linked_elem);
+				_head = _linked_elem->_next;
+				_tail = _linked_elem->_prev;
 			}
 
+			void splice(iterator position, list &x)
+			{
+				splice(position, x, x.begin(), x.end());
+			}
+
+			void splice(iterator position, list &x, iterator i)
+			{
+				insert(position, *i);
+				x.erase(i);
+			}
+
+			void splice(iterator position, list &x, iterator first, iterator last)
+			{
+				insert(position, first, last);
+				x.erase(first, last);
+			}
+
+			void sort()
+			{
+				sort(Sort_Comparer);
+			}
+
+			template<class Compare>
+			void sort(Compare comp)
+			{
+				node *temp = _head;
+				temp = mergeSort(temp, comp);
+				_head = temp;
+				_head->_prev = _linked_elem;
+				while (temp->_next != nullptr)
+				{
+					temp = temp->_next;
+				}
+				temp->_next = _linked_elem;
+				_linked_elem->_prev = temp;
+			}
+
+			void merge(list &x)
+			{
+				merge(x, Sort_Comparer);
+			}
+
+			template<class Compare>
+			void merge(list &x, Compare comp)
+			{
+				node *first = _head;
+				_head->_prev = nullptr;
+				_tail->_next = nullptr;
+				node *second = x._head;
+				x._head->_prev = nullptr;
+				x._tail->_next = nullptr;
+				first = merge(first, second, comp);
+				_head = first;
+				_head->_prev = _linked_elem;
+				while (first->_next != nullptr)
+				{
+					first = first->_next;
+				}
+				first->_next = _linked_elem;
+				_linked_elem->_prev = first;
+				x._head->_prev = x._linked_elem;
+				x._tail->_next = x._linked_elem;
+			}
 	};
 
 	template<class T, class Alloc>
