@@ -23,7 +23,7 @@ namespace ft
 			{
 				List_Node() {}
 				explicit List_Node(const T &data) : _data(data) {}
-				T *_data;
+				T _data;
 				List_Node *_next;
 				List_Node *_prev;
 
@@ -38,7 +38,7 @@ namespace ft
 					Iterator(const Iterator &copy) : ptr(copy.ptr) {}
 					Iterator &operator=(const Iterator &copy)
 					{
-						if (*this != copy)
+						if (this != &copy)
 						{
 							ptr = copy.ptr;
 						}
@@ -48,8 +48,8 @@ namespace ft
 
 					friend bool operator==(const Iterator &left, const Iterator &right) { return left.ptr == right.ptr; }
 					friend bool operator!=(const Iterator &left, const Iterator &right) { return left.ptr != right.ptr; }
-					T &operator*() const { return *(this->ptr->_data); }
-					T *operator->() const { return this->ptr->_data; }
+					T &operator*() const { return this->ptr->_data; }
+					T *operator->() const { return &(this->ptr->_data); }
 					Iterator &operator++()
 					{
 						if (this->ptr)
@@ -81,12 +81,13 @@ namespace ft
 			class Const_Iterator : public Iterator
 			{
 				public:
+					Const_Iterator() {}
 					Const_Iterator(node *ptr) : Iterator(ptr) {}
 					Const_Iterator(const Const_Iterator &copy) : Iterator(copy) {}
 					Const_Iterator(Iterator iterator) : Iterator(iterator.ptr) {}
 					Const_Iterator &operator=(const Const_Iterator &copy)
 					{
-						if (*this != copy)
+						if (this != &copy)
 						{
 							this->ptr = copy.ptr;
 						}
@@ -94,8 +95,8 @@ namespace ft
 					}
 					virtual ~Const_Iterator() {}
 
-					const T &operator*() { return *(this->ptr->_data); }
-					const T *operator->() { return this->ptr->_data; }
+					const T &operator*() { return this->ptr->_data; }
+					const T *operator->() { return &(this->ptr->_data); }
 			};
 
 			class Reverse_Iterator
@@ -107,7 +108,7 @@ namespace ft
 					Reverse_Iterator(const Reverse_Iterator &copy) : ptr(copy.ptr) {}
 					Reverse_Iterator &operator=(const Reverse_Iterator &copy)
 					{
-						if (*this != copy)
+						if (this != &copy)
 						{
 							ptr = copy.ptr;
 						}
@@ -117,8 +118,8 @@ namespace ft
 
 					friend bool operator==(const Reverse_Iterator &left, const Reverse_Iterator &right) { return left.ptr == right.ptr; }
 					friend bool operator!=(const Reverse_Iterator &left, const Reverse_Iterator &right) { return left.ptr != right.ptr; }
-					T &operator*() const { return *(this->ptr->_data); }
-					T *operator->() const { return this->ptr->_data; }
+					T &operator*() const { return this->ptr->_data; }
+					T *operator->() const { return &(this->ptr->_data); }
 					Reverse_Iterator &operator++()
 					{
 						if (this->ptr)
@@ -150,12 +151,13 @@ namespace ft
 			class Const_Reverse_Iterator : public Reverse_Iterator
 			{
 				public:
+					Const_Reverse_Iterator() {}
 					Const_Reverse_Iterator(node *ptr) : Reverse_Iterator(ptr) {}
 					Const_Reverse_Iterator(const Const_Reverse_Iterator &copy) : Reverse_Iterator(copy) {}
 					Const_Reverse_Iterator(Reverse_Iterator iterator) : Reverse_Iterator(iterator.ptr) {}
 					Const_Reverse_Iterator &operator=(const Const_Reverse_Iterator &copy)
 					{
-						if (*this != copy)
+						if (this != &copy)
 						{
 							this->ptr = copy.ptr;
 						}
@@ -163,11 +165,10 @@ namespace ft
 					}
 					virtual ~Const_Reverse_Iterator() {}
 
-					const T &operator*() { return *(this->ptr->_data); }
-					const T *operator->() { return this->ptr->_data; }
+					const T &operator*() { return this->ptr->_data; }
+					const T *operator->() { return &(this->ptr->_data); }
 			};
 		public:
-			//member_types
 			typedef T value_type;
 			typedef Alloc allocator_type;
 			typedef typename allocator_type::reference reference;
@@ -242,8 +243,6 @@ namespace ft
 			~list()
 			{
 				Clear_List();
-				_allocator.destroy((_linked_elem)->_data);
-				_allocator.deallocate((_linked_elem)->_data, 1);
 				delete _linked_elem;
 				_linked_elem = nullptr;
 			}
@@ -252,7 +251,12 @@ namespace ft
 			{
 				if (this != &x)
 				{
-					assign(x.begin(), x.end());
+					_linked_elem = Create_Node();
+					_head = _linked_elem;
+					_tail = _linked_elem;
+					_linked_elem->_next = _linked_elem;
+					_linked_elem->_prev = _linked_elem;
+					Create_List_Copy(x.begin(), x.end());
 				}
 				return *this;
 			}
@@ -261,8 +265,7 @@ namespace ft
 			node *Create_Node(const_reference data = value_type())
 			{
 				node *new_node = new node;
-				new_node->_data = _allocator.allocate(1);
-				_allocator.construct(new_node->_data, data);
+				new_node->_data = data;
 				new_node->_next = nullptr;
 				new_node->_prev = nullptr;
 				return new_node;
@@ -282,19 +285,15 @@ namespace ft
 			{
 				if (_head == _tail && _head != _linked_elem)
 				{
-					_allocator.destroy((_head)->_data);
-					_allocator.deallocate((_head)->_data, 1);
 					delete _head;
 					_head = nullptr;
 				}
 				else if (_head)
 				{
 					node *temp = _head;
-					while (temp != _linked_elem)
+					while (temp != _linked_elem && temp != nullptr)
 					{
 						temp = temp->_next;
-						_allocator.destroy((_head)->_data);
-						_allocator.deallocate((_head)->_data, 1);
 						delete _head;
 						_head = nullptr;
 						_head = temp;
@@ -310,8 +309,6 @@ namespace ft
 				{
 					node *temp = first.ptr;
 					++first;
-					_allocator.destroy(temp->_data);
-					_allocator.deallocate(temp->_data, 1);
 					delete temp;
 					temp = nullptr;
 				}
@@ -319,60 +316,7 @@ namespace ft
 
 			static bool Unique_Binary_Predicate(const_reference lhs, const_reference rhs) { return lhs == rhs; }
 
-			static bool Sort_Comparer(value_type lhs, value_type rhs) { return lhs < rhs; }
-
-			template<class Compare>
-			node *merge(node *first_part, node *second_part, Compare comp)
-			{
-				if (!first_part)
-					return second_part;
-
-				if (!second_part)
-					return first_part;
-
-				if (comp(*(first_part->_data), *(second_part->_data)))
-				{
-					first_part->_next = merge(first_part->_next, second_part, comp);
-					first_part->_next->_prev = first_part;
-					first_part->_prev = NULL;
-					return first_part;
-				}
-				else
-				{
-					second_part->_next = merge(first_part, second_part->_next, comp);
-					second_part->_next->_prev = second_part;
-					second_part->_prev = NULL;
-					return second_part;
-				}
-			}
-
-			template<class Compare>
-			node *mergeSort(node *start_node, Compare comp)
-			{
-				if (start_node == _linked_elem || start_node == nullptr || start_node->_next == _linked_elem ||
-				    start_node->_next == nullptr)
-					return start_node;
-				node *first_part = start_node;
-				node *second_part = start_node->_next;
-				while (second_part != nullptr && second_part != _linked_elem && second_part->_next != nullptr &&
-				       second_part->_next != _linked_elem)
-				{
-					start_node = start_node->_next;
-					second_part = second_part->_next->_next;
-				}
-				first_part->_prev = nullptr;
-				second_part = start_node->_next;
-				second_part->_prev = nullptr;
-				start_node->_next = nullptr;
-
-				node *temp = second_part;
-				while (temp->_next != _linked_elem && temp->_next != nullptr)
-				{
-					temp = temp->_next;
-				}
-				temp->_next = nullptr;
-				return merge(mergeSort(first_part, comp), mergeSort(second_part, comp), comp);
-			}
+			static bool Sort_Comparer(const_reference lhs, const_reference rhs) { return lhs < rhs; }
 
 		public:
 			bool empty() const { return _head == _linked_elem; }
@@ -396,22 +340,22 @@ namespace ft
 
 			size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(node); }
 
-			reference front() { return *(_head->_data); }
+			reference front() { return _head->_data; }
 
-			const_reference front() const { return *(_head->_data); }
+			const_reference front() const { return _head->_data; }
 
-			reference back() { return *(_tail->_data); }
+			reference back() { return _tail->_data; }
 
-			const_reference back() const { return *(_tail->_data); }
+			const_reference back() const { return _tail->_data; }
 
 			template<class InputIterator>
 			void assign(InputIterator first, InputIterator last, typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
 			{
 				iterator begin = iterator(_head);
 				iterator end = iterator(_linked_elem);
-				for (; _head != nullptr && _linked_elem != nullptr && first != last && begin != end; ++first, ++begin)
+				for (; first != last && begin != end; ++first, ++begin)
 					*begin = *first;
-				if (begin == end || _head == nullptr || _linked_elem == nullptr)
+				if (begin == end)
 					insert(end, first, last);
 				else
 					erase(begin, end);
@@ -421,9 +365,9 @@ namespace ft
 			{
 				iterator begin = iterator(_head);
 				iterator end = iterator(_linked_elem);
-				for (; _head != nullptr && _linked_elem != nullptr && n > 0 && begin != end; --n, ++begin)
+				for (; n > 0 && begin != end; --n, ++begin)
 					*begin = val;
-				if (begin == end || _head == nullptr || _linked_elem == nullptr)
+				if (begin == end)
 					insert(end, n, val);
 				else
 					erase(begin, end);
@@ -440,9 +384,10 @@ namespace ft
 				_linked_elem->_prev = _tail->_prev;
 				node *temp = _tail;
 				_tail = _tail->_prev;
-				_allocator.destroy(temp->_data);
-				_allocator.deallocate(temp->_data, 1);
 				delete temp;
+				if (_linked_elem->_next == _linked_elem)
+					_head = _linked_elem;
+				temp = nullptr;
 			}
 
 			void push_front(const_reference val)
@@ -452,13 +397,14 @@ namespace ft
 
 			void pop_front()
 			{
-				_linked_elem->_next = _head->_next;
 				_head->_next->_prev = _linked_elem;
+				_linked_elem->_next = _head->_next;
 				node *temp = _head;
 				_head = _head->_next;
-				_allocator.destroy(temp->_data);
-				_allocator.deallocate(temp->_data, 1);
 				delete temp;
+				if (_linked_elem->_next == _linked_elem)
+					_head = _linked_elem;
+				temp = nullptr;
 			}
 
 			iterator insert(iterator position, const value_type &val)
@@ -471,7 +417,7 @@ namespace ft
 					_head->_prev = _linked_elem;
 					_head->_next = _linked_elem;
 					_linked_elem->_next = _head;
-					_linked_elem->_prev = _head;
+					_linked_elem->_prev = _tail;
 				}
 				else if (position == end())
 				{
@@ -524,15 +470,14 @@ namespace ft
 			iterator erase(iterator position)
 			{
 				node *temp = position.ptr;
-				node *returned;
+				node *returned = temp->_next;
 				temp->_prev->_next = temp->_next;
 				temp->_next->_prev = temp->_prev;
-				returned = temp->_next;
-				_allocator.destroy(temp->_data);
-				_allocator.deallocate(temp->_data, 1);
 				delete temp;
 				temp = nullptr;
-				return returned;
+				_tail = _linked_elem->_prev;
+				_head = _linked_elem->_next;
+				return iterator(returned);
 			}
 
 			iterator erase(iterator first, iterator last)
@@ -573,8 +518,12 @@ namespace ft
 			{
 				iterator begin = iterator(_head);
 				iterator end = iterator(_linked_elem);
-				for (; _head != nullptr && _linked_elem != nullptr && n > 0 && begin != end; --n, ++begin);
-				if (begin == end || _head == nullptr || _linked_elem == nullptr)
+				while (n > 0 && begin != end)
+				{
+					--n;
+					++begin;
+				}
+				if (begin == end)
 					insert(end, n, val);
 				else
 					erase(begin, end);
@@ -593,23 +542,25 @@ namespace ft
 			template<class BinaryPredicate>
 			void unique(BinaryPredicate binary_pred)
 			{
-				iterator first = begin();
-				iterator last = end();
-				while (first.ptr->_next != last.ptr)
+				if (size() < 2)
+					return;
+				iterator it_first = begin();
+				iterator it_second = ++begin();
+				while (it_second != end())
 				{
-					if (binary_pred(*first, *(first.ptr->_next->_data)))
+					if (binary_pred(*it_first, *it_second))
 					{
-						first = erase(first);
+						it_second = erase(it_second);
 						continue;
 					}
-					++first;
+					++it_first;
+					++it_second;
 				}
 			}
 
 			void remove(const value_type &val)
 			{
 				iterator first = begin();
-				iterator last = end();
 				while (first != end())
 				{
 					if (*first == val)
@@ -625,7 +576,6 @@ namespace ft
 			void remove_if(Predicate pred)
 			{
 				iterator first = begin();
-				iterator last = end();
 				while (first != end())
 				{
 					if (pred(*first))
@@ -677,16 +627,21 @@ namespace ft
 			template<class Compare>
 			void sort(Compare comp)
 			{
-				node *temp = _head;
-				temp = mergeSort(temp, comp);
-				_head = temp;
-				_head->_prev = _linked_elem;
-				while (temp->_next != nullptr)
+				int i = 0;
+				node *tmp = _head;
+				size_type list_size = size();
+				while (i != list_size - 1)
 				{
-					temp = temp->_next;
+					while (tmp->_next != _linked_elem)
+					{
+						if (comp(tmp->_data, tmp->_next->_data))
+							tmp = tmp->_next;
+						else
+							SwapElement(tmp);
+					}
+					tmp = _head;
+					++i;
 				}
-				temp->_next = _linked_elem;
-				_linked_elem->_prev = temp;
 			}
 
 			void merge(list &x)
@@ -697,23 +652,36 @@ namespace ft
 			template<class Compare>
 			void merge(list &x, Compare comp)
 			{
-				node *first = _head;
-				_head->_prev = nullptr;
-				_tail->_next = nullptr;
-				node *second = x._head;
-				x._head->_prev = nullptr;
-				x._tail->_next = nullptr;
-				first = merge(first, second, comp);
-				_head = first;
-				_head->_prev = _linked_elem;
-				while (first->_next != nullptr)
+				if (&x == this)
+					return;
+				iterator first = begin();
+				iterator second = x.begin();
+				while (first != end() && second != x.end())
 				{
-					first = first->_next;
+					if (comp(*second, *first))
+					{
+						splice(first, x, second++);
+					}
+					else
+					{
+						++first;
+						continue;
+					}
 				}
-				first->_next = _linked_elem;
-				_linked_elem->_prev = first;
-				x._head->_prev = x._linked_elem;
-				x._tail->_next = x._linked_elem;
+				if (first == end())
+					splice(end(), x, second, x.end());
+			}
+
+			void SwapElement(node *first)
+			{
+				first->_prev->_next = first->_next;
+				first->_next = first->_next->_next;
+				first->_prev->_next->_prev = first->_prev;
+				first->_prev->_next->_next = first;
+				first->_prev = first->_prev->_next;
+				first->_next->_prev = first;
+				_head = _linked_elem->_next;
+				_tail = _linked_elem->_prev;
 			}
 	};
 
