@@ -2,8 +2,10 @@
 #include <math.h>
 #include "list.hpp"
 #include "vector.hpp"
+#include "stack.hpp"
 #include <vector>
 #include <list>
+#include <stack>
 
 #define YELLOW  "\033[1;33m"
 #define RED "\033[1;31m"
@@ -485,134 +487,134 @@ void list_tests()
 	std::cout << std::endl;
 }
 
-//void stack_tests()
-//{
-//	std::cout << BLUE << "///////////////////////STACK TESTS///////////////////////" << RESET << std::endl;
-//	std::cout << std::endl;
-//
-//	ft::stack<char> ft_stack_f;
-//	std::stack<char> std_stack_f;
-//
-//	ft::list<char> ft_list(10, 'a');
-//	ft::stack<char> ft_stack_s(ft_list);
-//
-//	std::deque<char> std_list(10, 'a');
-//	std::stack<char> std_stack_s(std_list);
-//
-//	char value;
-//	for (int i = 0; i < 10; ++i)
-//	{
-//		value = 'A' + rand() % ('z' - 'A');
-//		ft_stack_f.push(value);
-//		std_stack_f.push(value);
-//	}
-//
-//	std::cout << RED << "      Cloned parent container, top element: " << ft_stack_s.top() << RESET << std::endl;
-//	std::cout << GREEN << "      Cloned parent container, top element: " << std_stack_s.top() << RESET << std::endl;
-//
-//	std::cout << RED << "      Pushed back 10 values, top element is: " << ft_stack_f.top() << RESET << std::endl;
-//	std::cout << GREEN << "      Pushed back 10 values, top element is: " << std_stack_f.top() << RESET << std::endl;
-//
-//	std::cout << RED << "      Size of container is: " << ft_stack_f.size() << RESET << std::endl;
-//	std::cout << GREEN << "      Size of container is: " << std_stack_f.size() << RESET << std::endl;
-//
-//	ft::stack<char> ft_stack_th(ft_stack_f);
-//	std::stack<char> std_stack_th(std_stack_f);
-//
-//	std::cout << RED << "      Copy constructor, top element is: " << ft_stack_th.top() << RESET << std::endl;
-//	std::cout << GREEN << "      Copy constructor, top element is: " << std_stack_th.top() << RESET << std::endl;
-//
-//	ft_stack_th.pop();
-//	std_stack_th.pop();
-//	ft_stack_th.pop();
-//	std_stack_th.pop();
-//
-//	std::cout << RED << "      Popping two elements, top element is: " << ft_stack_th.top() << RESET << std::endl;
-//	std::cout << GREEN << "      Popping two elements, top element is: " << std_stack_th.top() << RESET << std::endl;
-//
-//	ft_stack_s = ft_stack_th;
-//	std_stack_s = std_stack_th;
-//
-//	std::cout << RED << "      Assignation operator, top element is: " << ft_stack_s.top() << RESET << std::endl;
-//	std::cout << GREEN << "      Assignation operator, top element is: " << std_stack_s.top() << RESET << std::endl;
-//
-//	std::cout << RED << "      Checking if container is empty: " << ft_stack_s.empty()
-//	          << "  Size: " << ft_stack_s.size() << RESET << std::endl;
-//	std::cout << GREEN << "      Checking if container is empty: " << std_stack_s.empty()
-//	          << "  Size: " << std_stack_s.size() << RESET << std::endl;
-//
-//	for (int i = 0; i < 8; ++i)
-//	{
-//		ft_stack_s.pop();
-//		std_stack_s.pop();
-//	}
-//
-//	std::cout << RED << "      Popping 8 elements, checking if container is empty: " << ft_stack_s.empty()
-//	          << "  Size: "  << ft_stack_s.size() << RESET << std::endl;
-//	std::cout << GREEN << "      Popping 8 elements, checking if container is empty: " << std_stack_s.empty()
-//	          << "  Size: "  << std_stack_s.size() << RESET << std::endl;
-//
-//	for (int i = 0; i < 10; ++i)
-//	{
-//		ft_stack_f.pop();
-//		std_stack_f.pop();
-//	}
-//
-//	for (int i = 0; i < 5; ++i)
-//	{
-//		ft_stack_s.push('a');
-//		std_stack_s.push('a');
-//		ft_stack_f.push('a');
-//		std_stack_f.push('a');
-//	}
-//	std::cout << RED << "      Clearing 2 stacks and pushing 5 equal elements to it, top is: " << ft_stack_s.top() << RESET << std::endl;
-//	std::cout << GREEN << "      Clearing 2 stacks and pushing 5 equal elements to it, top is: " << std_stack_s.top() << RESET << std::endl;
-//
-//	if (ft_stack_s == ft_stack_f)
-//		std::cout << RED << "      Containers are equal" << RESET << std::endl;
-//	if (std_stack_s == std_stack_f)
-//		std::cout << GREEN << "      Containers are equal" << RESET << std::endl;
-//
-//	ft_stack_s.pop();
-//	std_stack_s.pop();
-//
-//	std::cout << RED << "      Now popping one element from second container" << RESET << std::endl;
-//	std::cout << GREEN << "      Now popping one element from second container" << RESET << std::endl;
-//
-//	if (ft_stack_f > ft_stack_s)
-//		std::cout << RED << "      First stack is > than second" << RESET << std::endl;
-//	if (std_stack_f > std_stack_s)
-//		std::cout << GREEN << "      First stack is > than second" << RESET << std::endl;
-//	if (ft_stack_f >= ft_stack_s)
-//		std::cout << RED << "      First stack is >= than second" << RESET << std::endl;
-//	if (std_stack_f >= std_stack_s)
-//		std::cout << GREEN << "      First stack is >= than second" << RESET << std::endl;
-//
-//	ft_stack_f.pop();
-//	std_stack_f.pop();
-//	ft_stack_f.pop();
-//	std_stack_f.pop();
-//
-//	std::cout << RED << "      Now popping 2 elements from first container" << RESET << std::endl;
-//	std::cout << GREEN << "      Now popping 2 elements from first container" << RESET << std::endl;
-//
-//	if (ft_stack_f < ft_stack_s)
-//		std::cout << RED << "      First container is < than second" << RESET << std::endl;
-//	if (std_stack_f < std_stack_s)
-//		std::cout << GREEN << "      First container is < than second" << RESET << std::endl;
-//	if (ft_stack_f <= ft_stack_s)
-//		std::cout << RED << "      First container is <= than second" << RESET << std::endl;
-//	if (std_stack_f <= std_stack_s)
-//		std::cout << GREEN << "      First container is <= than second" << RESET << std::endl;
-//	if (ft_stack_f != ft_stack_s)
-//		std::cout << RED << "      Stacks are not equal" << RESET << std::endl;
-//	if (std_stack_f != std_stack_s)
-//		std::cout << GREEN << "      Stacks are not equal" << RESET << std::endl;
-//
-//	std::cout << std::endl;
-//	std::cout << BLUE << "///////////////////////END OF STACK TESTS///////////////////////" << RESET << std::endl;
-//	std::cout << std::endl;
-//}
+void stack_tests()
+{
+	std::cout << BLUE << "///////////////////////STACK TESTS///////////////////////" << RESET << std::endl;
+	std::cout << std::endl;
+
+	ft::stack<char> ft_stack_f;
+	std::stack<char> std_stack_f;
+
+	ft::list<char> ft_list(10, 'a');
+	ft::stack<char> ft_stack_s(ft_list);
+
+	std::deque<char> std_list(10, 'a');
+	std::stack<char> std_stack_s(std_list);
+
+	char value;
+	for (int i = 0; i < 10; ++i)
+	{
+		value = 'A' + rand() % ('z' - 'A');
+		ft_stack_f.push(value);
+		std_stack_f.push(value);
+	}
+
+	std::cout << RED << "      Cloned parent container, top element: " << ft_stack_s.top() << RESET << std::endl;
+	std::cout << GREEN << "      Cloned parent container, top element: " << std_stack_s.top() << RESET << std::endl;
+
+	std::cout << RED << "      Pushed back 10 values, top element is: " << ft_stack_f.top() << RESET << std::endl;
+	std::cout << GREEN << "      Pushed back 10 values, top element is: " << std_stack_f.top() << RESET << std::endl;
+
+	std::cout << RED << "      Size of container is: " << ft_stack_f.size() << RESET << std::endl;
+	std::cout << GREEN << "      Size of container is: " << std_stack_f.size() << RESET << std::endl;
+
+	ft::stack<char> ft_stack_th(ft_stack_f);
+	std::stack<char> std_stack_th(std_stack_f);
+
+	std::cout << RED << "      Copy constructor, top element is: " << ft_stack_th.top() << RESET << std::endl;
+	std::cout << GREEN << "      Copy constructor, top element is: " << std_stack_th.top() << RESET << std::endl;
+
+	ft_stack_th.pop();
+	std_stack_th.pop();
+	ft_stack_th.pop();
+	std_stack_th.pop();
+
+	std::cout << RED << "      Popping two elements, top element is: " << ft_stack_th.top() << RESET << std::endl;
+	std::cout << GREEN << "      Popping two elements, top element is: " << std_stack_th.top() << RESET << std::endl;
+
+	ft_stack_s = ft_stack_th;
+	std_stack_s = std_stack_th;
+
+	std::cout << RED << "      Assignation operator, top element is: " << ft_stack_s.top() << RESET << std::endl;
+	std::cout << GREEN << "      Assignation operator, top element is: " << std_stack_s.top() << RESET << std::endl;
+
+	std::cout << RED << "      Checking if container is empty: " << ft_stack_s.empty()
+	          << "  Size: " << ft_stack_s.size() << RESET << std::endl;
+	std::cout << GREEN << "      Checking if container is empty: " << std_stack_s.empty()
+	          << "  Size: " << std_stack_s.size() << RESET << std::endl;
+
+	for (int i = 0; i < 8; ++i)
+	{
+		ft_stack_s.pop();
+		std_stack_s.pop();
+	}
+
+	std::cout << RED << "      Popping 8 elements, checking if container is empty: " << ft_stack_s.empty()
+	          << "  Size: "  << ft_stack_s.size() << RESET << std::endl;
+	std::cout << GREEN << "      Popping 8 elements, checking if container is empty: " << std_stack_s.empty()
+	          << "  Size: "  << std_stack_s.size() << RESET << std::endl;
+
+	for (int i = 0; i < 10; ++i)
+	{
+		ft_stack_f.pop();
+		std_stack_f.pop();
+	}
+
+	for (int i = 0; i < 5; ++i)
+	{
+		ft_stack_s.push('a');
+		std_stack_s.push('a');
+		ft_stack_f.push('a');
+		std_stack_f.push('a');
+	}
+	std::cout << RED << "      Clearing 2 stacks and pushing 5 equal elements to it, top is: " << ft_stack_s.top() << RESET << std::endl;
+	std::cout << GREEN << "      Clearing 2 stacks and pushing 5 equal elements to it, top is: " << std_stack_s.top() << RESET << std::endl;
+
+	if (ft_stack_s == ft_stack_f)
+		std::cout << RED << "      Containers are equal" << RESET << std::endl;
+	if (std_stack_s == std_stack_f)
+		std::cout << GREEN << "      Containers are equal" << RESET << std::endl;
+
+	ft_stack_s.pop();
+	std_stack_s.pop();
+
+	std::cout << RED << "      Now popping one element from second container" << RESET << std::endl;
+	std::cout << GREEN << "      Now popping one element from second container" << RESET << std::endl;
+
+	if (ft_stack_f > ft_stack_s)
+		std::cout << RED << "      First stack is > than second" << RESET << std::endl;
+	if (std_stack_f > std_stack_s)
+		std::cout << GREEN << "      First stack is > than second" << RESET << std::endl;
+	if (ft_stack_f >= ft_stack_s)
+		std::cout << RED << "      First stack is >= than second" << RESET << std::endl;
+	if (std_stack_f >= std_stack_s)
+		std::cout << GREEN << "      First stack is >= than second" << RESET << std::endl;
+
+	ft_stack_f.pop();
+	std_stack_f.pop();
+	ft_stack_f.pop();
+	std_stack_f.pop();
+
+	std::cout << RED << "      Now popping 2 elements from first container" << RESET << std::endl;
+	std::cout << GREEN << "      Now popping 2 elements from first container" << RESET << std::endl;
+
+	if (ft_stack_f < ft_stack_s)
+		std::cout << RED << "      First container is < than second" << RESET << std::endl;
+	if (std_stack_f < std_stack_s)
+		std::cout << GREEN << "      First container is < than second" << RESET << std::endl;
+	if (ft_stack_f <= ft_stack_s)
+		std::cout << RED << "      First container is <= than second" << RESET << std::endl;
+	if (std_stack_f <= std_stack_s)
+		std::cout << GREEN << "      First container is <= than second" << RESET << std::endl;
+	if (ft_stack_f != ft_stack_s)
+		std::cout << RED << "      Stacks are not equal" << RESET << std::endl;
+	if (std_stack_f != std_stack_s)
+		std::cout << GREEN << "      Stacks are not equal" << RESET << std::endl;
+
+	std::cout << std::endl;
+	std::cout << BLUE << "///////////////////////END OF STACK TESTS///////////////////////" << RESET << std::endl;
+	std::cout << std::endl;
+}
 
 //void queue_tests()
 //{
@@ -2909,7 +2911,7 @@ int main()
 	srand(time(NULL));
 
 	list_tests();
-//	stack_tests();
+	stack_tests();
 //	queue_tests();
 	vector_tests();
 //	map_tests();

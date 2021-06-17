@@ -4,8 +4,10 @@
 //#include "vector.hpp"
 //#include "list.hpp"
 //#include "test.hpp"
+//#include "stack.hpp"
 //#include <math.h>
 //#include <sstream>
+//#include <deque>
 //
 //using namespace std;
 //
@@ -155,36 +157,18 @@
 //	}
 //}
 //
-//bool mycomparison (double first, double second)
-//{ return ( int(first)<int(second) ); }
+//bool mycomparison(double first, double second) { return (int(first) < int(second)); }
 //
-//int main ()
-//{
-//	ft::list<double> first, second;
+//int main()
+//{    // deque with 3 elements 	// deque with 3 elements
+//	ft::stack<int> myints;
+//	std::cout << "0. size: " << myints.size() << '\n';
 //
-//	first.push_back (3.1);
-//	first.push_back (2.2);
-//	first.push_back (2.9);
+//	for (int i=0; i<5; i++) myints.push(i);
+//	std::cout << "1. size: " << myints.size() << '\n';
 //
-//	second.push_back (3.7);
-//	second.push_back (7.1);
-//	second.push_back (1.4);
-//
-//	first.sort();
-//	second.sort();
-//
-//	first.merge(second);
-//
-//	// (second is now empty)
-//
-//	second.push_back (2.1);
-//
-//	first.merge(second,mycomparison);
-//
-//	std::cout << "first contains:";
-//	for (ft::list<double>::iterator it=first.begin(); it!=first.end(); ++it)
-//		std::cout << ' ' << *it;
-//	std::cout << '\n';
+//	myints.pop();
+//	std::cout << "2. size: " << myints.size() << '\n';
 //
 //	return 0;
 //
