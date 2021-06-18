@@ -9,7 +9,10 @@ add_executable(
         Container/vector.hpp
         Iterator/Vector_Iterator.hpp
         Container/list.hpp
-        Test/test.cpp Container/stack.hpp Container/queue.hpp Container/map.hpp Container/binary_three.hpp)
+        Test/test.cpp
+        Container/stack.hpp
+        Container/queue.hpp
+        Container/map.hpp)
 
 
 include_directories(./)
