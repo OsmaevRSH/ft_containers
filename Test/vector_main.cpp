@@ -14,7 +14,7 @@
 //template<class T>
 //void capacity_part(const vector<T> &first, const ft::vector<T> &second)
 //{
-//	cout << BLUE << "vector.size(): " << lower << RESET;
+//	cout << BLUE << "vector.size(): " << left << RESET;
 //	if (first.size() == second.size())
 //	{
 //		cout << GREEN << "[" << "OK" << "]" << RESET << endl;
