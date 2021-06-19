@@ -109,7 +109,7 @@ namespace ft
 					}
 			};
 
-			
+
 			class Const_Iterator : public Iterator
 			{
 				public:
@@ -243,7 +243,7 @@ namespace ft
 					const T *operator->() { return this->ptr; }
 					const T &operator[](int n) { return *(this->ptr - n); }
 			};
-			
+
 		public:
 			//member_types
 			typedef T value_type;
@@ -278,12 +278,12 @@ namespace ft
 
 			//constructor
 			explicit vector(const allocator_type &alloc = allocator_type())
-					: _alloc_size(0), _curent_size(0), _vector_start(nullptr), _allocator(alloc) {}
+					: _vector_start(nullptr), _curent_size(0), _alloc_size(0), _allocator(alloc) {}
 			explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
-					: _alloc_size(n), _curent_size(n), _allocator(alloc)
+					: _curent_size(n), _alloc_size(n), _allocator(alloc)
 			{
 				_vector_start = _allocator.allocate(n);
-				for (int i = 0; i < n; ++i)
+				for (size_type i = 0; i < n; ++i)
 				{
 					_allocator.construct(_vector_start + i, val);
 				}
@@ -293,15 +293,15 @@ namespace ft
 					: _curent_size(static_cast<size_type>(last - first)), _alloc_size(last - first), _allocator(alloc)
 			{
 				_vector_start = _allocator.allocate(last.operator->() - first.operator->());
-				for (int i = 0; first < last; ++first, ++i)
+				for (size_type i = 0; first < last; ++first, ++i)
 				{
 					_allocator.construct(_vector_start + i, *first);
 				}
 			}
-			vector(const vector &x) : _alloc_size(x._alloc_size), _curent_size(x._curent_size), _allocator(x._allocator)
+			vector(const vector &x) : _curent_size(x._curent_size), _alloc_size(x._alloc_size), _allocator(x._allocator)
 			{
 				_vector_start = _allocator.allocate(_curent_size);
-				for (int i = 0; i < _curent_size; ++i)
+				for (size_type i = 0; i < _curent_size; ++i)
 				{
 					_allocator.construct(_vector_start + i, x._vector_start[i]);
 				}
@@ -310,7 +310,7 @@ namespace ft
 			//destructor
 			~vector()
 			{
-				for (int i = 0; i < _curent_size; ++i)
+				for (size_type i = 0; i < _curent_size; ++i)
 				{
 					_allocator.destroy(_vector_start + i);
 				}
@@ -326,7 +326,7 @@ namespace ft
 					_curent_size = x._curent_size;
 					_alloc_size = x._alloc_size;
 					_vector_start = _allocator.allocate(_alloc_size);
-					for (int i = 0; i < _curent_size; ++i)
+					for (size_type i = 0; i < _curent_size; ++i)
 					{
 						_allocator.construct(_vector_start + i, x._vector_start[i]);
 					}
@@ -366,7 +366,7 @@ namespace ft
 				{
 					if (n <= _curent_size)
 					{
-						for (int i = n; i < _curent_size; ++i)
+						for (size_type i = n; i < _curent_size; ++i)
 						{
 							_allocator.destroy(_vector_start + i);
 						}
@@ -375,16 +375,16 @@ namespace ft
 					{
 						pointer resized;
 						resized = _allocator.allocate(n);
-						for (int i = 0; i < _curent_size; ++i)
+						for (size_type i = 0; i < _curent_size; ++i)
 						{
 							_allocator.construct(resized + i, _vector_start[i]);
 						}
-						for (int i = 0; i < _curent_size; ++i)
+						for (size_type i = 0; i < _curent_size; ++i)
 						{
 							_allocator.destroy(_vector_start + i);
 						}
 						_allocator.deallocate(_vector_start, _curent_size);
-						for (int i = _curent_size; i < n; ++i)
+						for (size_type i = _curent_size; i < n; ++i)
 						{
 							_allocator.construct(resized + i, val);
 						}
@@ -402,7 +402,7 @@ namespace ft
 					if (n > _alloc_size)
 					{
 						pointer reserve = _allocator.allocate(n);
-						for (int i = 0; i < _curent_size; ++i)
+						for (size_type i = 0; i < _curent_size; ++i)
 						{
 							_allocator.construct(reserve + i, _vector_start[i]);
 							_allocator.destroy(_vector_start + i);
@@ -419,24 +419,24 @@ namespace ft
 			void assign(InputIterator first, InputIterator last)
 			{
 				int length = std::abs(last.operator->() - first.operator->());
-				for (int i = 0; i < _curent_size; ++i)
+				for (size_type i = 0; i < _curent_size; ++i)
 				{
 					_allocator.destroy(_vector_start + i);
 				}
 				_curent_size = length;
-				if (length > _alloc_size)
+				if ((size_type)length > _alloc_size)
 				{
 					_allocator.deallocate(_vector_start, _alloc_size);
 					_alloc_size = _curent_size;
 					_vector_start = _allocator.allocate(_curent_size);
-					for (int i = 0; first < last; ++first, ++i)
+					for (size_type i = 0; first < last; ++first, ++i)
 					{
 						_allocator.construct(_vector_start + i, *first);
 					}
 				}
 				else
 				{
-					for (int i = 0; first < last; ++first, ++i)
+					for (size_type i = 0; first < last; ++first, ++i)
 					{
 						_allocator.construct(_vector_start + i, *first);
 					}
@@ -444,7 +444,7 @@ namespace ft
 			}
 			void assign(size_type n, const value_type &val)
 			{
-				for (int i = 0; i < _curent_size; ++i)
+				for (size_type i = 0; i < _curent_size; ++i)
 				{
 					_allocator.destroy(_vector_start + i);
 				}
@@ -454,14 +454,14 @@ namespace ft
 					_allocator.deallocate(_vector_start, _alloc_size);
 					_alloc_size = _curent_size;
 					_vector_start = _allocator.allocate(_curent_size);
-					for (int i = 0; i < n; ++i)
+					for (size_type i = 0; i < n; ++i)
 					{
 						_allocator.construct(_vector_start + i, val);
 					}
 				}
 				else
 				{
-					for (int i = 0; i < n; ++i)
+					for (size_type i = 0; i < n; ++i)
 					{
 						_allocator.construct(_vector_start + i, val);
 					}
@@ -481,11 +481,11 @@ namespace ft
 						push_back = _allocator.allocate(1);
 					else
 						push_back = _allocator.allocate(_alloc_size * 2);
-					for (int i = 0; i < _curent_size; ++i)
+					for (size_type i = 0; i < _curent_size; ++i)
 					{
 						_allocator.construct(push_back + i, _vector_start[i]);
 					}
-					for (int i = 0; i < _curent_size; ++i)
+					for (size_type i = 0; i < _curent_size; ++i)
 					{
 						_allocator.destroy(_vector_start + i);
 					}
@@ -502,7 +502,7 @@ namespace ft
 				if (_curent_size >= _alloc_size)
 				{
 					pointer reserve = _allocator.allocate(_alloc_size * 2);
-					for (int i = 0; i < _curent_size; ++i)
+					for (size_type i = 0; i < _curent_size; ++i)
 					{
 						if (_vector_start + i == position.operator->())
 							save_ptr = reserve + i;
@@ -537,7 +537,7 @@ namespace ft
 				{
 
 					pointer reserve = _allocator.allocate(alloc_size);
-					for (int i = 0; i <= _curent_size; ++i)
+					for (size_type i = 0; i <= _curent_size; ++i)
 					{
 						if (_vector_start + i == position.operator->())
 							save_ptr = reserve + i;
@@ -559,7 +559,7 @@ namespace ft
 					_allocator.construct(it.operator->() + n, *it);
 					_allocator.destroy(it.operator->());
 				}
-				for (int i = 0; i < n; ++i)
+				for (size_type i = 0; i < n; ++i)
 				{
 					_allocator.construct(position.operator->() + i, val);
 					++_curent_size;
@@ -575,7 +575,7 @@ namespace ft
 				{
 
 					pointer reserve = _allocator.allocate(alloc_size);
-					for (int i = 0; i <= _curent_size; ++i)
+					for (size_type i = 0; i <= _curent_size; ++i)
 					{
 						if (_vector_start + i == position.operator->())
 							save_ptr = reserve + i;
@@ -597,7 +597,7 @@ namespace ft
 					_allocator.construct(it.operator->() + n, *it);
 					_allocator.destroy(it.operator->());
 				}
-				for (int i = 0; first < last; ++first, ++i)
+				for (size_type i = 0; first < last; ++first, ++i)
 				{
 					_allocator.construct(position.operator->() + i, *first);
 					++_curent_size;
@@ -662,7 +662,7 @@ namespace ft
 			}
 			void clear()
 			{
-				for (int i = 0; i < _curent_size; ++i)
+				for (size_type i = 0; i < _curent_size; ++i)
 				{
 					_allocator.destroy(_vector_start + i);
 				}
@@ -674,7 +674,7 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
 		{
 			if (lhs[i] != rhs[i])
 			{
@@ -686,7 +686,7 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
 		{
 			if (lhs[i] == rhs[i])
 			{
@@ -698,7 +698,7 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
 		{
 			if (lhs[i] <= rhs[i])
 			{
@@ -710,7 +710,7 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
 		{
 			if (lhs[i] >= rhs[i])
 			{
@@ -722,7 +722,7 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
 		{
 			if (lhs[i] < rhs[i])
 			{
@@ -734,7 +734,7 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (int i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
 		{
 			if (lhs[i] > rhs[i])
 			{

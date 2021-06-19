@@ -199,7 +199,7 @@ namespace ft
 			const_reverse_iterator rend() const { return const_reverse_iterator(_linked_elem); }
 
 			explicit list(const allocator_type &alloc = allocator_type())
-					: _head(nullptr), _tail(nullptr), _linked_elem(Create_Node()), _allocator(alloc)
+					: _linked_elem(Create_Node()), _head(nullptr), _tail(nullptr), _allocator(alloc)
 			{
 				_head = _linked_elem;
 				_tail = _linked_elem;
@@ -208,13 +208,13 @@ namespace ft
 			}
 
 			explicit list(size_type n, const value_type &value = value_type(), const allocator_type &alloc = allocator_type())
-					: _head(nullptr), _tail(nullptr), _linked_elem(Create_Node()), _allocator(alloc)
+					: _linked_elem(Create_Node()), _head(nullptr), _tail(nullptr), _allocator(alloc)
 			{
 				_head = _linked_elem;
 				_tail = _linked_elem;
 				_linked_elem->_next = _linked_elem;
 				_linked_elem->_prev = _linked_elem;
-				for (int i = 0; i < n; ++i)
+				for (size_type i = 0; i < n; ++i)
 				{
 					push_back(value);
 				}
@@ -222,7 +222,7 @@ namespace ft
 
 			template<class InputIterator>
 			list(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
-					: _head(nullptr), _tail(nullptr), _linked_elem(Create_Node()), _allocator(alloc)
+					:  _linked_elem(Create_Node()), _head(nullptr), _tail(nullptr), _allocator(alloc)
 			{
 				_head = _linked_elem;
 				_tail = _linked_elem;
@@ -231,7 +231,7 @@ namespace ft
 				Create_List_Copy(first, last);
 			}
 
-			list(const list &x) : _head(nullptr), _tail(nullptr), _linked_elem(Create_Node())
+			list(const list &x) : _linked_elem(Create_Node()), _head(nullptr), _tail(nullptr)
 			{
 				_head = _linked_elem;
 				_tail = _linked_elem;
@@ -452,7 +452,7 @@ namespace ft
 
 			void insert(iterator position, size_type n, const value_type &val)
 			{
-				for (int i = 0; i < n; ++i)
+				for (size_type i = 0; i < n; ++i)
 				{
 					position = insert(position, val);
 				}
@@ -630,7 +630,7 @@ namespace ft
 				int i = 0;
 				node *tmp = _head;
 				size_type list_size = size();
-				while (i != list_size - 1)
+				while (i != (int) (list_size - 1))
 				{
 					while (tmp->_next != _linked_elem)
 					{

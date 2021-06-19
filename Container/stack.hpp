@@ -22,11 +22,11 @@ namespace ft
 			void push(const value_type &val) { base.push_back(val); }
 			void pop() { base.pop_back(); }
 
-			friend bool operator==(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { lhs.base == rhs.base; }
-			friend bool operator!=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { lhs.base != rhs.base; }
-			friend bool operator<(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { lhs.base < rhs.base; }
-			friend bool operator>(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { lhs.base > rhs.base; }
-			friend bool operator<=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { lhs.base <= rhs.base; }
-			friend bool operator>=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { lhs.base >= rhs.base; }
+			friend bool operator==(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs.base == rhs.base; }
+			friend bool operator!=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs.base != rhs.base; }
+			friend bool operator<(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs.base < rhs.base; }
+			friend bool operator>(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs.base > rhs.base; }
+			friend bool operator<=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs.base <= rhs.base; }
+			friend bool operator>=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) { return lhs.base >= rhs.base; }
 	};
 }
