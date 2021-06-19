@@ -625,29 +625,29 @@ namespace ft
 					return root;
 				if (_comp(k, root->data.first))
 				{
-					root->left = Delete_Node(root->left, k);
-					if (root->left)
-						root->left->parent = root;
+					node *temp = Delete_Node(root->left, k);
+					root->left = temp;
 				}
 				else if (_comp(root->data.first, k))
 				{
-					root->right = Delete_Node(root->right, k);
-					if (root->right)
-						root->right->parent = root;
+					node *temp = Delete_Node(root->right, k);
+					root->right = temp;
 				}
 				else
 				{
 					if ((root->left == nullptr || root->left == _end) && (root->right == nullptr || root->right == _end))
 					{
+						node *temp;
 						if (root->parent)
 						{
 							if (root->parent->left == root)
-								root->parent->left = nullptr;
+								temp = root->left;
 							if (root->parent->right == root)
-								root->parent->right = nullptr;
+								temp = root->right;
 						}
 						delete root;
 						root = nullptr;
+						return temp;
 					}
 					else if (((root->left == nullptr || root->left == _end) && (root->right != nullptr || root->right != _end)) ||
 					         ((root->left != nullptr || root->left != _end) && (root->right == nullptr || root->right == _end)))
