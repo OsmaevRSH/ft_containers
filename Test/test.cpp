@@ -37,8 +37,8 @@
 //template <typename DEF, typename MY>
 //void comparison_print_map(MY _ft, DEF _std, std::string str)
 //{
-//	print_map(_ft.begin(), _ft.end(), str, FT);
-//	print_map(_std.begin(), _std.end(), str, STD);
+//	print_map(_ft.begin(), _ft.rend(), str, FT);
+//	print_map(_std.begin(), _std.rend(), str, STD);
 //}
 //
 //template <typename T>
@@ -61,8 +61,8 @@
 //template <typename DEF, typename MY>
 //void comparison_print(MY _ft, DEF _std, std::string str)
 //{
-//	print(_ft.begin(), _ft.end(), str, FT);
-//	print(_std.begin(), _std.end(), str, STD);
+//	print(_ft.begin(), _ft.rend(), str, FT);
+//	print(_std.begin(), _std.rend(), str, STD);
 //}
 //
 //
@@ -89,8 +89,8 @@
 //
 //	comparison_print(ft_list_s, std_list_s, "Range constructor: ");
 //
-//	ft::list<size_t> ft_list_t(ft_list_s.begin(), ft_list_s.end());
-//	std::list<size_t> std_list_t(std_list_s.begin(), std_list_s.end());
+//	ft::list<size_t> ft_list_t(ft_list_s.begin(), ft_list_s.rend());
+//	std::list<size_t> std_list_t(std_list_s.begin(), std_list_s.rend());
 //
 //	comparison_print(ft_list_t, std_list_t, "Iterator constructor: ");
 //
@@ -112,8 +112,8 @@
 //
 //	comparison_print(ft_list_f, std_list_f, "Assign with count: ");
 //
-//	ft_list_s.assign(ft_list_f.begin(), ft_list_f.end());
-//	std_list_s.assign(std_list_f.begin(), std_list_f.end());
+//	ft_list_s.assign(ft_list_f.begin(), ft_list_f.rend());
+//	std_list_s.assign(std_list_f.begin(), std_list_f.rend());
 //
 //	comparison_print(ft_list_s, std_list_s, "Assign with iterators: ");
 //
@@ -137,7 +137,7 @@
 //	std::cout << YELLOW << "Iterators: " << RESET << std::endl;
 //
 //	ft::list<size_t>::iterator ft_iter = ft_list_ft.begin();
-//	ft::list<size_t>::iterator ft_iter_end = ft_list_ft.end();
+//	ft::list<size_t>::iterator ft_iter_end = ft_list_ft.rend();
 //
 //	std::list<size_t>::iterator std_iter = std_list_ft.begin();
 //
@@ -176,10 +176,10 @@
 //	std::cout << RESET << std::endl;
 //
 //	ft::list<size_t>::const_iterator ft_iter_c = ft_list_ft.begin();
-//	ft::list<size_t>::const_iterator ft_iter_c_end = ft_list_ft.end();
+//	ft::list<size_t>::const_iterator ft_iter_c_end = ft_list_ft.rend();
 //
 //	std::list<size_t>::const_iterator std_iter_c = std_list_ft.begin();
-//	std::list<size_t>::const_iterator std_iter_c_end = std_list_ft.end();
+//	std::list<size_t>::const_iterator std_iter_c_end = std_list_ft.rend();
 //
 //	std::cout << RED << "      Const straight iterator: ";
 //	while (ft_iter_c != ft_iter_c_end)
@@ -234,14 +234,14 @@
 //
 //	comparison_print(ft_list_ft, std_list_ft, "Inserting one element before begin: ");
 //
-//	ft_list_ft.insert(ft_list_ft.end(), ft_list_s.begin(), ft_list_s.end());
-//	std_list_ft.insert(std_list_ft.end(), std_list_s.begin(), std_list_s.end());
+//	ft_list_ft.insert(ft_list_ft.rend(), ft_list_s.begin(), ft_list_s.rend());
+//	std_list_ft.insert(std_list_ft.rend(), std_list_s.begin(), std_list_s.rend());
 //
 //	comparison_print(ft_list_s, std_list_s, "Second list: ");
-//	comparison_print(ft_list_ft, std_list_ft, "Inserting elements of second list at the end: ");
+//	comparison_print(ft_list_ft, std_list_ft, "Inserting elements of second list at the rend: ");
 //
-//	ft_list_ft.erase(++++++ft_list_ft.begin(), ------ft_list_ft.end());
-//	std_list_ft.erase(++++++std_list_ft.begin(), ------std_list_ft.end());
+//	ft_list_ft.erase(++++++ft_list_ft.begin(), ------ft_list_ft.rend());
+//	std_list_ft.erase(++++++std_list_ft.begin(), ------std_list_ft.rend());
 //
 //	comparison_print(ft_list_ft, std_list_ft, "Erased part of list: ");
 //
@@ -370,25 +370,25 @@
 //	comparison_print(ft_list_s, std_list_s, "Transfer beginning of second list to beginning of first: ");
 //	comparison_print(ft_list_f, std_list_f, "Second list after transfer: ");
 //
-//	ft_list_s.splice(ft_list_s.begin(), ft_list_f, ++++ft_list_f.begin(), ----ft_list_f.end());
-//	std_list_s.splice(std_list_s.begin(), std_list_f, ++++std_list_f.begin(), ----std_list_f.end());
+//	ft_list_s.splice(ft_list_s.begin(), ft_list_f, ++++ft_list_f.begin(), ----ft_list_f.rend());
+//	std_list_s.splice(std_list_s.begin(), std_list_f, ++++std_list_f.begin(), ----std_list_f.rend());
 //
-//	comparison_print(ft_list_s, std_list_s, "Transfer from third element to third from end "
+//	comparison_print(ft_list_s, std_list_s, "Transfer from third element to third from rend "
 //	                                        "of second list to beginning of first:\n      ");
 //	comparison_print(ft_list_f, std_list_f, "Second list after transfer: ");
 //
-//	ft_list_f.splice(ft_list_f.end(), ft_list_s);
-//	std_list_f.splice(std_list_f.end(), std_list_s);
+//	ft_list_f.splice(ft_list_f.rend(), ft_list_s);
+//	std_list_f.splice(std_list_f.rend(), std_list_s);
 //
-//	comparison_print(ft_list_f, std_list_f, "Transfer full first list to end of second:\n      ");
+//	comparison_print(ft_list_f, std_list_f, "Transfer full first list to rend of second:\n      ");
 //	comparison_print(ft_list_s, std_list_s, "First list: ");
 //
 //	ft_list_f.insert(++ft_list_f.begin(), 10);
 //	ft_list_f.insert(++++++++++++ft_list_f.begin(), 10);
-//	ft_list_f.insert(--ft_list_f.end(), 10);
+//	ft_list_f.insert(--ft_list_f.rend(), 10);
 //	std_list_f.insert(++std_list_f.begin(), 10);
 //	std_list_f.insert(++++++++++++std_list_f.begin(), 10);
-//	std_list_f.insert(--std_list_f.end(), 10);
+//	std_list_f.insert(--std_list_f.rend(), 10);
 //
 //	comparison_print(ft_list_f, std_list_f, "Inserting 3 elements of value 10 into list:\n      ");
 //
@@ -765,8 +765,8 @@
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Range constructor: ");
 //
-//	ft::vector<double> ft_vector_th(ft_vector_s.begin(), ft_vector_s.end());
-//	std::vector<double> std_vector_th(std_vector_s.begin(), std_vector_s.end());
+//	ft::vector<double> ft_vector_th(ft_vector_s.begin(), ft_vector_s.rend());
+//	std::vector<double> std_vector_th(std_vector_s.begin(), std_vector_s.rend());
 //
 //	comparison_print(ft_vector_th, std_vector_th, "Iterator constructor: ");
 //
@@ -788,8 +788,8 @@
 //
 //	comparison_print(ft_vector_f, std_vector_f, "Range assignment: ");
 //
-//	ft_vector_s.assign(ft_vector_f.begin(), ft_vector_f.end());
-//	std_vector_s.assign(std_vector_f.begin(), std_vector_f.end());
+//	ft_vector_s.assign(ft_vector_f.begin(), ft_vector_f.rend());
+//	std_vector_s.assign(std_vector_f.begin(), std_vector_f.rend());
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Iterator assignment: ");
 //
@@ -834,10 +834,10 @@
 //	std::cout << YELLOW << "Iterators tests: " << RESET << std::endl;
 //
 //	ft::vector<double>::const_iterator it = ft_vector_s.begin();
-//	ft::vector<double>::const_iterator end = ft_vector_s.end();
+//	ft::vector<double>::const_iterator rend = ft_vector_s.rend();
 //
 //	std::cout << RED << "      Vector straight order: ";
-//	while (it != end)
+//	while (it != rend)
 //	{
 //		std::cout << " " << *it;
 //		it++;
@@ -845,7 +845,7 @@
 //	std::cout << RESET << std::endl;
 //
 //	std::vector<double>::const_iterator def_it = std_vector_s.begin();
-//	std::vector<double>::const_iterator def_end = std_vector_s.end();
+//	std::vector<double>::const_iterator def_end = std_vector_s.rend();
 //
 //	std::cout << GREEN << "      Vector straight order: ";
 //	while (def_it != def_end)
@@ -881,8 +881,8 @@
 //	std::vector<double>::iterator iter_def;
 //
 //
-//	iter = ft_vector_s.end();
-//	iter_def = std_vector_s.end();
+//	iter = ft_vector_s.rend();
+//	iter_def = std_vector_s.rend();
 //
 //	iter -= 3;
 //	iter_def -= 3;
@@ -892,17 +892,17 @@
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Changed value of middle element with iterator: ");
 //
-//	std::cout << RED << "      Size of vector calculated with iterators: " << ft_vector_s.end() - ft_vector_s.begin()
+//	std::cout << RED << "      Size of vector calculated with iterators: " << ft_vector_s.rend() - ft_vector_s.begin()
 //	          << RESET << std::endl;
-//	std::cout << GREEN << "      Size of vector calculated with iterators: " << std_vector_s.end() - std_vector_s.begin()
+//	std::cout << GREEN << "      Size of vector calculated with iterators: " << std_vector_s.rend() - std_vector_s.begin()
 //	          << RESET << std::endl;
 //
 //	std::cout << RED << "      Size of vector with size function: " << ft_vector_s.size() << RESET << std::endl;
 //	std::cout << GREEN << "      Size of vector with size function: " << std_vector_s.size() << RESET << std::endl;
 //
-//	if (ft_vector_s.end() > ft_vector_s.begin())
+//	if (ft_vector_s.rend() > ft_vector_s.begin())
 //		std::cout << RED << "      End iterator is > than begin" << RESET << std::endl;
-//	if (std_vector_s.end() > std_vector_s.begin())
+//	if (std_vector_s.rend() > std_vector_s.begin())
 //		std::cout << GREEN << "      End iterator is > than begin" << RESET << std::endl;
 //
 //	std::cout << std::endl;
@@ -946,13 +946,13 @@
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Inserting 1 value after begin: ");
 //
-//	ft_vector_th.insert(ft_vector_th.end(), ----ft_vector_s.end(), ft_vector_s.end());
-//	std_vector_th.insert(std_vector_th.end(), ----std_vector_s.end(), std_vector_s.end());
+//	ft_vector_th.insert(ft_vector_th.rend(), ----ft_vector_s.rend(), ft_vector_s.rend());
+//	std_vector_th.insert(std_vector_th.rend(), ----std_vector_s.rend(), std_vector_s.rend());
 //
 //	comparison_print(ft_vector_th, std_vector_th, "Inserting 2 values into another vector: ");
 //
-//	ft_vector_th.erase(ft_vector_th.begin(), ft_vector_th.end() - 4);
-//	std_vector_th.erase(std_vector_th.begin(), std_vector_th.end() - 4);
+//	ft_vector_th.erase(ft_vector_th.begin(), ft_vector_th.rend() - 4);
+//	std_vector_th.erase(std_vector_th.begin(), std_vector_th.rend() - 4);
 //
 //	comparison_print(ft_vector_th, std_vector_th, "Erasing elements: ");
 //
@@ -1099,8 +1099,8 @@
 ////
 ////	comparison_print_map(ft_map_f, std_map_f, "Inserting 20 values: ");
 ////
-////	ft::map<int, std::string> ft_map_s(ft_map_f.begin(), ft_map_f.end());
-////	std::map<int, std::string> std_map_s(std_map_f.begin(), std_map_f.end());
+////	ft::map<int, std::string> ft_map_s(ft_map_f.begin(), ft_map_f.rend());
+////	std::map<int, std::string> std_map_s(std_map_f.begin(), std_map_f.rend());
 ////
 ////	comparison_print_map(ft_map_s, std_map_s, "Iterator constructor: ");
 ////
@@ -1135,7 +1135,7 @@
 ////	std::map<int, std::string>::iterator std_it = std_map_ft.begin();
 ////
 ////	std::cout << RED << "      Print with iterators: ";
-////	while (ft_it != ft_map_ft.end())
+////	while (ft_it != ft_map_ft.rend())
 ////	{
 ////		std::cout << ft_it->first << ":" << ft_it->second << "   ";
 ////		ft_it++;
@@ -1143,7 +1143,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      Print with iterators: ";
-////	while (std_it != std_map_ft.end())
+////	while (std_it != std_map_ft.rend())
 ////	{
 ////		std::cout << std_it->first << ":" << std_it->second << "   ";
 ////		std_it++;
@@ -1173,7 +1173,7 @@
 ////	std::map<int, std::string>::const_iterator std_it_c = std_map_ft.begin();
 ////
 ////	std::cout << RED << "      With const: ";
-////	while (ft_it_c != ft_map_ft.end())
+////	while (ft_it_c != ft_map_ft.rend())
 ////	{
 ////		std::cout << ft_it_c->first << ":" << ft_it_c->second << "   ";
 ////		++ft_it_c;
@@ -1181,7 +1181,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      With const: ";
-////	while (std_it_c != std_map_ft.end())
+////	while (std_it_c != std_map_ft.rend())
 ////	{
 ////		std::cout << std_it_c->first << ":" << std_it_c->second << "   ";
 ////		++std_it_c;
@@ -1207,17 +1207,17 @@
 ////	}
 ////	std::cout << RESET << std::endl;
 ////
-////	(----ft_map_ft.end())->second = "bro";
-////	(----std_map_ft.end())->second = "bro";
+////	(----ft_map_ft.rend())->second = "bro";
+////	(----std_map_ft.rend())->second = "bro";
 ////
 ////	comparison_print_map(ft_map_ft, std_map_ft, "Changing value of pre last element with iterator:\n      ");
 ////
 ////	ft::map<int, std::string>::iterator ft_copy_iter(ft_map_ft.begin());
 ////	std::map<int, std::string>::iterator std_copy_iter(std_map_ft.begin());
-////	ft::map<int, std::string>::iterator ft_copy_iter_end(ft_map_ft.end());
-////	std::map<int, std::string>::iterator std_copy_iter_end(std_map_ft.end());
+////	ft::map<int, std::string>::iterator ft_copy_iter_end(ft_map_ft.rend());
+////	std::map<int, std::string>::iterator std_copy_iter_end(std_map_ft.rend());
 ////
-////	std::cout << RED << "      Going from end to begin: ";
+////	std::cout << RED << "      Going from rend to begin: ";
 ////	--ft_copy_iter_end;
 ////	while (ft_copy_iter != ft_copy_iter_end)
 ////	{
@@ -1227,7 +1227,7 @@
 ////	std::cout << ft_copy_iter_end->first << ":" << ft_copy_iter_end->second << " " << RESET << std::endl;
 ////
 ////
-////	std::cout << GREEN << "      Going from end to begin: ";
+////	std::cout << GREEN << "      Going from rend to begin: ";
 ////	--std_copy_iter_end;
 ////	while (std_copy_iter != std_copy_iter_end)
 ////	{
@@ -1268,7 +1268,7 @@
 ////	ft::pair<ft::map<int, std::string>::iterator, bool> ft_pair = ft_map_ft.insert(ft::make_pair(48, "io"));
 ////
 ////	std::cout << RED << "      Insertind values and start iterating from 48:\n      ";
-////	while (ft_pair.first != ft_map_ft.end())
+////	while (ft_pair.first != ft_map_ft.rend())
 ////	{
 ////		std::cout << ft_pair.first->first << ":" << ft_pair.first->second << " ";
 ////		ft_pair.first++;
@@ -1283,7 +1283,7 @@
 ////	std::pair<std::map<int, std::string>::iterator, bool> std_pair = std_map_ft.insert(std::make_pair(48, "io"));
 ////
 ////	std::cout << GREEN << "      Insertind values and start iterating from 48:\n      ";
-////	while (std_pair.first != std_map_ft.end())
+////	while (std_pair.first != std_map_ft.rend())
 ////	{
 ////		std::cout << std_pair.first->first << ":" << std_pair.first->second << " ";
 ////		std_pair.first++;
@@ -1310,8 +1310,8 @@
 ////	std::cout << RED << "      Checking empty: " << ft_map_f.empty() << RESET << std::endl;
 ////	std::cout << GREEN << "      Checking empty: " << std_map_f.empty() << RESET << std::endl;
 ////
-////	ft_map_f.insert(++ft_map_ft.begin(), ft_map_ft.end());
-////	std_map_f.insert(++std_map_ft.begin(), std_map_ft.end());
+////	ft_map_f.insert(++ft_map_ft.begin(), ft_map_ft.rend());
+////	std_map_f.insert(++std_map_ft.begin(), std_map_ft.rend());
 ////
 ////	comparison_print_map(ft_map_ft, std_map_ft, "First container: ");
 ////
@@ -1336,8 +1336,8 @@
 ////	std::cout << RED << "      Erasing not existing, checking if it erased: " << i << RESET << std::endl;
 ////	std::cout << GREEN << "      Erasing not existing, checking if it erased: " << j << RESET << std::endl;
 ////
-////	ft_map_f.erase(ft_map_f.begin(), ft_map_f.end());
-////	std_map_f.erase(std_map_f.begin(), std_map_f.end());
+////	ft_map_f.erase(ft_map_f.begin(), ft_map_f.rend());
+////	std_map_f.erase(std_map_f.begin(), std_map_f.rend());
 ////
 ////	comparison_print_map(ft_map_f, std_map_f, "Erasing the rest with iterators: ");
 ////
@@ -1387,11 +1387,11 @@
 ////	ft_iterator = ft_map_f.find(2);
 ////	std_iterator = std_map_f.find(2);
 ////
-////	if (ft_iterator == ft_map_f.end())
-////		std::cout << RED << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (ft_iterator == ft_map_f.rend())
+////		std::cout << RED << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
-////	if (std_iterator == std_map_f.end())
-////		std::cout << GREEN << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (std_iterator == std_map_f.rend())
+////		std::cout << GREEN << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
 ////	comparison_print_map(ft_map_f, std_map_f, "Maps: ");
 ////
@@ -1458,14 +1458,14 @@
 ////
 ////	comparison_print_map(ft_map_f, std_map_f, "Maps: ");
 ////
-////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(ft_map_f.begin()->first, (--ft_map_f.end())->first) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(std_map_f.begin()->first, (--std_map_f.end())->first) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(ft_map_f.begin()->first, (--ft_map_f.rend())->first) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(std_map_f.begin()->first, (--std_map_f.rend())->first) << RESET << std::endl;
 ////
 ////	ft::map<int, std::string>::value_compare ft_v_comparator = ft_map_f.value_comp();
 ////	std::map<int, std::string>::value_compare std_v_comparator = std_map_f.value_comp();
 ////
-////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_map_f.begin(), *(--ft_map_f.end())) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_map_f.begin(), *(--std_map_f.end())) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_map_f.begin(), *(--ft_map_f.rend())) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_map_f.begin(), *(--std_map_f.rend())) << RESET << std::endl;
 ////
 ////	std::cout << std::endl;
 ////
@@ -1474,8 +1474,8 @@
 ////	ft_map_s.clear();
 ////	std_map_s.clear();
 ////
-////	ft_map_s.insert(ft_map_f.begin(), ft_map_f.end());
-////	std_map_s.insert(std_map_f.begin(), std_map_f.end());
+////	ft_map_s.insert(ft_map_f.begin(), ft_map_f.rend());
+////	std_map_s.insert(std_map_f.begin(), std_map_f.rend());
 ////
 ////	comparison_print_map(ft_map_s, std_map_s, "Maps: ");
 ////	comparison_print_map(ft_map_f, std_map_f, "Maps: ");
@@ -1503,8 +1503,8 @@
 ////	std::cout << RED << "      > Compare: " << (ft_map_s > ft_map_f) << RESET << std::endl;
 ////	std::cout << GREEN << "      > Compare: " << (std_map_s > std_map_f) << RESET << std::endl;
 ////
-////	ft_map_f.erase(++ft_map_f.begin(), ft_map_f.end());
-////	std_map_f.erase(++std_map_f.begin(), std_map_f.end());
+////	ft_map_f.erase(++ft_map_f.begin(), ft_map_f.rend());
+////	std_map_f.erase(++std_map_f.begin(), std_map_f.rend());
 ////
 ////	comparison_print_map(ft_map_f, std_map_f, "Erasing all values except begin from first: ");
 ////
@@ -1567,8 +1567,8 @@
 ////
 ////	comparison_print_map(ft_multimap_f, std_multimap_f, "Inserting 20 values: ");
 ////
-////	ft::multimap<int, std::string> ft_multimap_s(ft_multimap_f.begin(), ft_multimap_f.end());
-////	std::multimap<int, std::string> std_multimap_s(std_multimap_f.begin(), std_multimap_f.end());
+////	ft::multimap<int, std::string> ft_multimap_s(ft_multimap_f.begin(), ft_multimap_f.rend());
+////	std::multimap<int, std::string> std_multimap_s(std_multimap_f.begin(), std_multimap_f.rend());
 ////
 ////	comparison_print_map(ft_multimap_s, std_multimap_s, "Iterator constructor: ");
 ////
@@ -1596,7 +1596,7 @@
 ////	std::multimap<int, std::string>::iterator std_it = std_multimap_ft.begin();
 ////
 ////	std::cout << RED << "      Print with iterators: ";
-////	while (ft_it != ft_multimap_ft.end())
+////	while (ft_it != ft_multimap_ft.rend())
 ////	{
 ////		std::cout << ft_it->first << ":" << ft_it->second << "   ";
 ////		ft_it++;
@@ -1604,7 +1604,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      Print with iterators: ";
-////	while (std_it != std_multimap_ft.end())
+////	while (std_it != std_multimap_ft.rend())
 ////	{
 ////		std::cout << std_it->first << ":" << std_it->second << "   ";
 ////		std_it++;
@@ -1634,7 +1634,7 @@
 ////	std::multimap<int, std::string>::const_iterator std_it_c = std_multimap_ft.begin();
 ////
 ////	std::cout << RED << "      With const: ";
-////	while (ft_it_c != ft_multimap_ft.end())
+////	while (ft_it_c != ft_multimap_ft.rend())
 ////	{
 ////		std::cout << ft_it_c->first << ":" << ft_it_c->second << "   ";
 ////		++ft_it_c;
@@ -1642,7 +1642,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      With const: ";
-////	while (std_it_c != std_multimap_ft.end())
+////	while (std_it_c != std_multimap_ft.rend())
 ////	{
 ////		std::cout << std_it_c->first << ":" << std_it_c->second << "   ";
 ////		++std_it_c;
@@ -1668,17 +1668,17 @@
 ////	}
 ////	std::cout << RESET << std::endl;
 ////
-////	(----ft_multimap_ft.end())->second = "bro";
-////	(----std_multimap_ft.end())->second = "bro";
+////	(----ft_multimap_ft.rend())->second = "bro";
+////	(----std_multimap_ft.rend())->second = "bro";
 ////
 ////	comparison_print_map(ft_multimap_ft, std_multimap_ft, "Changing value of pre last element with iterator:\n      ");
 ////
 ////	ft::multimap<int, std::string>::iterator ft_copy_iter(ft_multimap_ft.begin());
 ////	std::multimap<int, std::string>::iterator std_copy_iter(std_multimap_ft.begin());
-////	ft::multimap<int, std::string>::iterator ft_copy_iter_end(ft_multimap_ft.end());
-////	std::multimap<int, std::string>::iterator std_copy_iter_end(std_multimap_ft.end());
+////	ft::multimap<int, std::string>::iterator ft_copy_iter_end(ft_multimap_ft.rend());
+////	std::multimap<int, std::string>::iterator std_copy_iter_end(std_multimap_ft.rend());
 ////
-////	std::cout << RED << "      Going from end to begin: ";
+////	std::cout << RED << "      Going from rend to begin: ";
 ////	--ft_copy_iter_end;
 ////	while (ft_copy_iter != ft_copy_iter_end)
 ////	{
@@ -1688,7 +1688,7 @@
 ////	std::cout << ft_copy_iter_end->first << ":" << ft_copy_iter_end->second << " " << RESET << std::endl;
 ////
 ////
-////	std::cout << GREEN << "      Going from end to begin: ";
+////	std::cout << GREEN << "      Going from rend to begin: ";
 ////	--std_copy_iter_end;
 ////	while (std_copy_iter != std_copy_iter_end)
 ////	{
@@ -1730,7 +1730,7 @@
 ////	ft::multimap<int, std::string>::iterator ft_iter = ft_multimap_ft.insert(ft::make_pair(48, "io"));
 ////
 ////	std::cout << RED << "      Insertind values and start iterating from 48:\n      ";
-////	while (ft_iter != ft_multimap_ft.end())
+////	while (ft_iter != ft_multimap_ft.rend())
 ////	{
 ////		std::cout << ft_iter->first << ":" << ft_iter->second << " ";
 ////		ft_iter++;
@@ -1746,7 +1746,7 @@
 ////	std::multimap<int, std::string>::iterator std_iter = std_multimap_ft.insert(std::make_pair(48, "io"));
 ////
 ////	std::cout << GREEN << "      Insertind values and start iterating from 48:\n      ";
-////	while (std_iter != std_multimap_ft.end())
+////	while (std_iter != std_multimap_ft.rend())
 ////	{
 ////		std::cout << std_iter->first << ":" << std_iter->second << " ";
 ////		std_iter++;
@@ -1787,8 +1787,8 @@
 ////	std::cout << RED << "      Checking empty: " << ft_multimap_f.empty() << RESET << std::endl;
 ////	std::cout << GREEN << "      Checking empty: " << std_multimap_f.empty() << RESET << std::endl;
 ////
-////	ft_multimap_f.insert(++ft_multimap_ft.begin(), ft_multimap_ft.end());
-////	std_multimap_f.insert(++std_multimap_ft.begin(), std_multimap_ft.end());
+////	ft_multimap_f.insert(++ft_multimap_ft.begin(), ft_multimap_ft.rend());
+////	std_multimap_f.insert(++std_multimap_ft.begin(), std_multimap_ft.rend());
 ////
 ////	comparison_print_map(ft_multimap_ft, std_multimap_ft, "First container: ");
 ////
@@ -1814,8 +1814,8 @@
 ////	std::cout << RED << "      Erasing not existing, checking if it erased: " << i << RESET << std::endl;
 ////	std::cout << GREEN << "      Erasing not existing, checking if it erased: " << j << RESET << std::endl;
 ////
-////	ft_multimap_f.erase(ft_multimap_f.begin(), ft_multimap_f.end());
-////	std_multimap_f.erase(std_multimap_f.begin(), std_multimap_f.end());
+////	ft_multimap_f.erase(ft_multimap_f.begin(), ft_multimap_f.rend());
+////	std_multimap_f.erase(std_multimap_f.begin(), std_multimap_f.rend());
 ////
 ////	comparison_print_map(ft_multimap_f, std_multimap_f, "Erasing the rest with iterators: ");
 ////
@@ -1863,11 +1863,11 @@
 ////	ft_iterator = ft_multimap_f.find(2);
 ////	std_iterator = std_multimap_f.find(2);
 ////
-////	if (ft_iterator == ft_multimap_f.end())
-////		std::cout << RED << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (ft_iterator == ft_multimap_f.rend())
+////		std::cout << RED << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
-////	if (std_iterator == std_multimap_f.end())
-////		std::cout << GREEN << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (std_iterator == std_multimap_f.rend())
+////		std::cout << GREEN << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
 ////	comparison_print_map(ft_multimap_f, std_multimap_f, "Maps: ");
 ////
@@ -1934,14 +1934,14 @@
 ////
 ////	comparison_print_map(ft_multimap_f, std_multimap_f, "Maps: ");
 ////
-////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(ft_multimap_f.begin()->first, (--ft_multimap_f.end())->first) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(std_multimap_f.begin()->first, (--std_multimap_f.end())->first) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(ft_multimap_f.begin()->first, (--ft_multimap_f.rend())->first) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(std_multimap_f.begin()->first, (--std_multimap_f.rend())->first) << RESET << std::endl;
 ////
 ////	ft::multimap<int, std::string>::value_compare ft_v_comparator = ft_multimap_f.value_comp();
 ////	std::multimap<int, std::string>::value_compare std_v_comparator = std_multimap_f.value_comp();
 ////
-////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_multimap_f.begin(), *(--ft_multimap_f.end())) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_multimap_f.begin(), *(--std_multimap_f.end())) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_multimap_f.begin(), *(--ft_multimap_f.rend())) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_multimap_f.begin(), *(--std_multimap_f.rend())) << RESET << std::endl;
 ////
 ////	std::cout << std::endl;
 ////
@@ -1950,8 +1950,8 @@
 ////	ft_multimap_s.clear();
 ////	std_multimap_s.clear();
 ////
-////	ft_multimap_s.insert(ft_multimap_f.begin(), ft_multimap_f.end());
-////	std_multimap_s.insert(std_multimap_f.begin(), std_multimap_f.end());
+////	ft_multimap_s.insert(ft_multimap_f.begin(), ft_multimap_f.rend());
+////	std_multimap_s.insert(std_multimap_f.begin(), std_multimap_f.rend());
 ////
 ////	comparison_print_map(ft_multimap_s, std_multimap_s, "Maps: ");
 ////	comparison_print_map(ft_multimap_f, std_multimap_f, "Maps: ");
@@ -1979,8 +1979,8 @@
 ////	std::cout << RED << "      > Compare: " << (ft_multimap_s > ft_multimap_f) << RESET << std::endl;
 ////	std::cout << GREEN << "      > Compare: " << (std_multimap_s > std_multimap_f) << RESET << std::endl;
 ////
-////	ft_multimap_f.erase(++ft_multimap_f.begin(), ft_multimap_f.end());
-////	std_multimap_f.erase(++std_multimap_f.begin(), std_multimap_f.end());
+////	ft_multimap_f.erase(++ft_multimap_f.begin(), ft_multimap_f.rend());
+////	std_multimap_f.erase(++std_multimap_f.begin(), std_multimap_f.rend());
 ////
 ////	comparison_print_map(ft_multimap_f, std_multimap_f, "Erasing all values except begin from first: ");
 ////
@@ -2024,8 +2024,8 @@
 ////
 ////	comparison_print(ft_set_f, std_set_f, "Inserting 20 values: ");
 ////
-////	ft::set<int> ft_set_s(ft_set_f.begin(), ft_set_f.end());
-////	std::set<int> std_set_s(std_set_f.begin(), std_set_f.end());
+////	ft::set<int> ft_set_s(ft_set_f.begin(), ft_set_f.rend());
+////	std::set<int> std_set_s(std_set_f.begin(), std_set_f.rend());
 ////
 ////	comparison_print(ft_set_s, std_set_s, "Iterator constructor: ");
 ////
@@ -2053,7 +2053,7 @@
 ////	std::set<int>::iterator std_it = std_set_ft.begin();
 ////
 ////	std::cout << RED << "      Print with iterators: ";
-////	while (ft_it != ft_set_ft.end())
+////	while (ft_it != ft_set_ft.rend())
 ////	{
 ////		std::cout << *ft_it << "   ";
 ////		ft_it++;
@@ -2061,7 +2061,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      Print with iterators: ";
-////	while (std_it != std_set_ft.end())
+////	while (std_it != std_set_ft.rend())
 ////	{
 ////		std::cout << *std_it << "   ";
 ////		std_it++;
@@ -2091,7 +2091,7 @@
 ////	std::set<int>::const_iterator std_it_c = std_set_ft.begin();
 ////
 ////	std::cout << RED << "      With const: ";
-////	while (ft_it_c != ft_set_ft.end())
+////	while (ft_it_c != ft_set_ft.rend())
 ////	{
 ////		std::cout << *ft_it_c << "   ";
 ////		++ft_it_c;
@@ -2099,7 +2099,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      With const: ";
-////	while (std_it_c != std_set_ft.end())
+////	while (std_it_c != std_set_ft.rend())
 ////	{
 ////		std::cout << *std_it_c << "   ";
 ////		++std_it_c;
@@ -2128,10 +2128,10 @@
 ////
 ////	ft::set<int>::iterator ft_copy_iter(ft_set_ft.begin());
 ////	std::set<int>::iterator std_copy_iter(std_set_ft.begin());
-////	ft::set<int>::iterator ft_copy_iter_end(ft_set_ft.end());
-////	std::set<int>::iterator std_copy_iter_end(std_set_ft.end());
+////	ft::set<int>::iterator ft_copy_iter_end(ft_set_ft.rend());
+////	std::set<int>::iterator std_copy_iter_end(std_set_ft.rend());
 ////
-////	std::cout << RED << "      Going from end to begin: ";
+////	std::cout << RED << "      Going from rend to begin: ";
 ////	--ft_copy_iter_end;
 ////	while (ft_copy_iter != ft_copy_iter_end)
 ////	{
@@ -2141,7 +2141,7 @@
 ////	std::cout << *ft_copy_iter_end << " " << RESET << std::endl;
 ////
 ////
-////	std::cout << GREEN << "      Going from end to begin: ";
+////	std::cout << GREEN << "      Going from rend to begin: ";
 ////	--std_copy_iter_end;
 ////	while (std_copy_iter != std_copy_iter_end)
 ////	{
@@ -2182,7 +2182,7 @@
 ////	ft::pair<ft::set<int>::iterator, bool> ft_pair = ft_set_ft.insert(48);
 ////
 ////	std::cout << RED << "      Insertind values and start iterating from 48:\n      ";
-////	while (ft_pair.first != ft_set_ft.end())
+////	while (ft_pair.first != ft_set_ft.rend())
 ////	{
 ////		std::cout << *ft_pair.first << " ";
 ////		ft_pair.first++;
@@ -2197,7 +2197,7 @@
 ////	std::pair<std::set<int>::iterator, bool> std_pair = std_set_ft.insert(48);
 ////
 ////	std::cout << GREEN << "      Insertind values and start iterating from 48:\n      ";
-////	while (std_pair.first != std_set_ft.end())
+////	while (std_pair.first != std_set_ft.rend())
 ////	{
 ////		std::cout << *std_pair.first << " ";
 ////		std_pair.first++;
@@ -2224,8 +2224,8 @@
 ////	std::cout << RED << "      Checking empty: " << ft_set_f.empty() << RESET << std::endl;
 ////	std::cout << GREEN << "      Checking empty: " << std_set_f.empty() << RESET << std::endl;
 ////
-////	ft_set_f.insert(++ft_set_ft.begin(), ft_set_ft.end());
-////	std_set_f.insert(++std_set_ft.begin(), std_set_ft.end());
+////	ft_set_f.insert(++ft_set_ft.begin(), ft_set_ft.rend());
+////	std_set_f.insert(++std_set_ft.begin(), std_set_ft.rend());
 ////
 ////	comparison_print(ft_set_ft, std_set_ft, "First container: ");
 ////
@@ -2250,8 +2250,8 @@
 ////	std::cout << RED << "      Erasing not existing, checking if it erased: " << i << RESET << std::endl;
 ////	std::cout << GREEN << "      Erasing not existing, checking if it erased: " << j << RESET << std::endl;
 ////
-////	ft_set_f.erase(ft_set_f.begin(), ft_set_f.end());
-////	std_set_f.erase(std_set_f.begin(), std_set_f.end());
+////	ft_set_f.erase(ft_set_f.begin(), ft_set_f.rend());
+////	std_set_f.erase(std_set_f.begin(), std_set_f.rend());
 ////
 ////	comparison_print(ft_set_f, std_set_f, "Erasing the rest with iterators: ");
 ////
@@ -2294,11 +2294,11 @@
 ////	ft_iterator = ft_set_f.find(2);
 ////	std_iterator = std_set_f.find(2);
 ////
-////	if (ft_iterator == ft_set_f.end())
-////		std::cout << RED << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (ft_iterator == ft_set_f.rend())
+////		std::cout << RED << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
-////	if (std_iterator == std_set_f.end())
-////		std::cout << GREEN << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (std_iterator == std_set_f.rend())
+////		std::cout << GREEN << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
 ////	comparison_print(ft_set_f, std_set_f, "sets: ");
 ////
@@ -2365,14 +2365,14 @@
 ////
 ////	comparison_print(ft_set_f, std_set_f, "sets: ");
 ////
-////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(*ft_set_f.begin(), *(--ft_set_f.end())) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(*std_set_f.begin(), *(--std_set_f.end())) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(*ft_set_f.begin(), *(--ft_set_f.rend())) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(*std_set_f.begin(), *(--std_set_f.rend())) << RESET << std::endl;
 ////
 ////	ft::set<int>::value_compare ft_v_comparator = ft_set_f.value_comp();
 ////	std::set<int>::value_compare std_v_comparator = std_set_f.value_comp();
 ////
-////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_set_f.begin(), *(--ft_set_f.end())) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_set_f.begin(), *(--std_set_f.end())) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_set_f.begin(), *(--ft_set_f.rend())) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_set_f.begin(), *(--std_set_f.rend())) << RESET << std::endl;
 ////
 ////	std::cout << std::endl;
 ////
@@ -2381,8 +2381,8 @@
 ////	ft_set_s.clear();
 ////	std_set_s.clear();
 ////
-////	ft_set_s.insert(ft_set_f.begin(), ft_set_f.end());
-////	std_set_s.insert(std_set_f.begin(), std_set_f.end());
+////	ft_set_s.insert(ft_set_f.begin(), ft_set_f.rend());
+////	std_set_s.insert(std_set_f.begin(), std_set_f.rend());
 ////
 ////	comparison_print(ft_set_s, std_set_s, "sets: ");
 ////	comparison_print(ft_set_f, std_set_f, "sets: ");
@@ -2410,8 +2410,8 @@
 ////	std::cout << RED << "      > Compare: " << (ft_set_s > ft_set_f) << RESET << std::endl;
 ////	std::cout << GREEN << "      > Compare: " << (std_set_s > std_set_f) << RESET << std::endl;
 ////
-////	ft_set_f.erase(++ft_set_f.begin(), ft_set_f.end());
-////	std_set_f.erase(++std_set_f.begin(), std_set_f.end());
+////	ft_set_f.erase(++ft_set_f.begin(), ft_set_f.rend());
+////	std_set_f.erase(++std_set_f.begin(), std_set_f.rend());
 ////
 ////	comparison_print(ft_set_f, std_set_f, "Erasing all values except begin from first: ");
 ////
@@ -2474,8 +2474,8 @@
 ////
 ////	comparison_print(ft_multiset_f, std_multiset_f, "Inserting 20 values: ");
 ////
-////	ft::multiset<int> ft_multiset_s(ft_multiset_f.begin(), ft_multiset_f.end());
-////	std::multiset<int> std_multiset_s(std_multiset_f.begin(), std_multiset_f.end());
+////	ft::multiset<int> ft_multiset_s(ft_multiset_f.begin(), ft_multiset_f.rend());
+////	std::multiset<int> std_multiset_s(std_multiset_f.begin(), std_multiset_f.rend());
 ////
 ////	comparison_print(ft_multiset_s, std_multiset_s, "Iterator constructor: ");
 ////
@@ -2503,7 +2503,7 @@
 ////	std::multiset<int>::iterator std_it = std_multiset_ft.begin();
 ////
 ////	std::cout << RED << "      Print with iterators: ";
-////	while (ft_it != ft_multiset_ft.end())
+////	while (ft_it != ft_multiset_ft.rend())
 ////	{
 ////		std::cout << *ft_it << "   ";
 ////		ft_it++;
@@ -2511,7 +2511,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      Print with iterators: ";
-////	while (std_it != std_multiset_ft.end())
+////	while (std_it != std_multiset_ft.rend())
 ////	{
 ////		std::cout << *std_it << "   ";
 ////		std_it++;
@@ -2541,7 +2541,7 @@
 ////	std::multiset<int>::const_iterator std_it_c = std_multiset_ft.begin();
 ////
 ////	std::cout << RED << "      With const: ";
-////	while (ft_it_c != ft_multiset_ft.end())
+////	while (ft_it_c != ft_multiset_ft.rend())
 ////	{
 ////		std::cout << *ft_it_c << "   ";
 ////		++ft_it_c;
@@ -2549,7 +2549,7 @@
 ////	std::cout << RESET << std::endl;
 ////
 ////	std::cout << GREEN << "      With const: ";
-////	while (std_it_c != std_multiset_ft.end())
+////	while (std_it_c != std_multiset_ft.rend())
 ////	{
 ////		std::cout << *std_it_c << "   ";
 ////		++std_it_c;
@@ -2579,10 +2579,10 @@
 ////
 ////	ft::multiset<int>::iterator ft_copy_iter(ft_multiset_ft.begin());
 ////	std::multiset<int>::iterator std_copy_iter(std_multiset_ft.begin());
-////	ft::multiset<int>::iterator ft_copy_iter_end(ft_multiset_ft.end());
-////	std::multiset<int>::iterator std_copy_iter_end(std_multiset_ft.end());
+////	ft::multiset<int>::iterator ft_copy_iter_end(ft_multiset_ft.rend());
+////	std::multiset<int>::iterator std_copy_iter_end(std_multiset_ft.rend());
 ////
-////	std::cout << RED << "      Going from end to begin: ";
+////	std::cout << RED << "      Going from rend to begin: ";
 ////	--ft_copy_iter_end;
 ////	while (ft_copy_iter != ft_copy_iter_end)
 ////	{
@@ -2592,7 +2592,7 @@
 ////	std::cout << *ft_copy_iter_end << " " << RESET << std::endl;
 ////
 ////
-////	std::cout << GREEN << "      Going from end to begin: ";
+////	std::cout << GREEN << "      Going from rend to begin: ";
 ////	--std_copy_iter_end;
 ////	while (std_copy_iter != std_copy_iter_end)
 ////	{
@@ -2634,7 +2634,7 @@
 ////	ft::multiset<int>::iterator ft_iter = ft_multiset_ft.insert(48);
 ////
 ////	std::cout << RED << "      Insertind values and start iterating from 48:\n      ";
-////	while (ft_iter != ft_multiset_ft.end())
+////	while (ft_iter != ft_multiset_ft.rend())
 ////	{
 ////		std::cout << *ft_iter << " ";
 ////		ft_iter++;
@@ -2650,7 +2650,7 @@
 ////	std::multiset<int>::iterator std_iter = std_multiset_ft.insert(48);
 ////
 ////	std::cout << GREEN << "      Insertind values and start iterating from 48:\n      ";
-////	while (std_iter != std_multiset_ft.end())
+////	while (std_iter != std_multiset_ft.rend())
 ////	{
 ////		std::cout << *std_iter << " ";
 ////		std_iter++;
@@ -2691,8 +2691,8 @@
 ////	std::cout << RED << "      Checking empty: " << ft_multiset_f.empty() << RESET << std::endl;
 ////	std::cout << GREEN << "      Checking empty: " << std_multiset_f.empty() << RESET << std::endl;
 ////
-////	ft_multiset_f.insert(++ft_multiset_ft.begin(), ft_multiset_ft.end());
-////	std_multiset_f.insert(++std_multiset_ft.begin(), std_multiset_ft.end());
+////	ft_multiset_f.insert(++ft_multiset_ft.begin(), ft_multiset_ft.rend());
+////	std_multiset_f.insert(++std_multiset_ft.begin(), std_multiset_ft.rend());
 ////
 ////	comparison_print(ft_multiset_ft, std_multiset_ft, "First container: ");
 ////
@@ -2718,8 +2718,8 @@
 ////	std::cout << RED << "      Erasing not existing, checking if it erased: " << i << RESET << std::endl;
 ////	std::cout << GREEN << "      Erasing not existing, checking if it erased: " << j << RESET << std::endl;
 ////
-////	ft_multiset_f.erase(ft_multiset_f.begin(), ft_multiset_f.end());
-////	std_multiset_f.erase(std_multiset_f.begin(), std_multiset_f.end());
+////	ft_multiset_f.erase(ft_multiset_f.begin(), ft_multiset_f.rend());
+////	std_multiset_f.erase(std_multiset_f.begin(), std_multiset_f.rend());
 ////
 ////	comparison_print(ft_multiset_f, std_multiset_f, "Erasing the rest with iterators: ");
 ////
@@ -2767,11 +2767,11 @@
 ////	ft_iterator = ft_multiset_f.find(2);
 ////	std_iterator = std_multiset_f.find(2);
 ////
-////	if (ft_iterator == ft_multiset_f.end())
-////		std::cout << RED << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (ft_iterator == ft_multiset_f.rend())
+////		std::cout << RED << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
-////	if (std_iterator == std_multiset_f.end())
-////		std::cout << GREEN << "      Finding non excisting key: iterator is end" << RESET << std::endl;
+////	if (std_iterator == std_multiset_f.rend())
+////		std::cout << GREEN << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
 ////
 ////	comparison_print(ft_multiset_f, std_multiset_f, "Maps: ");
 ////
@@ -2838,14 +2838,14 @@
 ////
 ////	comparison_print(ft_multiset_f, std_multiset_f, "Maps: ");
 ////
-////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(*ft_multiset_f.begin(), *(--ft_multiset_f.end())) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(*std_multiset_f.begin(), *(--std_multiset_f.end())) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with key_compare: " << ft_comparator(*ft_multiset_f.begin(), *(--ft_multiset_f.rend())) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with key_compare: " << std_comparator(*std_multiset_f.begin(), *(--std_multiset_f.rend())) << RESET << std::endl;
 ////
 ////	ft::multiset<int>::value_compare ft_v_comparator = ft_multiset_f.value_comp();
 ////	std::multiset<int>::value_compare std_v_comparator = std_multiset_f.value_comp();
 ////
-////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_multiset_f.begin(), *(--ft_multiset_f.end())) << RESET << std::endl;
-////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_multiset_f.begin(), *(--std_multiset_f.end())) << RESET << std::endl;
+////	std::cout << RED << "      Comparing first and last with value_compare: " << ft_v_comparator(*ft_multiset_f.begin(), *(--ft_multiset_f.rend())) << RESET << std::endl;
+////	std::cout << GREEN << "      Comparing first and last with value_compare: " << std_v_comparator(*std_multiset_f.begin(), *(--std_multiset_f.rend())) << RESET << std::endl;
 ////
 ////	std::cout << std::endl;
 ////
@@ -2854,8 +2854,8 @@
 ////	ft_multiset_s.clear();
 ////	std_multiset_s.clear();
 ////
-////	ft_multiset_s.insert(ft_multiset_f.begin(), ft_multiset_f.end());
-////	std_multiset_s.insert(std_multiset_f.begin(), std_multiset_f.end());
+////	ft_multiset_s.insert(ft_multiset_f.begin(), ft_multiset_f.rend());
+////	std_multiset_s.insert(std_multiset_f.begin(), std_multiset_f.rend());
 ////
 ////	comparison_print(ft_multiset_s, std_multiset_s, "Sets: ");
 ////	comparison_print(ft_multiset_f, std_multiset_f, "Sets: ");
@@ -2883,8 +2883,8 @@
 ////	std::cout << RED << "      > Compare: " << (ft_multiset_s > ft_multiset_f) << RESET << std::endl;
 ////	std::cout << GREEN << "      > Compare: " << (std_multiset_s > std_multiset_f) << RESET << std::endl;
 ////
-////	ft_multiset_f.erase(++ft_multiset_f.begin(), ft_multiset_f.end());
-////	std_multiset_f.erase(++std_multiset_f.begin(), std_multiset_f.end());
+////	ft_multiset_f.erase(++ft_multiset_f.begin(), ft_multiset_f.rend());
+////	std_multiset_f.erase(++std_multiset_f.begin(), std_multiset_f.rend());
 ////
 ////	comparison_print(ft_multiset_f, std_multiset_f, "Erasing all values except begin from first: ");
 ////
