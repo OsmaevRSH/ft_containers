@@ -45,12 +45,12 @@ namespace ft
 			node *_end;
 			key_compare _comp;
 
-			iterator begin() { return iterator(SearchBeginElement(), _end); }
-			const_iterator begin() const { return const_iterator(SearchBeginElement(), _end); }
+			iterator begin() { return iterator(_root ? SearchBeginElement() : _end, _end); }
+			const_iterator begin() const { return const_iterator(_root ? SearchBeginElement() : _end, _end); }
 			iterator end() { return iterator(_end, _end); }
 			const_iterator end() const { return const_iterator(_end, _end); }
-			reverse_iterator rbegin() { return reverse_iterator(SearchRBeginElement(), _end); }
-			const_reverse_iterator rbegin() const { return const_reverse_iterator(SearchRBeginElement(), _end); }
+			reverse_iterator rbegin() { return reverse_iterator(_root ? SearchRBeginElement() : _end, _end); }
+			const_reverse_iterator rbegin() const { return const_reverse_iterator(_root ? SearchRBeginElement() : _end, _end); }
 			reverse_iterator rend() { return reverse_iterator(_end, _end); }
 			const_reverse_iterator rend() const { return const_reverse_iterator(_end, _end); }
 
@@ -409,29 +409,29 @@ namespace ft
 				return (temp == _end) ? 0 : 1;
 			}
 
-			//			iterator lower_bound(const key_type &k)
-			//			{
-			//				iterator temp = find(k);
-			//				return temp == end() ? end() : temp;
-			//			}
-			//
-			//			const_iterator lower_bound(const key_type &k) const
-			//			{
-			//				const_iterator temp = find(k);
-			//				return temp == end() ? end() : temp;
-			//			}
-			//
-			//			iterator upper_bound(const key_type &k)
-			//			{
-			//				iterator temp = find(k);
-			//				return temp == end() ? end() : ++temp;
-			//			}
-			//
-			//			const_iterator upper_bound(const key_type &k) const
-			//			{
-			//				const_iterator temp = find(k);
-			//				return temp == end() ? end() : ++temp;
-			//			}
+			iterator lower_bound(const key_type &k)
+			{
+				iterator temp = find(k);
+				return temp == end() ? end() : temp;
+			}
+
+			const_iterator lower_bound(const key_type &k) const
+			{
+				const_iterator temp = find(k);
+				return temp == end() ? end() : temp;
+			}
+
+			iterator upper_bound(const key_type &k)
+			{
+				iterator temp = find(k);
+				return temp == end() ? end() : ++temp;
+			}
+
+			const_iterator upper_bound(const key_type &k) const
+			{
+				const_iterator temp = find(k);
+				return temp == end() ? end() : ++temp;
+			}
 
 			void clear()
 			{
@@ -475,15 +475,15 @@ namespace ft
 
 			value_compare value_comp() const { return value_compare(_comp).comp; }
 
-			//			std::pair<const_iterator, const_iterator> equal_range(const key_type &k) const
-			//			{
-			//				return std::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
-			//			}
-			//
-			//			std::pair<iterator, iterator> equal_range(const key_type &k)
-			//			{
-			//				return std::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
-			//			}
+			std::pair<const_iterator, const_iterator> equal_range(const key_type &k) const
+			{
+				return std::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+			}
+
+			std::pair<iterator, iterator> equal_range(const key_type &k)
+			{
+				return std::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+			}
 
 			size_type erase(const key_type &k)
 			{
@@ -500,7 +500,7 @@ namespace ft
 			{
 				while (first != last)
 				{
-					first = del_node(first.operator->()->first);
+					del_node((first++).operator->()->first);
 				}
 			}
 
@@ -610,20 +610,12 @@ namespace ft
 				temp->left = _end;
 			}
 
-			iterator del_node(const key_type &k)
+			void del_node(const key_type &k)
 			{
-				DeleteEndElements();
 				node *temp = Delete_Node(_root, k);
-				Add_LEnd_Element();
-				Add_REnd_Element();
-				if (temp)
-				{
-					return iterator(temp, _end);
-				}
-				else
+				if (!temp)
 				{
 					_root = nullptr;
-					return end();
 				}
 			}
 
@@ -645,7 +637,7 @@ namespace ft
 				}
 				else
 				{
-					if (root->left == nullptr && root->right == nullptr)
+					if ((root->left == nullptr || root->left == _end) && (root->right == nullptr || root->right == _end))
 					{
 						if (root->parent)
 						{
@@ -657,10 +649,11 @@ namespace ft
 						delete root;
 						root = nullptr;
 					}
-					else if ((root->left == nullptr && root->right != nullptr) || (root->left != nullptr && root->right == nullptr))
+					else if (((root->left == nullptr || root->left == _end) && (root->right != nullptr || root->right != _end)) ||
+					         ((root->left != nullptr || root->left != _end) && (root->right == nullptr || root->right == _end)))
 					{
 						node *temp;
-						if (root->left != nullptr)
+						if ((root->left != nullptr || root->left != _end) && (root->right == nullptr || root->right == _end))
 							temp = root->left;
 						else
 							temp = root->right;
@@ -672,7 +665,7 @@ namespace ft
 					}
 					else
 					{
-						if (root->right->left == nullptr)
+						if (root->right->left == nullptr || root->right->left == _end)
 						{
 							node *temp = root->right->right;
 							root->data = root->right->data;
