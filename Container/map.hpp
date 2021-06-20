@@ -324,13 +324,13 @@ namespace ft
 
 		public:
 			explicit map(const key_compare &comp = key_compare(), const allocator_type & = allocator_type())
-					: _root(nullptr), _comp(comp), _rend(nullptr), _lend(nullptr) {}
+					: _root(nullptr), _rend(nullptr), _lend(nullptr), _comp(comp) {}
 
 			template<class InputIterator>
 			map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type & = allocator_type())
-					: _root(nullptr), _comp(comp), _rend(nullptr), _lend(nullptr) { insert(first, last); }
+					: _root(nullptr), _rend(nullptr), _lend(nullptr), _comp(comp) { insert(first, last); }
 
-			map(const map &x) : _root(nullptr), _comp(x._comp), _rend(nullptr), _lend(nullptr)
+			map(const map &x) : _root(nullptr), _rend(nullptr), _lend(nullptr), _comp(x._comp)
 			{
 				Create_Three_Copy(x._root, x._rend, x._lend);
 			}
@@ -409,51 +409,51 @@ namespace ft
 
 			iterator find(const key_type &k)
 			{
-				node *temp = _root;
-				temp = Find_Element(k, temp);
-				if (temp == _rend || temp == _lend)
-					return end();
-				return iterator(temp, _rend, _lend);
+				iterator temp = Find_Elem(k);
+				if ((!_comp(k, temp.operator->()->first) && !_comp(temp.operator->()->first, k)))
+					return temp;
+				return end();
 			}
 
 			const_iterator find(const key_type &k) const
 			{
-				node *temp = _root;
-				temp = Find_Element(k, temp);
-				if (temp == _rend || temp == _lend)
-					return end();
-				return iterator(temp, _rend, _lend);
+				iterator temp = Find_Elem(k);
+				if ((!_comp(k, temp.operator->()->first) && !_comp(temp.operator->()->first, k)))
+					return temp;
+				return end();
 			}
 
 			size_type count(const key_type &k) const
 			{
-				node *temp = _root;
-				temp = Find_Element(k, temp);
-				return (temp == _rend || temp == _lend) ? 0 : 1;
+				if (find(k) != end())
+					return 1;
+				return 0;
 			}
 
 			iterator lower_bound(const key_type &k)
 			{
-				iterator temp = find(k);
-				return temp == end() ? end() : temp;
+				return Find_Elem(k);
 			}
 
 			const_iterator lower_bound(const key_type &k) const
 			{
-				const_iterator temp = find(k);
-				return temp == end() ? end() : temp;
+				return Find_Elem(k);
 			}
 
 			iterator upper_bound(const key_type &k)
 			{
-				iterator temp = find(k);
-				return temp == end() ? end() : ++temp;
+				iterator temp = Find_Elem(k);
+				if ((!_comp(k, temp.operator->()->first) && !_comp(temp.operator->()->first, k)))
+					return ++temp;
+				return temp == end() ? end() : temp;
 			}
 
 			const_iterator upper_bound(const key_type &k) const
 			{
-				const_iterator temp = find(k);
-				return temp == end() ? end() : ++temp;
+				const_iterator temp = Find_Elem(k);
+				if ((!_comp(k, temp.operator->()->first) && !_comp(temp.operator->()->first, k)))
+					return ++temp;
+				return temp == end() ? end() : temp;
 			}
 
 			void clear()
@@ -515,8 +515,13 @@ namespace ft
 
 			size_type erase(const key_type &k)
 			{
-				del_node(k);
-				return 1;
+				int out = 0;
+				if (find(k) != end())
+				{
+					del_node(k);
+					out = 1;
+				}
+				return out;
 			}
 
 			void erase(iterator position)
@@ -577,15 +582,27 @@ namespace ft
 				_lend->parent = nullptr;
 			}
 
-			node *Find_Element(const key_type &k, node *x) const
+			iterator Find_Elem(const key_type &k) const
 			{
-				if (x == _rend || x == _lend || x == nullptr)
-					return x == _rend ? _rend : _lend;
-				if (!_comp(k, x->data.first) && !_comp(x->data.first, k))
-					return x;
-				else
-					return _comp(k, x->data.first) ? Find_Element(k, x->left) : Find_Element(k, x->right);
+				iterator begin(_root ? SearchBeginElement() : _rend, _rend, _lend);
+				iterator end(_rend, _rend, _lend);
+				while (begin != end)
+				{
+					if (_comp(k, begin.operator->()->first) ||
+					    (!_comp(k, begin.operator->()->first) && !_comp(begin.operator->()->first, k)))
+						return begin;
+					++begin;
+				}
+				return begin;
 			}
+
+			//			node *Find_Element(const key_type &k, node *x) const
+			//			{
+			//				if (x == _rend || x == _lend || x == nullptr || (!_comp(k, x->data.first) && !_comp(x->data.first, k)))
+			//					return x;
+			//				else
+			//					return _comp(k, x->data.first) ? Find_Element(k, x->left) : Find_Element(k, x->right);
+			//			}
 
 			void Create_Three_Copy(node *x, node *rend, node *lend)
 			{
@@ -743,9 +760,9 @@ namespace ft
 		typename map<Key, T, Compare, Alloc>::const_iterator rhs_iter = rhs.begin();
 		for (; lhs_iter != lhs.end() && rhs_iter != rhs.end(); ++lhs_iter, ++rhs_iter)
 		{
-			if (*lhs_iter != *rhs_iter)
+			if (*lhs_iter < *rhs_iter)
 				return true;
-			else if (*rhs_iter != *lhs_iter)
+			else if (*rhs_iter < *lhs_iter)
 				return false;
 			else
 				continue;
