@@ -41,10 +41,6 @@ namespace ft
 			typedef size_t size_type;
 
 
-			node *_root;
-			node *_end;
-			key_compare _comp;
-
 			iterator begin() { return iterator(_root ? SearchBeginElement() : _end, _end); }
 			const_iterator begin() const { return const_iterator(_root ? SearchBeginElement() : _end, _end); }
 			iterator end() { return iterator(_end, _end); }
@@ -71,6 +67,10 @@ namespace ft
 			};
 
 		private:
+			node *_root;
+			node *_end;
+			key_compare _comp;
+
 			class Iterator
 			{
 				protected:
@@ -115,7 +115,13 @@ namespace ft
 						}
 						if (ptr->parent->right == ptr)
 						{
-							ptr = ptr->parent->parent;
+							node *temp = ptr;
+							ptr = ptr->parent;
+							while (ptr->left != temp)
+							{
+								temp = ptr;
+								ptr = ptr->parent;
+							}
 							return *this;
 						}
 						return *this;
@@ -140,7 +146,13 @@ namespace ft
 						}
 						if (ptr->parent->left == ptr)
 						{
-							ptr = ptr->parent->parent;
+							node *temp = ptr;
+							ptr = ptr->parent;
+							while (ptr->right != temp)
+							{
+								temp = ptr;
+								ptr = ptr->parent;
+							}
 							return *this;
 						}
 						return *this;
@@ -208,31 +220,6 @@ namespace ft
 					{
 						if (ptr == end)
 							return *this;
-						if (ptr->left != nullptr)
-						{
-							ptr = ptr->left;
-							while (ptr->right != nullptr)
-							{
-								ptr = ptr->right;
-							}
-							return *this;
-						}
-						if (ptr->parent->right == ptr)
-						{
-							ptr = ptr->parent;
-							return *this;
-						}
-						if (ptr->parent->left == ptr)
-						{
-							ptr = ptr->parent->parent;
-							return *this;
-						}
-						return *this;
-					}
-					Reverse_Iterator &operator--()
-					{
-						if (ptr == end)
-							return *this;
 						if (ptr->right != nullptr)
 						{
 							ptr = ptr->right;
@@ -249,7 +236,44 @@ namespace ft
 						}
 						if (ptr->parent->right == ptr)
 						{
-							ptr = ptr->parent->parent;
+							node *temp = ptr;
+							ptr = ptr->parent;
+							while (ptr->left != temp)
+							{
+								temp = ptr;
+								ptr = ptr->parent;
+							}
+							return *this;
+						}
+						return *this;
+					}
+					Reverse_Iterator &operator--()
+					{
+						if (ptr == end)
+							return *this;
+						if (ptr->left != nullptr)
+						{
+							ptr = ptr->left;
+							while (ptr->right != nullptr)
+							{
+								ptr = ptr->right;
+							}
+							return *this;
+						}
+						if (ptr->parent->right == ptr)
+						{
+							ptr = ptr->parent;
+							return *this;
+						}
+						if (ptr->parent->left == ptr)
+						{
+							node *temp = ptr;
+							ptr = ptr->parent;
+							while (ptr->right != temp)
+							{
+								temp = ptr;
+								ptr = ptr->parent;
+							}
 							return *this;
 						}
 						return *this;
@@ -279,8 +303,7 @@ namespace ft
 					{
 						if (&it != this)
 						{
-							this->ptr = it.ptr;
-							this->end = it.end;
+							Create_Three_Copy(it._root, it._end);
 						}
 						return *this;
 					}
@@ -299,8 +322,7 @@ namespace ft
 
 			map(const map &x) : _root(nullptr), _comp(x._comp), _end(nullptr)
 			{
-				node *temp = x._root;
-				Create_Three_Copy(temp);
+				Create_Three_Copy(x._root, x._end);
 			}
 
 			std::pair<iterator, bool> insert(const value_type &val)
@@ -560,13 +582,13 @@ namespace ft
 					return _comp(k, x->data.first) ? Find_Element(k, x->left) : Find_Element(k, x->right);
 			}
 
-			void Create_Three_Copy(node *x)
+			void Create_Three_Copy(node *x, node *end)
 			{
-				if (x == nullptr || x == _end)
+				if (x == nullptr || x == end)
 					return;
 				insert(x->data);
-				Create_Three_Copy(x->left);
-				Create_Three_Copy(x->right);
+				Create_Three_Copy(x->left, end);
+				Create_Three_Copy(x->right, end);
 			}
 
 			void Get_Three_Size(int &count, node *x) const
