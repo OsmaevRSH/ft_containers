@@ -142,30 +142,16 @@
 ////
 //int main ()
 //{
-//	srand(time(NULL));
-//	std::string various_strings[] = {"lesha", "good", "nice", "loooool", "not_bad)", "good_map"};
-//	std::string working_str;
-//	int working_int;
+//	ft::map<char,int> mymap;
 //
-//	ft::map<int, std::string> ft_map_f;
-//	std::map<int, std::string> std_map_f;
+//	mymap['x'] = 100;
+//	mymap['y'] = 200;
+//	mymap['z'] = 300;
 //
-//	for (int i = 0; i < 20; ++i)
-//	{
-//		working_int = rand() % 100;
-//		working_str = various_strings[rand() % 6];
-//		ft_map_f.insert(std::make_pair(working_int, working_str));
-//		std_map_f.insert(std::make_pair(working_int, working_str));
-//	}
-//	ft::map<int, std::string>::iterator first = ft_map_f.begin();
-//	ft::map<int, std::string>::iterator last = ft_map_f.end();
-//int i = 0;
-//	while (first != last)
-//	{
-//		++i;
-//		std::cout <<  first->first << ":" << first->second <<  "   ";
-//		++first;
-//	}
+//	// show content:
+//	ft::map<char,int>::reverse_iterator rit;
+//	for (rit=mymap.rbegin(); rit!=mymap.rend(); ++rit)
+//		std::cout << rit->first << " => " << rit->second << '\n';
 //
 //	return 0;
 //}

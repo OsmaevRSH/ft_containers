@@ -28,10 +28,8 @@ void print_map(T first, T last, std::string str, bool colour)
 	else
 		std::cout << RED;
 	std::cout << "      " + str;
-	int i = 0;
 	while (first != last)
 	{
-		++i;
 		std::cout <<  first->first << ":" << first->second <<  "   ";
 		++first;
 	}
@@ -42,8 +40,8 @@ void print_map(T first, T last, std::string str, bool colour)
 template <typename DEF, typename MY>
 void comparison_print_map(MY _ft, DEF _std, std::string str)
 {
-	print_map(_ft.begin(), _ft.rend(), str, FT);
-	print_map(_std.begin(), _std.rend(), str, STD);
+	print_map(_ft.begin(), _ft.end(), str, FT);
+	print_map(_std.begin(), _std.end(), str, STD);
 }
 
 template <typename T>
@@ -66,8 +64,8 @@ void print(T first, T last, std::string str, bool colour)
 template <typename DEF, typename MY>
 void comparison_print(MY _ft, DEF _std, std::string str)
 {
-	print(_ft.begin(), _ft.rend(), str, FT);
-	print(_std.begin(), _std.rend(), str, STD);
+	print(_ft.begin(), _ft.end(), str, FT);
+	print(_std.begin(), _std.end(), str, STD);
 }
 
 
@@ -94,8 +92,8 @@ bool binaryPredicate(int a, int b) {
 //
 //	comparison_print(ft_list_s, std_list_s, "Range constructor: ");
 //
-//	ft::list<size_t> ft_list_t(ft_list_s.begin(), ft_list_s.rend());
-//	std::list<size_t> std_list_t(std_list_s.begin(), std_list_s.rend());
+//	ft::list<size_t> ft_list_t(ft_list_s.begin(), ft_list_s.end());
+//	std::list<size_t> std_list_t(std_list_s.begin(), std_list_s.end());
 //
 //	comparison_print(ft_list_t, std_list_t, "Iterator constructor: ");
 //
@@ -117,8 +115,8 @@ bool binaryPredicate(int a, int b) {
 //
 //	comparison_print(ft_list_f, std_list_f, "Assign with count: ");
 //
-//	ft_list_s.assign(ft_list_f.begin(), ft_list_f.rend());
-//	std_list_s.assign(std_list_f.begin(), std_list_f.rend());
+//	ft_list_s.assign(ft_list_f.begin(), ft_list_f.end());
+//	std_list_s.assign(std_list_f.begin(), std_list_f.end());
 //
 //	comparison_print(ft_list_s, std_list_s, "Assign with iterators: ");
 //
@@ -142,7 +140,7 @@ bool binaryPredicate(int a, int b) {
 //	std::cout << YELLOW << "Iterators: " << RESET << std::endl;
 //
 //	ft::list<size_t>::iterator ft_iter = ft_list_ft.begin();
-//	ft::list<size_t>::iterator ft_iter_end = ft_list_ft.rend();
+//	ft::list<size_t>::iterator ft_iter_end = ft_list_ft.end();
 //
 //	std::list<size_t>::iterator std_iter = std_list_ft.begin();
 //
@@ -181,10 +179,10 @@ bool binaryPredicate(int a, int b) {
 //	std::cout << RESET << std::endl;
 //
 //	ft::list<size_t>::const_iterator ft_iter_c = ft_list_ft.begin();
-//	ft::list<size_t>::const_iterator ft_iter_c_end = ft_list_ft.rend();
+//	ft::list<size_t>::const_iterator ft_iter_c_end = ft_list_ft.end();
 //
 //	std::list<size_t>::const_iterator std_iter_c = std_list_ft.begin();
-//	std::list<size_t>::const_iterator std_iter_c_end = std_list_ft.rend();
+//	std::list<size_t>::const_iterator std_iter_c_end = std_list_ft.end();
 //
 //	std::cout << RED << "      Const straight iterator: ";
 //	while (ft_iter_c != ft_iter_c_end)
@@ -239,14 +237,14 @@ bool binaryPredicate(int a, int b) {
 //
 //	comparison_print(ft_list_ft, std_list_ft, "Inserting one element before begin: ");
 //
-//	ft_list_ft.insert(ft_list_ft.rend(), ft_list_s.begin(), ft_list_s.rend());
-//	std_list_ft.insert(std_list_ft.rend(), std_list_s.begin(), std_list_s.rend());
+//	ft_list_ft.insert(ft_list_ft.end(), ft_list_s.begin(), ft_list_s.end());
+//	std_list_ft.insert(std_list_ft.end(), std_list_s.begin(), std_list_s.end());
 //
 //	comparison_print(ft_list_s, std_list_s, "Second list: ");
-//	comparison_print(ft_list_ft, std_list_ft, "Inserting elements of second list at the rend: ");
+//	comparison_print(ft_list_ft, std_list_ft, "Inserting elements of second list at the end: ");
 //
-//	ft_list_ft.erase(++++++ft_list_ft.begin(), ------ft_list_ft.rend());
-//	std_list_ft.erase(++++++std_list_ft.begin(), ------std_list_ft.rend());
+//	ft_list_ft.erase(++++++ft_list_ft.begin(), ------ft_list_ft.end());
+//	std_list_ft.erase(++++++std_list_ft.begin(), ------std_list_ft.end());
 //
 //	comparison_print(ft_list_ft, std_list_ft, "Erased part of list: ");
 //
@@ -375,25 +373,25 @@ bool binaryPredicate(int a, int b) {
 //	comparison_print(ft_list_s, std_list_s, "Transfer beginning of second list to beginning of first: ");
 //	comparison_print(ft_list_f, std_list_f, "Second list after transfer: ");
 //
-//	ft_list_s.splice(ft_list_s.begin(), ft_list_f, ++++ft_list_f.begin(), ----ft_list_f.rend());
-//	std_list_s.splice(std_list_s.begin(), std_list_f, ++++std_list_f.begin(), ----std_list_f.rend());
+//	ft_list_s.splice(ft_list_s.begin(), ft_list_f, ++++ft_list_f.begin(), ----ft_list_f.end());
+//	std_list_s.splice(std_list_s.begin(), std_list_f, ++++std_list_f.begin(), ----std_list_f.end());
 //
-//	comparison_print(ft_list_s, std_list_s, "Transfer from third element to third from rend "
+//	comparison_print(ft_list_s, std_list_s, "Transfer from third element to third from end "
 //	                                        "of second list to beginning of first:\n      ");
 //	comparison_print(ft_list_f, std_list_f, "Second list after transfer: ");
 //
-//	ft_list_f.splice(ft_list_f.rend(), ft_list_s);
-//	std_list_f.splice(std_list_f.rend(), std_list_s);
+//	ft_list_f.splice(ft_list_f.end(), ft_list_s);
+//	std_list_f.splice(std_list_f.end(), std_list_s);
 //
-//	comparison_print(ft_list_f, std_list_f, "Transfer full first list to rend of second:\n      ");
+//	comparison_print(ft_list_f, std_list_f, "Transfer full first list to end of second:\n      ");
 //	comparison_print(ft_list_s, std_list_s, "First list: ");
 //
 //	ft_list_f.insert(++ft_list_f.begin(), 10);
 //	ft_list_f.insert(++++++++++++ft_list_f.begin(), 10);
-//	ft_list_f.insert(--ft_list_f.rend(), 10);
+//	ft_list_f.insert(--ft_list_f.end(), 10);
 //	std_list_f.insert(++std_list_f.begin(), 10);
 //	std_list_f.insert(++++++++++++std_list_f.begin(), 10);
-//	std_list_f.insert(--std_list_f.rend(), 10);
+//	std_list_f.insert(--std_list_f.end(), 10);
 //
 //	comparison_print(ft_list_f, std_list_f, "Inserting 3 elements of value 10 into list:\n      ");
 //
@@ -770,8 +768,8 @@ bool binaryPredicate(int a, int b) {
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Range constructor: ");
 //
-//	ft::vector<double> ft_vector_th(ft_vector_s.begin(), ft_vector_s.rend());
-//	std::vector<double> std_vector_th(std_vector_s.begin(), std_vector_s.rend());
+//	ft::vector<double> ft_vector_th(ft_vector_s.begin(), ft_vector_s.end());
+//	std::vector<double> std_vector_th(std_vector_s.begin(), std_vector_s.end());
 //
 //	comparison_print(ft_vector_th, std_vector_th, "Iterator constructor: ");
 //
@@ -793,8 +791,8 @@ bool binaryPredicate(int a, int b) {
 //
 //	comparison_print(ft_vector_f, std_vector_f, "Range assignment: ");
 //
-//	ft_vector_s.assign(ft_vector_f.begin(), ft_vector_f.rend());
-//	std_vector_s.assign(std_vector_f.begin(), std_vector_f.rend());
+//	ft_vector_s.assign(ft_vector_f.begin(), ft_vector_f.end());
+//	std_vector_s.assign(std_vector_f.begin(), std_vector_f.end());
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Iterator assignment: ");
 //
@@ -839,10 +837,10 @@ bool binaryPredicate(int a, int b) {
 //	std::cout << YELLOW << "Iterators tests: " << RESET << std::endl;
 //
 //	ft::vector<double>::const_iterator it = ft_vector_s.begin();
-//	ft::vector<double>::const_iterator rend = ft_vector_s.rend();
+//	ft::vector<double>::const_iterator end = ft_vector_s.end();
 //
 //	std::cout << RED << "      Vector straight order: ";
-//	while (it != rend)
+//	while (it != end)
 //	{
 //		std::cout << " " << *it;
 //		it++;
@@ -850,7 +848,7 @@ bool binaryPredicate(int a, int b) {
 //	std::cout << RESET << std::endl;
 //
 //	std::vector<double>::const_iterator def_it = std_vector_s.begin();
-//	std::vector<double>::const_iterator def_end = std_vector_s.rend();
+//	std::vector<double>::const_iterator def_end = std_vector_s.end();
 //
 //	std::cout << GREEN << "      Vector straight order: ";
 //	while (def_it != def_end)
@@ -886,8 +884,8 @@ bool binaryPredicate(int a, int b) {
 //	std::vector<double>::iterator iter_def;
 //
 //
-//	iter = ft_vector_s.rend();
-//	iter_def = std_vector_s.rend();
+//	iter = ft_vector_s.end();
+//	iter_def = std_vector_s.end();
 //
 //	iter -= 3;
 //	iter_def -= 3;
@@ -897,17 +895,17 @@ bool binaryPredicate(int a, int b) {
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Changed value of middle element with iterator: ");
 //
-//	std::cout << RED << "      Size of vector calculated with iterators: " << ft_vector_s.rend() - ft_vector_s.begin()
+//	std::cout << RED << "      Size of vector calculated with iterators: " << ft_vector_s.end() - ft_vector_s.begin()
 //	          << RESET << std::endl;
-//	std::cout << GREEN << "      Size of vector calculated with iterators: " << std_vector_s.rend() - std_vector_s.begin()
+//	std::cout << GREEN << "      Size of vector calculated with iterators: " << std_vector_s.end() - std_vector_s.begin()
 //	          << RESET << std::endl;
 //
 //	std::cout << RED << "      Size of vector with size function: " << ft_vector_s.size() << RESET << std::endl;
 //	std::cout << GREEN << "      Size of vector with size function: " << std_vector_s.size() << RESET << std::endl;
 //
-//	if (ft_vector_s.rend() > ft_vector_s.begin())
+//	if (ft_vector_s.end() > ft_vector_s.begin())
 //		std::cout << RED << "      End iterator is > than begin" << RESET << std::endl;
-//	if (std_vector_s.rend() > std_vector_s.begin())
+//	if (std_vector_s.end() > std_vector_s.begin())
 //		std::cout << GREEN << "      End iterator is > than begin" << RESET << std::endl;
 //
 //	std::cout << std::endl;
@@ -951,13 +949,13 @@ bool binaryPredicate(int a, int b) {
 //
 //	comparison_print(ft_vector_s, std_vector_s, "Inserting 1 value after begin: ");
 //
-//	ft_vector_th.insert(ft_vector_th.rend(), ----ft_vector_s.rend(), ft_vector_s.rend());
-//	std_vector_th.insert(std_vector_th.rend(), ----std_vector_s.rend(), std_vector_s.rend());
+//	ft_vector_th.insert(ft_vector_th.end(), ----ft_vector_s.end(), ft_vector_s.end());
+//	std_vector_th.insert(std_vector_th.end(), ----std_vector_s.end(), std_vector_s.end());
 //
 //	comparison_print(ft_vector_th, std_vector_th, "Inserting 2 values into another vector: ");
 //
-//	ft_vector_th.erase(ft_vector_th.begin(), ft_vector_th.rend() - 4);
-//	std_vector_th.erase(std_vector_th.begin(), std_vector_th.rend() - 4);
+//	ft_vector_th.erase(ft_vector_th.begin(), ft_vector_th.end() - 4);
+//	std_vector_th.erase(std_vector_th.begin(), std_vector_th.end() - 4);
 //
 //	comparison_print(ft_vector_th, std_vector_th, "Erasing elements: ");
 //
@@ -1222,7 +1220,7 @@ void map_tests()
 	ft::map<int, std::string>::iterator ft_copy_iter_end(ft_map_ft.end());
 	std::map<int, std::string>::iterator std_copy_iter_end(std_map_ft.end());
 
-	std::cout << RED << "      Going from rend to begin: ";
+	std::cout << RED << "      Going from end to begin: ";
 	--ft_copy_iter_end;
 	while (ft_copy_iter != ft_copy_iter_end)
 	{
@@ -1232,7 +1230,7 @@ void map_tests()
 	std::cout << ft_copy_iter_end->first << ":" << ft_copy_iter_end->second << " " << RESET << std::endl;
 
 
-	std::cout << GREEN << "      Going from rend to begin: ";
+	std::cout << GREEN << "      Going from end to begin: ";
 	--std_copy_iter_end;
 	while (std_copy_iter != std_copy_iter_end)
 	{
@@ -1393,10 +1391,10 @@ void map_tests()
 	std_iterator = std_map_f.find(2);
 
 	if (ft_iterator == ft_map_f.end())
-		std::cout << RED << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
+		std::cout << RED << "      Finding non excisting key: iterator is end" << RESET << std::endl;
 
 	if (std_iterator == std_map_f.end())
-		std::cout << GREEN << "      Finding non excisting key: iterator is rend" << RESET << std::endl;
+		std::cout << GREEN << "      Finding non excisting key: iterator is end" << RESET << std::endl;
 
 	comparison_print_map(ft_map_f, std_map_f, "Maps: ");
 
@@ -1542,4 +1540,5 @@ int main()
 //	queue_tests();
 //	vector_tests();
 	map_tests();
+
 }

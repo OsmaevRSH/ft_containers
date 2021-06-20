@@ -287,14 +287,14 @@ namespace ft
 					}
 					Reverse_Iterator operator++(int)
 					{
-						Iterator copy(*this);
-						--(*this);
+						Reverse_Iterator copy(*this);
+						++(*this);
 						return copy;
 					}
 					Reverse_Iterator operator--(int)
 					{
-						Iterator copy(*this);
-						++(*this);
+						Reverse_Iterator copy(*this);
+						--(*this);
 						return copy;
 					}
 			};
