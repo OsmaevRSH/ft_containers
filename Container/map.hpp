@@ -41,14 +41,14 @@ namespace ft
 			typedef size_t size_type;
 
 
-			iterator begin() { return iterator(_root ? SearchBeginElement() : _end, _end); }
-			const_iterator begin() const { return const_iterator(_root ? SearchBeginElement() : _end, _end); }
-			iterator end() { return iterator(_end, _end); }
-			const_iterator end() const { return const_iterator(_end, _end); }
-			reverse_iterator rbegin() { return reverse_iterator(_root ? SearchRBeginElement() : _end, _end); }
-			const_reverse_iterator rbegin() const { return const_reverse_iterator(_root ? SearchRBeginElement() : _end, _end); }
-			reverse_iterator rend() { return reverse_iterator(_end, _end); }
-			const_reverse_iterator rend() const { return const_reverse_iterator(_end, _end); }
+			iterator begin() { return iterator(_root ? SearchBeginElement() : _rend, _rend, _lend); }
+			const_iterator begin() const { return const_iterator(_root ? SearchBeginElement() : _rend, _rend, _lend); }
+			iterator end() { return iterator(_rend, _rend, _lend); }
+			const_iterator end() const { return const_iterator(_rend, _rend, _lend); }
+			reverse_iterator rbegin() { return reverse_iterator(_root ? SearchRBeginElement() : _lend, _rend, _lend); }
+			const_reverse_iterator rbegin() const { return const_reverse_iterator(_root ? SearchRBeginElement() : _lend, _rend, _lend); }
+			reverse_iterator rend() { return reverse_iterator(_lend, _rend, _lend); }
+			const_reverse_iterator rend() const { return const_reverse_iterator(_lend, _rend, _lend); }
 
 			class value_compare
 			{
@@ -68,24 +68,27 @@ namespace ft
 
 		private:
 			node *_root;
-			node *_end;
+			node *_rend;
+			node *_lend;
 			key_compare _comp;
 
 			class Iterator
 			{
 				protected:
 					node *ptr;
-					node *end;
+					node *rend;
+					node *lend;
 				public:
 					Iterator() {}
-					Iterator(node *x, node *end) : ptr(x), end(end) {}
-					Iterator(const Iterator &it) : ptr(it.ptr), end(it.end) {}
+					Iterator(node *x, node *rend, node *lend) : ptr(x), rend(rend), lend(lend) {}
+					Iterator(const Iterator &it) : ptr(it.ptr), rend(it.lend), lend(it.lend) {}
 					Iterator &operator=(const Iterator &it)
 					{
 						if (&it != this)
 						{
 							ptr = it.ptr;
-							end = it.end;
+							rend = it.rend;
+							lend = it.lend;
 						}
 						return *this;
 					}
@@ -97,7 +100,7 @@ namespace ft
 					value_type *operator->() const { return &(this->ptr->data); }
 					Iterator &operator++()
 					{
-						if (ptr == end)
+						if (ptr == rend)
 							return *this;
 						if (ptr->right != nullptr)
 						{
@@ -128,7 +131,7 @@ namespace ft
 					}
 					Iterator &operator--()
 					{
-						if (ptr == end)
+						if (ptr == lend)
 							return *this;
 						if (ptr->left != nullptr)
 						{
@@ -175,38 +178,42 @@ namespace ft
 			{
 				public:
 					Const_Iterator() {}
-					Const_Iterator(node *x, node *end) : Iterator(x, end) {}
+					Const_Iterator(node *x, node *rend, node *lend) : Iterator(x, rend, lend) {}
 					Const_Iterator(const Const_Iterator &it) : Iterator(it) {}
-					Const_Iterator(Iterator iter) : Iterator(iter) {}
+					Const_Iterator(Iterator it) : Iterator(it) {}
 					Const_Iterator &operator=(const Const_Iterator &it)
 					{
 						if (&it != this)
 						{
 							this->ptr = it.ptr;
-							this->end = it.end;
+							this->rend = it.rend;
+							this->lend = it.lend;
 						}
 						return *this;
 					}
 					virtual ~Const_Iterator() {}
-					const value_type &operator*() const { return this->ptr->data; }
-					const value_type *operator->() const { return &(this->ptr->data); }
+
+					value_type &operator*() const { return this->ptr->data; }
+					value_type *operator->() const { return &(this->ptr->data); }
 			};
-			//
+
 			class Reverse_Iterator
 			{
 				protected:
 					node *ptr;
-					node *end;
+					node *rend;
+					node *lend;
 				public:
 					Reverse_Iterator() {}
-					Reverse_Iterator(node *x, node *end) : ptr(x), end(end) {}
-					Reverse_Iterator(const Reverse_Iterator &it) : ptr(it.ptr), end(it.end) {}
+					Reverse_Iterator(node *x, node *rend, node *lend) : ptr(x), rend(rend), lend(lend) {}
+					Reverse_Iterator(const Reverse_Iterator &it) : ptr(it.ptr), rend(it.rend), lend(it.lend) {}
 					Reverse_Iterator &operator=(const Reverse_Iterator &it)
 					{
 						if (&it != this)
 						{
 							ptr = it.ptr;
-							end = it.end;
+							rend = it.rend;
+							lend = it.lend;
 						}
 						return *this;
 					}
@@ -218,38 +225,7 @@ namespace ft
 					value_type *operator->() const { return &(this->ptr->data); }
 					Reverse_Iterator &operator++()
 					{
-						if (ptr == end)
-							return *this;
-						if (ptr->right != nullptr)
-						{
-							ptr = ptr->right;
-							while (ptr->left != nullptr)
-							{
-								ptr = ptr->left;
-							}
-							return *this;
-						}
-						if (ptr->parent->left == ptr)
-						{
-							ptr = ptr->parent;
-							return *this;
-						}
-						if (ptr->parent->right == ptr)
-						{
-							node *temp = ptr;
-							ptr = ptr->parent;
-							while (ptr->left != temp)
-							{
-								temp = ptr;
-								ptr = ptr->parent;
-							}
-							return *this;
-						}
-						return *this;
-					}
-					Reverse_Iterator &operator--()
-					{
-						if (ptr == end)
+						if (ptr == lend)
 							return *this;
 						if (ptr->left != nullptr)
 						{
@@ -278,15 +254,46 @@ namespace ft
 						}
 						return *this;
 					}
+					Reverse_Iterator &operator--()
+					{
+						if (ptr == rend)
+							return *this;
+						if (ptr->right != nullptr)
+						{
+							ptr = ptr->right;
+							while (ptr->left != nullptr)
+							{
+								ptr = ptr->left;
+							}
+							return *this;
+						}
+						if (ptr->parent->left == ptr)
+						{
+							ptr = ptr->parent;
+							return *this;
+						}
+						if (ptr->parent->right == ptr)
+						{
+							node *temp = ptr;
+							ptr = ptr->parent;
+							while (ptr->left != temp)
+							{
+								temp = ptr;
+								ptr = ptr->parent;
+							}
+							return *this;
+						}
+						return *this;
+					}
 					Reverse_Iterator operator++(int)
 					{
-						Reverse_Iterator copy(*this);
+						Iterator copy(*this);
 						--(*this);
 						return copy;
 					}
 					Reverse_Iterator operator--(int)
 					{
-						Reverse_Iterator copy(*this);
+						Iterator copy(*this);
 						++(*this);
 						return copy;
 					}
@@ -296,33 +303,36 @@ namespace ft
 			{
 				public:
 					Const_Reverse_Iterator() {}
-					Const_Reverse_Iterator(node *x, node *end) : Reverse_Iterator(x, end) {}
-					Const_Reverse_Iterator(Reverse_Iterator iter) : Reverse_Iterator(iter) {}
+					Const_Reverse_Iterator(node *x, node *rend, node *lend) : Reverse_Iterator(x, rend, lend) {}
 					Const_Reverse_Iterator(const Const_Reverse_Iterator &it) : Reverse_Iterator(it) {}
+					Const_Reverse_Iterator(Reverse_Iterator it) : Reverse_Iterator(it) {}
 					Const_Reverse_Iterator &operator=(const Const_Reverse_Iterator &it)
 					{
 						if (&it != this)
 						{
-							Create_Three_Copy(it._root, it._end);
+							this->ptr = it.ptr;
+							this->rend = it.rend;
+							this->lend = it.lend;
 						}
 						return *this;
 					}
 					virtual ~Const_Reverse_Iterator() {}
-					const value_type &operator*() const { return this->ptr->data; }
-					const value_type *operator->() const { return &(this->ptr->data); }
+
+					value_type &operator*() const { return this->ptr->data; }
+					value_type *operator->() const { return &(this->ptr->data); }
 			};
 
 		public:
 			explicit map(const key_compare &comp = key_compare(), const allocator_type & = allocator_type())
-					: _root(nullptr), _comp(comp), _end(nullptr) {}
+					: _root(nullptr), _comp(comp), _rend(nullptr), _lend(nullptr) {}
 
 			template<class InputIterator>
 			map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type & = allocator_type())
-					: _root(nullptr), _comp(comp), _end(nullptr) { insert(first, last); }
+					: _root(nullptr), _comp(comp), _rend(nullptr), _lend(nullptr) { insert(first, last); }
 
-			map(const map &x) : _root(nullptr), _comp(x._comp), _end(nullptr)
+			map(const map &x) : _root(nullptr), _comp(x._comp), _rend(nullptr), _lend(nullptr)
 			{
-				Create_Three_Copy(x._root, x._end);
+				Create_Three_Copy(x._root, x._rend, x._lend);
 			}
 
 			std::pair<iterator, bool> insert(const value_type &val)
@@ -331,12 +341,14 @@ namespace ft
 				if (_root == nullptr)
 				{
 					_root = Create_Node(val);
-					_end = Create_Node();
-					_end = Create_Node();
-					_root->right = _end;
-					_root->left = _end;
+					_rend = Create_Node();
+					_lend = Create_Node();
+					_root->right = _rend;
+					_rend->parent = _root;
+					_root->left = _lend;
+					_lend->parent = _root;
 					copy = _root;
-					return std::pair<iterator, bool>(iterator(copy, _end), true);
+					return std::pair<iterator, bool>(iterator(copy, _rend, _lend), true);
 				}
 				DeleteEndElements();
 				copy = _root;
@@ -346,7 +358,7 @@ namespace ft
 					{
 						Add_LEnd_Element();
 						Add_REnd_Element();
-						return std::pair<iterator, bool>(iterator(copy, _end), false);
+						return std::pair<iterator, bool>(iterator(copy, _rend, _lend), false);
 					}
 					else if (_comp(val.first, copy->data.first))
 					{
@@ -356,7 +368,7 @@ namespace ft
 							copy->left->parent = copy;
 							Add_LEnd_Element();
 							Add_REnd_Element();
-							return std::pair<iterator, bool>(iterator(copy->left, _end), true);
+							return std::pair<iterator, bool>(iterator(copy->left, _rend, _lend), true);
 						}
 						else
 							copy = copy->left;
@@ -369,13 +381,13 @@ namespace ft
 							copy->right->parent = copy;
 							Add_REnd_Element();
 							Add_LEnd_Element();
-							return std::pair<iterator, bool>(iterator(copy->right, _end), true);
+							return std::pair<iterator, bool>(iterator(copy->right, _rend, _lend), true);
 						}
 						else
 							copy = copy->right;
 					}
 				}
-				return std::pair<iterator, bool>(iterator(_root, _end), true);
+				return std::pair<iterator, bool>(iterator(_root, _rend, _lend), true);
 			}
 
 			iterator insert(iterator, const value_type &val)
@@ -399,25 +411,25 @@ namespace ft
 			{
 				node *temp = _root;
 				temp = Find_Element(k, temp);
-				if (temp == _end)
+				if (temp == _rend || temp == _lend)
 					return end();
-				return iterator(temp, _end);
+				return iterator(temp, _rend, _lend);
 			}
 
 			const_iterator find(const key_type &k) const
 			{
 				node *temp = _root;
 				temp = Find_Element(k, temp);
-				if (temp == _end)
+				if (temp == _rend || temp == _lend)
 					return end();
-				return iterator(temp, _end);
+				return iterator(temp, _rend, _lend);
 			}
 
 			size_type count(const key_type &k) const
 			{
 				node *temp = _root;
 				temp = Find_Element(k, temp);
-				return (temp == _end) ? 0 : 1;
+				return (temp == _rend || temp == _lend) ? 0 : 1;
 			}
 
 			iterator lower_bound(const key_type &k)
@@ -450,8 +462,10 @@ namespace ft
 				node *temp = _root;
 				Clear_Three(temp);
 				_root = nullptr;
-				delete _end;
-				_end = nullptr;
+				delete _rend;
+				_rend = nullptr;
+				delete _lend;
+				_lend = nullptr;
 			}
 
 			mapped_type &operator[](const key_type &k)
@@ -477,9 +491,12 @@ namespace ft
 				node *r = _root;
 				_root = x._root;
 				x._root = r;
-				node *e = _end;
-				_end = x._end;
-				x._end = e;
+				node *re = _rend;
+				_rend = x._rend;
+				x._rend = re;
+				node *le = _lend;
+				_lend = x._lend;
+				x._lend = le;
 			}
 
 			key_compare key_comp() const { return _comp; }
@@ -542,58 +559,46 @@ namespace ft
 
 			node *SearchBeginElement() const
 			{
-				node *temp = _root;
-				if (!temp)
-					return _end;
-				while (temp->left != _end && temp->left != nullptr)
-				{
-					temp = temp->left;
-				}
-				return temp;
+				return _lend->parent;
 			}
 
 			node *SearchRBeginElement() const
 			{
-				node *temp = _root;
-				if (!temp)
-					return _end;
-				while (temp->right != _end && temp->right != nullptr)
-				{
-					temp = temp->right;
-				}
-				return temp;
+				return _rend->parent;
 			}
 
 			void DeleteEndElements()
 			{
 				node *temp = SearchRBeginElement();
 				temp->right = nullptr;
+				_rend->parent = nullptr;
 				temp = SearchBeginElement();
 				temp->left = nullptr;
+				_lend->parent = nullptr;
 			}
 
 			node *Find_Element(const key_type &k, node *x) const
 			{
-				if (x == _end || x == nullptr)
-					return _end;
+				if (x == _rend || x == _lend || x == nullptr)
+					return x == _rend ? _rend : _lend;
 				if (!_comp(k, x->data.first) && !_comp(x->data.first, k))
 					return x;
 				else
 					return _comp(k, x->data.first) ? Find_Element(k, x->left) : Find_Element(k, x->right);
 			}
 
-			void Create_Three_Copy(node *x, node *end)
+			void Create_Three_Copy(node *x, node *rend, node *lend)
 			{
-				if (x == nullptr || x == end)
+				if (x == nullptr || x == rend || x == lend)
 					return;
 				insert(x->data);
-				Create_Three_Copy(x->left, end);
-				Create_Three_Copy(x->right, end);
+				Create_Three_Copy(x->left, rend, lend);
+				Create_Three_Copy(x->right, rend, lend);
 			}
 
 			void Get_Three_Size(int &count, node *x) const
 			{
-				if (x != nullptr && x != _end)
+				if (x != nullptr && x != _rend && x != _lend)
 				{
 					Get_Three_Size(count, x->left);
 					Get_Three_Size(count, x->right);
@@ -608,7 +613,8 @@ namespace ft
 				{
 					temp = temp->right;
 				}
-				temp->right = _end;
+				temp->right = _rend;
+				_rend->parent = temp;
 			}
 
 			void Add_LEnd_Element()
@@ -618,7 +624,8 @@ namespace ft
 				{
 					temp = temp->left;
 				}
-				temp->left = _end;
+				temp->left = _lend;
+				_lend->parent = temp;
 			}
 
 			void del_node(const key_type &k)
