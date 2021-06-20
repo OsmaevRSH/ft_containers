@@ -602,12 +602,8 @@ namespace ft
 			void del_node(const key_type &k)
 			{
 				DeleteEndElements();
-				node *temp = Delete_Node(_root, k);
-				if (!temp)
-				{
-					_root = nullptr;
-				}
-				else
+				_root = Delete_Node(_root, k);
+				if (_root)
 				{
 					Add_LEnd_Element();
 					Add_REnd_Element();
