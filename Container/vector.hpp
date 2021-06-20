@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <cmath>
-#include "Vector_Iterator.hpp"
 
 namespace ft
 {

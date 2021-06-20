@@ -1,18 +1,18 @@
-//#include <iostream>
-//#include <vector>
-//#include <list>
-//#include "vector.hpp"
-//#include "list.hpp"
-//#include "test.hpp"
-//#include "stack.hpp"
-//#include "map.hpp"
-//#include <math.h>
-//#include <sstream>
-//#include <deque>
-//#include <map>
-//
-//using namespace std;
-//
+#include <iostream>
+#include <vector>
+#include <list>
+#include "vector.hpp"
+#include "list.hpp"
+#include "test.hpp"
+#include "stack.hpp"
+#include "map.hpp"
+#include <math.h>
+#include <sstream>
+#include <deque>
+#include <map>
+
+using namespace std;
+
 //template<class T>
 //void capacity_part(const vector<T> &first, const ft::vector<T> &second)
 //{
@@ -136,112 +136,27 @@
 //	}
 //	capacity_part(first, second);
 //}
-//
-//int main()
-//{
-//	ft::map<char,int> mymap;
-//
-//	mymap['x']=100;
-//	mymap['y']=200;
-//	mymap['z']=300;
-//
-//	std::cout << "mymap contains:\n";
-//	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-//		std::cout << it->first << " => " << it->second << '\n';
-//
-//	mymap.clear();
-//	mymap['a']=1101;
-//	mymap['b']=2202;
-//
-//	std::cout << "mymap contains:\n";
-//	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-//		std::cout << it->first << " => " << it->second << '\n';
-//
-//	return 0;
-//}
-//
-////	temp.resize(20, 5);
-////	a.resize(20, 5);
-////	it1 = temp.begin();
-////	it2 = a.begin();
-////	for (int i = 0; i < 20; ++i, ++it1, ++it2)
-////	{
-////		cout << *it1 << "  " << *it2 << endl;
-////	}
-////	a = temp;
-////	ft::list<int> temp1;
-////	ft::list<int> b;
-////	temp1.push_back(1);
-////	temp1.push_back(2);
-////	temp1.push_back(3);
-////	temp1.push_back(4);
-////	b = temp1;
-////	//	temp1.assign(++temp1.begin(), --temp1.rend());
-////	list<int>::iterator ita = a.begin();
-////	ft::list<int>::iterator itb = b.begin();
-////	cout << a.size() << endl << b.size() << endl << endl << endl;
-////
-////	for (int i = 0; i < 10; ++i)
-////	{
-////		cout << *ita++ << "-" << *itb++ << endl;
-////	}
-//
-////	a.push_back(1);
-////	a.push_back("2");
-////	a.push_back("3");
-////	a.push_back("4");
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-////	cout << *ita++ << "-" << *itb++ << endl;
-//
-////		cout << YELLOW << "=====================vector()=====================\n" << RESET;
-////		{
-////			vector<int> first;
-////			ft::vector<int> second;
-////			capacity_part(first, second);
-////			vec_comparison(first, second);
-////		}
-////		cout << YELLOW << "=====================vector(size_type n)=====================\n" << RESET;
-////		{
-////			vector<int> first(10);
-////			ft::vector<int> second(10);
-////			capacity_part(first, second);
-////			vec_comparison(first, second);
-////		}
-////		cout << YELLOW << "=====================vector(size_type n, const value_type& val)=====================\n" << RESET;
-////		{
-////			vector<int> first(10, 4);
-////			ft::vector<int> second(10, 4);
-////			capacity_part(first, second);
-////			vec_comparison(first, second);
-////		}
-////		cout << YELLOW << "=====================push_back=====================\n" << RESET;
-////		{
-////			vector<int> first;
-////			ft::vector<int> second;
-////			vec_push_back(first, second);
-////			vec_comparison(first, second);
-////		}
-////		cout << YELLOW << "=====================iterators=====================\n" << RESET;
-////		{
-////			vector<int> first(10,5);
-////			ft::vector<int> second((size_t)10, 5);
-////			vector<int>::const_iterator a = first.begin();
-////			ft::vector<int>::const_iterator b = second.begin();
-////			for (int i = 0; i < 10; ++i)
-////			{
-////				cout << *a << " " << *b << endl;
-////				a++;
-////				b++;
-////			}
-////		}
-////}
+
+
+int main ()
+{
+	ft::map<char,int> mymap;
+	ft::map<char,int>::iterator itlow,itup;
+
+	mymap['a']=20;
+	mymap['b']=40;
+	mymap['c']=60;
+	mymap['d']=80;
+	mymap['e']=100;
+
+	itlow=mymap.lower_bound ('b');  // itlow points to b
+	itup=mymap.upper_bound ('d');   // itup points to e (not d!)
+
+	mymap.erase(itlow,itup);        // erases [itlow,itup)
+
+	// print content:
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	return 0;
+}

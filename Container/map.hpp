@@ -165,6 +165,7 @@ namespace ft
 					Const_Iterator() {}
 					Const_Iterator(node *x, node *end) : Iterator(x, end) {}
 					Const_Iterator(const Const_Iterator &it) : Iterator(it) {}
+					Const_Iterator(Iterator iter) : Iterator(iter) {}
 					Const_Iterator &operator=(const Const_Iterator &it)
 					{
 						if (&it != this)
@@ -175,9 +176,6 @@ namespace ft
 						return *this;
 					}
 					virtual ~Const_Iterator() {}
-
-					friend bool operator==(const Const_Iterator &left, const Const_Iterator &right) { return left.ptr == right.ptr; }
-					friend bool operator!=(const Const_Iterator &left, const Const_Iterator &right) { return left.ptr != right.ptr; }
 					const value_type &operator*() const { return this->ptr->data; }
 					const value_type *operator->() const { return &(this->ptr->data); }
 			};
@@ -258,13 +256,13 @@ namespace ft
 					}
 					Reverse_Iterator operator++(int)
 					{
-						Iterator copy(*this);
+						Reverse_Iterator copy(*this);
 						--(*this);
 						return copy;
 					}
 					Reverse_Iterator operator--(int)
 					{
-						Iterator copy(*this);
+						Reverse_Iterator copy(*this);
 						++(*this);
 						return copy;
 					}
@@ -275,6 +273,7 @@ namespace ft
 				public:
 					Const_Reverse_Iterator() {}
 					Const_Reverse_Iterator(node *x, node *end) : Reverse_Iterator(x, end) {}
+					Const_Reverse_Iterator(Reverse_Iterator iter) : Reverse_Iterator(iter) {}
 					Const_Reverse_Iterator(const Const_Reverse_Iterator &it) : Reverse_Iterator(it) {}
 					Const_Reverse_Iterator &operator=(const Const_Reverse_Iterator &it)
 					{
@@ -286,15 +285,6 @@ namespace ft
 						return *this;
 					}
 					virtual ~Const_Reverse_Iterator() {}
-
-					friend bool operator==(const Const_Reverse_Iterator &left, const Const_Reverse_Iterator &right)
-					{
-						return left.ptr == right.ptr;
-					}
-					friend bool operator!=(const Const_Reverse_Iterator &left, const Const_Reverse_Iterator &right)
-					{
-						return left.ptr != right.ptr;
-					}
 					const value_type &operator*() const { return this->ptr->data; }
 					const value_type *operator->() const { return &(this->ptr->data); }
 			};
@@ -528,7 +518,7 @@ namespace ft
 				return new_node;
 			}
 
-			node *SearchBeginElement()
+			node *SearchBeginElement() const
 			{
 				node *temp = _root;
 				if (!temp)
@@ -540,7 +530,7 @@ namespace ft
 				return temp;
 			}
 
-			node *SearchRBeginElement()
+			node *SearchRBeginElement() const
 			{
 				node *temp = _root;
 				if (!temp)
@@ -611,10 +601,16 @@ namespace ft
 
 			void del_node(const key_type &k)
 			{
+				DeleteEndElements();
 				node *temp = Delete_Node(_root, k);
 				if (!temp)
 				{
 					_root = nullptr;
+				}
+				else
+				{
+					Add_LEnd_Element();
+					Add_REnd_Element();
 				}
 			}
 
@@ -624,72 +620,79 @@ namespace ft
 					return root;
 				if (_comp(k, root->data.first))
 				{
-					node *temp = Delete_Node(root->left, k);
-					root->left = temp;
+					root->left = Delete_Node(root->left, k);
+					if (root->left)
+						root->left->parent = root;
 				}
 				else if (_comp(root->data.first, k))
 				{
-					node *temp = Delete_Node(root->right, k);
-					root->right = temp;
+					root->right = Delete_Node(root->right, k);
+					if (root->right)
+						root->right->parent = root;
 				}
 				else
 				{
-					if ((root->left == nullptr || root->left == _end) && (root->right == nullptr || root->right == _end))
+					if (Check_What_Right_And_Left_Empty(root))
 					{
-						node *temp;
-						if (root->parent)
-						{
-							if (root->parent->left == root)
-								temp = root->left;
-							if (root->parent->right == root)
-								temp = root->right;
-						}
 						delete root;
 						root = nullptr;
-						return temp;
 					}
-					else if (((root->left == nullptr || root->left == _end) && (root->right != nullptr || root->right != _end)) ||
-					         ((root->left != nullptr || root->left != _end) && (root->right == nullptr || root->right == _end)))
+					else if (Check_What_Right_Or_Left_Empty(root))
 					{
 						node *temp;
-						if ((root->left != nullptr || root->left != _end) && (root->right == nullptr || root->right == _end))
+						if (root->left)
 							temp = root->left;
 						else
 							temp = root->right;
-						root->data = temp->data;
-						root->left = temp->left;
-						root->right = temp->right;
-						delete temp;
-						temp = nullptr;
+						delete root;
+						root = temp;
 					}
 					else
 					{
-						if (root->right->left == nullptr || root->right->left == _end)
+						node *temp;
+						if (!root->right->left)
 						{
-							node *temp = root->right->right;
-							root->data = root->right->data;
-							root->right = root->right->right;
-							delete temp;
-							temp = nullptr;
+							root->right->left = root->left;
+							root->left->parent = root->right;
+							temp = root->right;
+							delete root;
+							root = temp;
 						}
 						else
 						{
-							node *temp = Search_left_from_current_node(root->right);
-							root->data = temp->data;
-							root->right = temp->right;
-							Delete_Node(temp, k);
+							temp = Search_left_from_current_node(root->right);
+							temp->parent->left = nullptr;
+							temp->right = root->right;
+							root->right->parent = temp;
+							temp->left = root->left;
+							root->left->parent = temp;
+							delete root;
+							root = temp;
 						}
 					}
 				}
 				return root;
 			}
 
-
 			node *Search_left_from_current_node(node *root)
 			{
 				if (root->left == nullptr)
 					return root;
 				return Search_left_from_current_node(root->left);
+			}
+
+			bool Check_What_Right_And_Left_Empty(node *root)
+			{
+				if (root->left == nullptr && root->right == nullptr)
+					return true;
+				return false;
+			}
+
+			bool Check_What_Right_Or_Left_Empty(node *root)
+			{
+				if ((root->left == nullptr && root->right != nullptr) || (root->left != nullptr && root->right == nullptr))
+					return true;
+				return false;
 			}
 	};
 
@@ -700,7 +703,7 @@ namespace ft
 		typename map<Key, T, Compare, Alloc>::const_iterator rhs_iter = rhs.begin();
 		for (; lhs_iter != lhs.end() && rhs_iter != rhs.end(); ++lhs_iter, ++rhs_iter)
 		{
-			if (Compare(lhs_iter.operator->()->second != rhs_iter.operator->()->second))
+			if (*lhs_iter != *rhs_iter)
 				return false;
 		}
 		if (lhs_iter == lhs.end() && rhs_iter == rhs.end())
@@ -715,9 +718,9 @@ namespace ft
 		typename map<Key, T, Compare, Alloc>::const_iterator rhs_iter = rhs.begin();
 		for (; lhs_iter != lhs.end() && rhs_iter != rhs.end(); ++lhs_iter, ++rhs_iter)
 		{
-			if (Compare(lhs_iter.operator->()->second != rhs_iter.operator->()->second))
+			if (*lhs_iter != *rhs_iter)
 				return true;
-			else if (Compare(rhs_iter.operator->()->second != lhs_iter.operator->()->second))
+			else if (*rhs_iter != *lhs_iter)
 				return false;
 			else
 				continue;
