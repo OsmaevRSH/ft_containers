@@ -415,7 +415,7 @@ namespace ft
 
 			//modifiers
 			template<class InputIterator>
-			void assign(InputIterator first, InputIterator last)
+			void assign(InputIterator first, InputIterator last, typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
 			{
 				int length = std::abs(last.operator->() - first.operator->());
 				for (size_type i = 0; i < _curent_size; ++i)
@@ -673,75 +673,48 @@ namespace ft
 	template<class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		typename vector<T, Alloc>::const_iterator lhs_iter = lhs.begin();
+		typename vector<T, Alloc>::const_iterator rhs_iter = rhs.begin();
+		for (; lhs_iter != lhs.end() && rhs_iter != rhs.end(); ++lhs_iter, ++rhs_iter)
 		{
-			if (lhs[i] != rhs[i])
-			{
+			if (*lhs_iter != *rhs_iter)
 				return false;
-			}
 		}
-		return true;
+		if (lhs_iter == lhs.end() && rhs_iter == rhs.end())
+			return true;
+		return false;
 	}
-	template<class T, class Alloc>
-	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-	{
-		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
-		{
-			if (lhs[i] == rhs[i])
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-	template<class T, class Alloc>
-	bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-	{
-		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
-		{
-			if (lhs[i] <= rhs[i])
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+
 	template<class T, class Alloc>
 	bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
+		typename vector<T, Alloc>::const_iterator lhs_iter = lhs.begin();
+		typename vector<T, Alloc>::const_iterator rhs_iter = rhs.begin();
+		for (; lhs_iter != lhs.end() && rhs_iter != rhs.end(); ++lhs_iter, ++rhs_iter)
 		{
-			if (lhs[i] >= rhs[i])
-			{
+			if (*lhs_iter < *rhs_iter)
+				return true;
+			else if (*lhs_iter > *rhs_iter)
 				return false;
-			}
+			else
+				continue;
 		}
-		return true;
+		if (lhs_iter == lhs.end() && rhs_iter != rhs.end())
+			return true;
+		return false;
 	}
+
 	template<class T, class Alloc>
-	bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-	{
-		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
-		{
-			if (lhs[i] < rhs[i])
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs == rhs); }
+
 	template<class T, class Alloc>
-	bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-	{
-		for (size_t i = 0; i < lhs.size() || i < rhs.size(); ++i)
-		{
-			if (lhs[i] > rhs[i])
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+	bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return rhs < lhs; }
+
+	template<class T, class Alloc>
+	bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(rhs < lhs); }
+
+	template<class T, class Alloc>
+	bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs < rhs); }
 	template<class T, class Alloc>
 	void swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
 	{

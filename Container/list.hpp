@@ -634,10 +634,10 @@ namespace ft
 				{
 					while (tmp->_next != _linked_elem)
 					{
-						if (comp(tmp->_data, tmp->_next->_data))
-							tmp = tmp->_next;
-						else
+						if (comp(tmp->_next->_data, tmp->_data))
 							SwapElement(tmp);
+						else
+							tmp = tmp->_next;
 					}
 					tmp = _head;
 					++i;

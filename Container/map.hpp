@@ -27,7 +27,7 @@ namespace ft
 		public:
 			typedef Key key_type;
 			typedef T mapped_type;
-			typedef std::pair<key_type, mapped_type> value_type;
+			typedef std::pair<const key_type, mapped_type> value_type;
 			typedef Compare key_compare;
 			typedef Alloc allocator_type;
 			typedef typename allocator_type::reference reference;
@@ -71,6 +71,7 @@ namespace ft
 			node *_rend;
 			node *_lend;
 			key_compare _comp;
+			typedef typename Alloc::template rebind<Map_Node>::other _node_allocator;
 
 			class Iterator
 			{
@@ -481,7 +482,7 @@ namespace ft
 				return count;
 			}
 
-			size_type max_size() const { return (std::numeric_limits<size_type>::max() / sizeof(_root)); }
+			size_type max_size() const { _node_allocator size; return size.max_size(); }
 
 			void swap(map &x)
 			{
