@@ -5,11 +5,11 @@
 #include <queue>
 #include <stack>
 #include <map>
-#include "vector.hpp"
-#include "list.hpp"
-#include "stack.hpp"
-#include "queue.hpp"
-#include "map.hpp"
+#include "../Container/vector.hpp"
+#include "../Container/list.hpp"
+#include "../Container/stack.hpp"
+#include "../Container/queue.hpp"
+#include "../Container/map.hpp"
 #include "test_color.hpp"
 
 
