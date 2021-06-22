@@ -10,7 +10,7 @@
 #include "stack.hpp"
 #include "queue.hpp"
 #include "map.hpp"
-#include "test.hpp"
+#include "test_color.hpp"
 
 
 using std::cout;

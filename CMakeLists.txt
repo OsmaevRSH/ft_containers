@@ -5,10 +5,10 @@ set(CMAKE_CXX_STANDARD 98)
 
 add_executable(
         ft_containers
-        Test/vector_main.cpp
+        Test/tests.cpp
         Container/vector.hpp
         Container/list.hpp
-        Test/test.cpp
+        Test/test_color.hpp
         Container/stack.hpp
         Container/queue.hpp
         Container/map.hpp)
