@@ -13,7 +13,7 @@ namespace ft
 				Map_Node() {}
 				Map_Node(const std::pair<Key, T> &x) : data(x), left(nullptr), right(nullptr), parent(nullptr) {}
 				Map_Node(const Map_Node &x) : data(x.data), left(x.left), right(x.right), parent(x.parent) {}
-				std::pair<Key, T> data;
+				std::pair<const Key, T> data;
 				Map_Node *left;
 				Map_Node *right;
 				Map_Node *parent;
