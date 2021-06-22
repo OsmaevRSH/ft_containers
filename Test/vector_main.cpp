@@ -54,7 +54,7 @@ bool removeIfPred(double a)
 }
 bool uniquePred(double a, double b)
 {
-	return a < b * 10;
+	return a > b;
 }
 void vectorTests()
 {
@@ -871,28 +871,42 @@ void listTests()
 	}
 	cout << endl << "Splice test:" << endl;
 	{
-		//		std::list<double> stdList(200, 666);
-		//		ft::list<double> ftList(200, 666);
-		//		std::list<double> stdListCopy(60, 1111);
-		//		ft::list<double> ftListCopy(60, 1111);
-		//		stdList.splice(++++++++++stdList.begin(), stdListCopy);
-		//		ftList.splice(++++++++++ftList.begin(), ftListCopy);
-		//		if (containerEquals(stdList, ftList))
-		//			cout << GREEN << "[OK]" << RESET;
-		//		else
-		//			cout << RED << "[FAIL]" << RESET;
-		//		stdList.splice(++++++++++stdList.begin(), stdListCopy, ++++++stdListCopy.begin());
-		//		ftList.splice(++++++++++ftList.begin(), ftListCopy, ++++++ftListCopy.begin());
-		//		if (containerEquals(stdListCopy, ftListCopy))
-		//			cout << GREEN << "[OK]" << RESET;
-		//		else
-		//			cout << RED << "[FAIL]" << RESET;
-		//		stdList.splice(++++++++++stdList.begin(), stdListCopy, ++++++stdListCopy.begin(), stdListCopy.end());
-		//		ftList.splice(++++++++++ftList.begin(), ftListCopy, ++++++ftListCopy.begin(), ftListCopy.end());
-		//		if (containerEquals(stdListCopy, ftListCopy))
-		//			cout << GREEN << "[OK]" << RESET;
-		//		else
-		//			cout << RED << "[FAIL]" << RESET;
+		{
+			std::list<double> stdList(200, 666);
+			ft::list<double> ftList(200, 666);
+			std::list<double> stdListCopy(60, 1111);
+			ft::list<double> ftListCopy(60, 1111);
+			stdList.splice(++ ++ ++ ++ ++stdList.begin(), stdListCopy);
+			ftList.splice(++ ++ ++ ++ ++ftList.begin(), ftListCopy);
+			if (containerEquals(stdList, ftList))
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+		}
+		{
+			std::list<double> stdList(200, 666);
+			ft::list<double> ftList(200, 666);
+			std::list<double> stdListCopy(60, 1111);
+			ft::list<double> ftListCopy(60, 1111);
+			stdList.splice(++ ++ ++ ++ ++stdList.begin(), stdListCopy, ++ ++ ++stdListCopy.begin());
+			ftList.splice(++ ++ ++ ++ ++ftList.begin(), ftListCopy, ++ ++ ++ftListCopy.begin());
+			if (containerEquals(stdListCopy, ftListCopy))
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+		}
+		{
+			std::list<double> stdList(200, 666);
+			ft::list<double> ftList(200, 666);
+			std::list<double> stdListCopy(60, 1111);
+			ft::list<double> ftListCopy(60, 1111);
+			stdList.splice(++ ++ ++ ++ ++stdList.begin(), stdListCopy, ++ ++ ++stdListCopy.begin(), stdListCopy.end());
+			ftList.splice(++ ++ ++ ++ ++ftList.begin(), ftListCopy, ++ ++ ++ftListCopy.begin(), ftListCopy.end());
+			if (containerEquals(stdListCopy, ftListCopy))
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+		}
 	}
 	cout << endl << "Remove test:" << endl;
 	{

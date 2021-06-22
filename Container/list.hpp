@@ -624,39 +624,24 @@ namespace ft
 				sort(Sort_Comparer);
 			}
 
-//			template<class Compare>
-//			void sort(Compare comp)
-//			{
-//				int i = 0;
-//				node *tmp = _head;
-//				size_type list_size = size();
-//				while (i != (int) (list_size - 1))
-//				{
-//					while (tmp->_next != _linked_elem)
-//					{
-//						if (comp(tmp->_next->_data, tmp->_data))
-//							SwapElement(tmp);
-//						else
-//							tmp = tmp->_next;
-//					}
-//					tmp = _head;
-//					++i;
-//				}
-//			}
-
 			template<class Compare>
 			void sort(Compare comp)
 			{
-				if (this->size() == 0 || this->size() == 1)
-					return ;
-				iterator	it = this->begin();
-				for (size_type i = 0; i * 2 < this->size() && it != this->end(); i++)
-					++it;
-				list		right;
-				right.splice(right.begin(), *this, it, this->end());
-				this->sort(comp);
-				right.sort(comp);
-				this->merge(right, comp);
+				int i = 0;
+				node *tmp = _head;
+				size_type list_size = size();
+				while (i != (int) (list_size - 1))
+				{
+					while (tmp->_next != _linked_elem)
+					{
+						if (comp(tmp->_next->_data, tmp->_data))
+							SwapElement(tmp);
+						else
+							tmp = tmp->_next;
+					}
+					tmp = _head;
+					++i;
+				}
 			}
 
 			void merge(list &x)
