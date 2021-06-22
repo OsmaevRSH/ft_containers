@@ -2,6 +2,8 @@
 #include <sstream>
 #include <vector>
 #include <list>
+#include <queue>
+#include <stack>
 #include "vector.hpp"
 #include "list.hpp"
 #include "stack.hpp"
@@ -1064,6 +1066,218 @@ void listTests()
 	}
 }
 
+void queueTest()
+{
+	cout << "Constructor test:" << endl;
+	{
+		{
+			std::queue<double> stdQueue;
+			ft::queue<double> ftQueue;
+			if (stdQueue.size() == ftQueue.size())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+		}
+		{
+			ft::list<double> ftList;
+			std::list<double> stdList;
+			double num;
+			for (int i = 0; i < 100; ++i)
+			{
+				num = rand() % 1000;
+				ftList.push_back(num);
+				stdList.push_back(num);
+			}
+			std::queue<double, std::list<double> > stdQueue(stdList);
+			ft::queue<double, ft::list<double> > ftQueue(ftList);
+			if (stdQueue.size() == ftQueue.size())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			cout << endl << "Empty test:" << endl;
+			if (stdQueue.empty() == ftQueue.empty())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			cout << endl << "Size test:" << endl;
+			if (stdQueue.size() == ftQueue.size())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			cout << endl << "Front test:" << endl;
+			if (stdQueue.front() == ftQueue.front())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			cout << endl << "Back test:" << endl;
+			if (stdQueue.back() == ftQueue.back())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			cout << endl << "Push test:" << endl;
+			stdQueue.push(2.22);
+			ftQueue.push(2.22);
+			if (stdQueue.front() == ftQueue.front())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			if (stdQueue.back() == ftQueue.back())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			cout << endl << "Pop test:" << endl;
+			stdQueue.pop();
+			ftQueue.pop();
+			if (stdQueue.front() == ftQueue.front())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+			if (stdQueue.back() == ftQueue.back())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+		}
+	}
+	cout << endl << "Relational operators test: (Non-member function)" << endl;
+	{
+		std::list<double> stdList1(200, 666);
+		ft::list<double> ftList1(200, 666);
+		std::list<double> stdList2(111, 333);
+		ft::list<double> ftList2(111, 333);
+		std::queue<double, std::list<double> > stdQueue1(stdList1);
+		ft::queue<double, ft::list<double> > ftQueue1(ftList1);
+		std::queue<double, std::list<double> > stdQueue2(stdList2);
+		ft::queue<double, ft::list<double> > ftQueue2(ftList2);
+
+		if ((stdQueue1 == stdQueue2) == (ftQueue1 == ftQueue2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdQueue1 != stdQueue2) == (ftQueue1 != ftQueue2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdQueue1 < stdQueue2) == (ftQueue1 < ftQueue2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdQueue1 > stdQueue2) == (ftQueue1 > ftQueue2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdQueue1 <= stdQueue2) == (ftQueue1 <= ftQueue2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdQueue1 >= stdQueue2) == (ftQueue1 >= ftQueue2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+	}
+}
+
+void stackTest()
+{
+	cout << "Constructor test:" << endl;
+	{
+		{
+			std::stack<double> stdStack;
+			ft::stack<double> ftStack;
+			if (stdStack.size() == ftStack.size())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+		}
+		{
+			ft::list<double> ftList;
+			std::list<double> stdList;
+			double num;
+			for (int i = 0; i < 100; ++i)
+			{
+				num = rand() % 1000;
+				ftList.push_back(num);
+				stdList.push_back(num);
+			}
+			std::stack<double, std::list<double> > stdStack(stdList);
+			ft::stack<double, ft::list<double> > ftStack(ftList);
+			if (stdStack.size() == ftStack.size())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+
+			cout << endl << "Empty test:" << endl;
+			if (stdStack.empty() == ftStack.empty())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+
+			cout << endl << "Size test:" << endl;
+			if (stdStack.size() == ftStack.size())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+
+			cout << endl << "Top test:" << endl;
+			if (stdStack.top() == ftStack.top())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+
+			cout << endl << "Push test:" << endl;
+			stdStack.push(2.22);
+			ftStack.push(2.22);
+			if (stdStack.top() == ftStack.top())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+
+			cout << endl << "Pop test:" << endl;
+			stdStack.pop();
+			ftStack.pop();
+			if (stdStack.top() == ftStack.top())
+				cout << GREEN << "[OK]" << RESET;
+			else
+				cout << RED << "[FAIL]" << RESET;
+		}
+	}
+	cout << endl << "Relational operators test: (Non-member function)" << endl;
+	{
+		std::list<double> stdList1(200, 666);
+		ft::list<double> ftList1(200, 666);
+		std::list<double> stdList2(111, 333);
+		ft::list<double> ftList2(111, 333);
+		std::stack<double, std::list<double> > stdStack1(stdList1);
+		ft::stack<double, ft::list<double> > ftStack1(ftList1);
+		std::stack<double, std::list<double> > stdStack2(stdList2);
+		ft::stack<double, ft::list<double> > ftStack2(ftList2);
+
+		if ((stdStack1 == stdStack2) == (ftStack1 == ftStack2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdStack1 != stdStack2) == (ftStack1 != ftStack2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdStack1 < stdStack2) == (ftStack1 < ftStack2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdStack1 > stdStack2) == (ftStack1 > ftStack2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdStack1 <= stdStack2) == (ftStack1 <= ftStack2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+		if ((stdStack1 >= stdStack2) == (ftStack1 >= ftStack2))
+			cout << GREEN << "[OK]" << RESET;
+		else
+			cout << RED << "[FAIL]" << RESET;
+	}
+}
+
 int main()
 {
 	srand(time(nullptr));
@@ -1071,5 +1285,10 @@ int main()
 	vectorTests();
 	cout << endl << BLUE << "========LIST========" << RESET << endl;
 	listTests();
+	cout << endl << BLUE << "=======QUEUE========" << RESET << endl;
+	stackTest();
+	cout << endl << BLUE << "=======STACK========" << RESET << endl;
+	stackTest();
+	cout << endl << BLUE << "========MAP=========" << RESET << endl;
 	return 0;
 }
