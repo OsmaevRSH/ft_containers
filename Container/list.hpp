@@ -251,7 +251,6 @@ namespace ft
 			{
 				if (this != &x)
 				{
-					_linked_elem = Create_Node();
 					_head = _linked_elem;
 					_tail = _linked_elem;
 					_linked_elem->_next = _linked_elem;

@@ -336,6 +336,19 @@ namespace ft
 				Create_Three_Copy(x._root, x._rend, x._lend);
 			}
 
+			map &operator=(const map &x)
+			{
+				if (&x != this)
+					Create_Three_Copy(x._root, x._rend, x._lend);
+				return *this;
+			}
+
+			~map()
+			{
+				if (_root)
+					this->clear();
+			}
+
 			std::pair<iterator, bool> insert(const value_type &val)
 			{
 				node *copy;
@@ -462,6 +475,7 @@ namespace ft
 				DeleteEndElements();
 				node *temp = _root;
 				Clear_Three(temp);
+				temp = nullptr;
 				_root = nullptr;
 				delete _rend;
 				_rend = nullptr;
@@ -596,14 +610,6 @@ namespace ft
 				}
 				return begin;
 			}
-
-			//			node *Find_Element(const key_type &k, node *x) const
-			//			{
-			//				if (x == _rend || x == _lend || x == nullptr || (!_comp(k, x->data.first) && !_comp(x->data.first, k)))
-			//					return x;
-			//				else
-			//					return _comp(k, x->data.first) ? Find_Element(k, x->left) : Find_Element(k, x->right);
-			//			}
 
 			void Create_Three_Copy(node *x, node *rend, node *lend)
 			{
